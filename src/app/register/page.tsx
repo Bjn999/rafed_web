@@ -1,0 +1,302 @@
+'use client';
+
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import Link from 'next/link';
+import { api, ApiError } from '@/lib/api';
+import { useAuth } from '@/context/AuthContext';
+import { useLanguage } from '@/context/LanguageContext';
+import { toast } from '@/components/ui/toast';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Loader2, Building2, User, Mail, Lock, Phone, Briefcase } from 'lucide-react';
+
+export default function RegisterPage() {
+  const { login } = useAuth();
+  const { t, isAr } = useLanguage();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const registerSchema = z.object({
+    company_name: z.string().min(2, { message: t('auth.validation.companyNameRequired') }),
+    email: z.string().email({ message: t('auth.validation.emailInvalid') }),
+    password: z.string().min(8, { message: t('auth.validation.passwordMin') }),
+    password_confirmation: z.string().min(1, { message: t('auth.validation.passwordRequired') }),
+    first_name: z.string().min(2, { message: t('auth.validation.firstNameRequired') }),
+    last_name: z.string().min(2, { message: t('auth.validation.lastNameRequired') }),
+    phone_number: z.string().optional().or(z.literal('')),
+    job_title: z.string().optional().or(z.literal('')),
+  }).refine((data) => data.password === data.password_confirmation, {
+    message: t('auth.validation.passwordConfirmMatch'),
+    path: ['password_confirmation'],
+  });
+
+  type RegisterFormValues = z.infer<typeof registerSchema>;
+
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<RegisterFormValues>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      company_name: '',
+      email: '',
+      password: '',
+      password_confirmation: '',
+      first_name: '',
+      last_name: '',
+      phone_number: '',
+      job_title: '',
+    },
+  });
+
+  const onSubmit = async (values: RegisterFormValues) => {
+    setIsSubmitting(true);
+    try {
+      const response = await api.post<{
+        success: boolean;
+        message: string;
+        data: { token: string; user: any };
+      }>('/auth/register-tenant', values);
+
+      if (response.success && response.data) {
+        toast.add({
+          title: t('auth.toast.registerSuccessTitle'),
+          description: t('auth.toast.registerSuccessDesc'),
+          type: 'success',
+        });
+        login(response.data.token, response.data.user);
+      }
+    } catch (error) {
+      if (error instanceof ApiError) {
+        // If there are validation errors from Laravel
+        if (error.status === 422 && error.data?.data) {
+          const apiErrors = error.data.data;
+          Object.keys(apiErrors).forEach((key) => {
+            setError(key as keyof RegisterFormValues, {
+              type: 'server',
+              message: apiErrors[key][0],
+            });
+          });
+          toast.add({
+            title: isAr ? 'خطأ في التحقق' : 'Validation Error',
+            description: isAr ? 'الرجاء التحقق من الحقول الموضحة أدناه.' : 'Please check the highlighted fields below.',
+            type: 'error',
+          });
+        } else {
+          toast.add({
+            title: t('auth.toast.registerFailedTitle'),
+            description: error.message || (isAr ? 'حدث خطأ غير متوقع. الرجاء المحاولة لاحقاً.' : 'An unexpected error occurred. Please try again later.'),
+            type: 'error',
+          });
+        }
+      } else {
+        toast.add({
+          title: t('auth.toast.connectionErrorTitle'),
+          description: t('auth.toast.connectionErrorDesc'),
+          type: 'error',
+        });
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="relative min-h-screen flex items-center justify-center bg-slate-950 p-4 sm:p-6 overflow-hidden" dir={isAr ? 'rtl' : 'ltr'}>
+      {/* Background gradients */}
+      <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-indigo-600/10 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full bg-violet-600/10 blur-[120px] pointer-events-none" />
+
+      <Card className="w-full max-w-2xl border-slate-800 bg-slate-900/60 backdrop-blur-xl text-slate-100 shadow-2xl relative z-10">
+        <CardHeader className="space-y-2 text-center pb-6 border-b border-slate-800">
+          <div className="mx-auto w-12 h-12 bg-indigo-600/20 text-indigo-400 rounded-2xl flex items-center justify-center mb-2 border border-indigo-500/30">
+            <Building2 className="w-6 h-6" />
+          </div>
+          <CardTitle className="text-3xl font-bold tracking-tight text-white font-sans">{isAr ? 'تسجيل شركة جديدة' : 'Register a New Company'}</CardTitle>
+          <CardDescription className="text-slate-400 text-sm">
+            {isAr ? 'قم بإنشاء حساب لشركتك وابدأ إدارة مشاريعك الهندسية والمقاولات اليوم' : 'Create an account for your company and start managing your construction projects today'}
+          </CardDescription>
+        </CardHeader>
+
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <CardContent className="space-y-6 pt-6">
+            
+            {/* Section 1: Company Info */}
+            <div className="space-y-3">
+              <h3 className={`text-md font-semibold text-indigo-400 flex items-center gap-2 pb-1 border-b border-slate-800/60 ${isAr ? 'text-right' : 'text-left'}`}>
+                <Building2 className="w-4 h-4" />
+                {isAr ? 'بيانات الشركة' : 'Company Info'}
+              </h3>
+              <div className="space-y-1">
+                <Label htmlFor="company_name" className={`text-slate-300 flex ${isAr ? 'justify-start' : 'justify-start'}`}>{t('auth.companyNameLabel')}</Label>
+                <div className="relative">
+                  <Input
+                    id="company_name"
+                    placeholder={isAr ? 'مثال: شركة المقاولات الحديثة' : 'e.g. Modern Contracting Co.'}
+                    className="bg-slate-950/40 border-slate-800 focus:border-indigo-500 focus:ring-indigo-500/20 transition-all text-white font-sans"
+                    {...register('company_name')}
+                  />
+                </div>
+                {errors.company_name && (
+                  <p className="text-rose-500 text-xs mt-1">{errors.company_name.message}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Section 2: Account details */}
+            <div className="space-y-4">
+              <h3 className={`text-md font-semibold text-indigo-400 flex items-center gap-2 pb-1 border-b border-slate-800/60 ${isAr ? 'text-right' : 'text-left'}`}>
+                <Mail className="w-4 h-4" />
+                {isAr ? 'بيانات الحساب (المالك)' : 'Account Details (Owner)'}
+              </h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-1 md:col-span-3">
+                  <Label htmlFor="email" className={`text-slate-300 flex ${isAr ? 'justify-start' : 'justify-start'}`}>{t('auth.emailLabel')}</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="owner@example.com"
+                    className="bg-slate-950/40 border-slate-800 focus:border-indigo-500 text-white font-sans"
+                    {...register('email')}
+                  />
+                  {errors.email && (
+                    <p className="text-rose-500 text-xs mt-1">{errors.email.message}</p>
+                  )}
+                </div>
+
+                <div className="space-y-1">
+                  <Label htmlFor="password" className={`text-slate-300 flex ${isAr ? 'justify-start' : 'justify-start'}`}>{t('auth.passwordLabel')}</Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="••••••••"
+                    className="bg-slate-950/40 border-slate-800 focus:border-indigo-500 text-white font-sans"
+                    {...register('password')}
+                  />
+                  {errors.password && (
+                    <p className="text-rose-500 text-xs mt-1">{errors.password.message}</p>
+                  )}
+                </div>
+
+                <div className="space-y-1 md:col-span-2">
+                  <Label htmlFor="password_confirmation" className={`text-slate-300 flex ${isAr ? 'justify-start' : 'justify-start'}`}>{t('auth.passwordConfirmLabel')}</Label>
+                  <Input
+                    id="password_confirmation"
+                    type="password"
+                    placeholder="••••••••"
+                    className="bg-slate-950/40 border-slate-800 focus:border-indigo-500 text-white font-sans"
+                    {...register('password_confirmation')}
+                  />
+                  {errors.password_confirmation && (
+                    <p className="text-rose-500 text-xs mt-1">{errors.password_confirmation.message}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Section 3: Profile Details */}
+            <div className="space-y-4">
+              <h3 className={`text-md font-semibold text-indigo-400 flex items-center gap-2 pb-1 border-b border-slate-800/60 ${isAr ? 'text-right' : 'text-left'}`}>
+                <User className="w-4 h-4" />
+                {isAr ? 'بيانات البروفايل الشخصي' : 'Profile Details'}
+              </h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <Label htmlFor="first_name" className={`text-slate-300 flex ${isAr ? 'justify-start' : 'justify-start'}`}>{t('auth.firstNameLabel')}</Label>
+                  <Input
+                    id="first_name"
+                    placeholder={isAr ? 'مثال: خالد' : 'e.g. John'}
+                    className="bg-slate-950/40 border-slate-800 focus:border-indigo-500 text-white font-sans"
+                    {...register('first_name')}
+                  />
+                  {errors.first_name && (
+                    <p className="text-rose-500 text-xs mt-1">{errors.first_name.message}</p>
+                  )}
+                </div>
+
+                <div className="space-y-1">
+                  <Label htmlFor="last_name" className={`text-slate-300 flex ${isAr ? 'justify-start' : 'justify-start'}`}>{t('auth.lastNameLabel')}</Label>
+                  <Input
+                    id="last_name"
+                    placeholder={isAr ? 'مثال: العمر' : 'e.g. Doe'}
+                    className="bg-slate-950/40 border-slate-800 focus:border-indigo-500 text-white font-sans"
+                    {...register('last_name')}
+                  />
+                  {errors.last_name && (
+                    <p className="text-rose-500 text-xs mt-1">{errors.last_name.message}</p>
+                  )}
+                </div>
+
+                <div className="space-y-1">
+                  <Label htmlFor="phone_number" className={`text-slate-300 flex items-center gap-1 ${isAr ? 'text-right' : 'text-left'}`}>
+                    <Phone className="w-3.5 h-3.5 opacity-60" />
+                    {t('auth.phoneNumberLabel')}
+                  </Label>
+                  <Input
+                    id="phone_number"
+                    placeholder="0566778899"
+                    className="bg-slate-950/40 border-slate-800 focus:border-indigo-500 text-white text-left font-sans"
+                    dir="ltr"
+                    {...register('phone_number')}
+                  />
+                  {errors.phone_number && (
+                    <p className="text-rose-500 text-xs mt-1">{errors.phone_number.message}</p>
+                  )}
+                </div>
+
+                <div className="space-y-1">
+                  <Label htmlFor="job_title" className={`text-slate-300 flex items-center gap-1 ${isAr ? 'text-right' : 'text-left'}`}>
+                    <Briefcase className="w-3.5 h-3.5 opacity-60" />
+                    {t('auth.jobTitleLabel')}
+                  </Label>
+                  <Input
+                    id="job_title"
+                    placeholder={isAr ? 'مثال: المدير العام' : 'e.g. General Manager'}
+                    className="bg-slate-950/40 border-slate-800 focus:border-indigo-500 text-white font-sans"
+                    {...register('job_title')}
+                  />
+                  {errors.job_title && (
+                    <p className="text-rose-500 text-xs mt-1">{errors.job_title.message}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+          </CardContent>
+
+          <CardFooter className="flex flex-col gap-4 border-t border-slate-800/80 pt-6 pb-6">
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white transition-all py-6 font-semibold text-base rounded-xl cursor-pointer"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className={`w-5 h-5 ${isAr ? 'ml-2' : 'mr-2'} animate-spin`} />
+                  {isAr ? 'جاري تسجيل شركتك...' : 'Registering your company...'}
+                </>
+              ) : (
+                t('auth.registerBtn')
+              )}
+            </Button>
+            
+            <p className="text-center text-sm text-slate-400 w-full mt-2">
+              {t('auth.alreadyHaveAccount')}{' '}
+              <Link href="/login" className="text-indigo-400 hover:underline hover:text-indigo-300 font-medium">
+                {t('nav.login')}
+              </Link>
+            </p>
+          </CardFooter>
+        </form>
+      </Card>
+    </div>
+  );
+}
