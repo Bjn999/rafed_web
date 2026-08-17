@@ -25,6 +25,7 @@ import {
   Layers
 } from 'lucide-react';
 import DrawingsTab from '@/components/drawings/DrawingsTab';
+import WbsTab from '@/components/wbs/WbsTab';
 
 interface ProjectItem {
   id: number;
@@ -422,21 +423,9 @@ export default function ProjectDetailsPage() {
           </Card>
         )}
 
-        {/* Tab 3: Tasks Work (Placeholder) */}
+        {/* Tab 3: Tasks & WBS Activities */}
         {activeTab === 'tasks' && (
-          <Card className="border-slate-800 bg-slate-900/30 text-white text-center py-12">
-            <CardContent className="space-y-4 flex flex-col items-center">
-              <div className="w-12 h-12 bg-slate-900/80 text-slate-500 border border-slate-800 rounded-2xl flex items-center justify-center">
-                <CheckSquare className="w-6 h-6" />
-              </div>
-              <h3 className="text-base font-bold">{isAr ? 'جدول المهام والمراحل الإنشائية' : 'Tasks & Construction Milestones'}</h3>
-              <p className="text-xs text-slate-400 max-w-sm leading-relaxed mx-auto text-center">
-                {isAr 
-                  ? 'هذه التبويبة ستمكنك قريباً من جدولة المهام الإنشائية اليومية وربطها بالموظفين وتتبع الإنجاز وخرائط جانت (Gantt Charts).'
-                  : 'This tab will enable you to schedule daily construction activities, allocate them to workers, check progress, and view Gantt charts.'}
-              </p>
-            </CardContent>
-          </Card>
+          <WbsTab projectId={project.id} />
         )}
 
       </div>

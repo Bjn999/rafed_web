@@ -39,6 +39,8 @@ export default function DrawingCanvas({
   const { isAr } = useLanguage();
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
+  const dragStartPosRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const hasDraggedRef = useRef<boolean>(false);
 
   // Zoom & Pan state
   const [scale, setScale] = useState(1);
@@ -86,13 +88,24 @@ export default function DrawingCanvas({
     setScale((s) => Math.min(Math.max(s + zoomFactor, 0.5), 4));
   };
 
-  const dragStartPosRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
-  const hasDraggedRef = useRef<boolean>(false);
+  // Global mouseup listener to guarantee dragging stops
+  useEffect(() => {
+    const handleGlobalUp = () => {
+      setIsDragging(false);
+    };
+    window.addEventListener('mouseup', handleGlobalUp);
+    window.addEventListener('touchend', handleGlobalUp);
+    return () => {
+      window.removeEventListener('mouseup', handleGlobalUp);
+      window.removeEventListener('touchend', handleGlobalUp);
+    };
+  }, []);
 
   // Mouse pan handlers
   const handleMouseDown = (e: React.MouseEvent) => {
     // Only drag if left click on canvas background (not on pin)
     if ((e.target as HTMLElement).closest('.pin-element')) return;
+    e.preventDefault(); // Prevent native browser drag / text selection
     setIsDragging(true);
     hasDraggedRef.current = false;
     dragStartPosRef.current = { x: e.clientX, y: e.clientY };
@@ -245,7 +258,9 @@ export default function DrawingCanvas({
               ref={imageRef}
               src={getFileUrl(drawing.file_url || drawing.file_path)}
               alt={drawing.title}
-              className="max-w-none max-h-[600px] object-contain rounded-lg shadow-2xl pointer-events-auto"
+              draggable={false}
+              onDragStart={(e) => e.preventDefault()}
+              className="max-w-none max-h-[600px] object-contain rounded-lg shadow-2xl pointer-events-auto select-none"
             />
 
             {/* Temporary Pin Marker */}

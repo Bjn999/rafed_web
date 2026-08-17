@@ -144,9 +144,23 @@ export default function DrawingFullscreenModal({
   const dragStartPosRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const hasDraggedRef = useRef<boolean>(false);
 
+  // Global mouseup / touchend listener to guarantee dragging stops even if released outside container
+  useEffect(() => {
+    const handleGlobalUp = () => {
+      setIsDragging(false);
+    };
+    window.addEventListener('mouseup', handleGlobalUp);
+    window.addEventListener('touchend', handleGlobalUp);
+    return () => {
+      window.removeEventListener('mouseup', handleGlobalUp);
+      window.removeEventListener('touchend', handleGlobalUp);
+    };
+  }, []);
+
   // Mouse Pan Handlers
   const handleMouseDown = (e: React.MouseEvent) => {
     if ((e.target as HTMLElement).closest('.pin-element')) return;
+    e.preventDefault(); // Prevent native browser drag / text selection
     setIsDragging(true);
     hasDraggedRef.current = false;
     dragStartPosRef.current = { x: e.clientX, y: e.clientY };
@@ -162,7 +176,9 @@ export default function DrawingFullscreenModal({
     setPan({ x: e.clientX - dragStart.x, y: e.clientY - dragStart.y });
   };
 
-  const handleMouseUp = () => setIsDragging(false);
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
 
   // Mobile Touch Pan & Pinch Zoom Handlers
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -406,7 +422,9 @@ export default function DrawingFullscreenModal({
                 ref={imageRef}
                 src={getFileUrl(drawing.file_url || drawing.file_path)}
                 alt={drawing.title}
-                className="max-w-none max-h-[82vh] md:max-h-[86vh] object-contain shadow-2xl pointer-events-auto rounded-md"
+                draggable={false}
+                onDragStart={(e) => e.preventDefault()}
+                className="max-w-none max-h-[82vh] md:max-h-[86vh] object-contain shadow-2xl pointer-events-auto rounded-md select-none"
               />
 
               {/* Temporary Pin Marker when creating issue */}
