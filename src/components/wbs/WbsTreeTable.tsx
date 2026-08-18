@@ -319,8 +319,8 @@ export default function WbsTreeTable({
   };
 
   return (
-    <div className="w-full overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/40 backdrop-blur-xl">
-      <table className="w-full text-right" dir={isAr ? 'rtl' : 'ltr'}>
+    <div className="w-full overflow-x-auto touch-scroll rounded-2xl border border-slate-800 bg-slate-900/40 backdrop-blur-xl">
+      <table className="w-full text-right min-w-[750px]" dir={isAr ? 'rtl' : 'ltr'}>
         <thead>
           <tr className="border-b border-slate-800 bg-slate-950/60 text-slate-400 text-[11px] font-bold uppercase tracking-wider">
             <th className="py-3 px-4 text-right">{isAr ? 'رمز WBS وبند العمل' : 'WBS Code & Activity'}</th>

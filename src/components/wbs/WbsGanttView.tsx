@@ -113,13 +113,13 @@ export default function WbsGanttView({ items, onEditItem }: WbsGanttViewProps) {
       </div>
 
       {/* Gantt Container */}
-      <div className="overflow-x-auto custom-scrollbar">
-        <div className="min-w-[850px]">
+      <div className="overflow-x-auto touch-scroll no-scrollbar">
+        <div className="min-w-[700px] sm:min-w-[850px]">
           
           {/* Timeline Header Columns */}
           <div className="flex border-b border-slate-800 bg-slate-950/40 text-[11px] font-bold text-slate-400">
             {/* Task Name Sidebar Header */}
-            <div className="w-64 sm:w-72 p-3 shrink-0 border-e border-slate-800">
+            <div className="w-48 sm:w-72 p-3 shrink-0 border-e border-slate-800">
               {isAr ? 'اسم البند / النشاط' : 'Activity Name'}
             </div>
 
@@ -147,7 +147,7 @@ export default function WbsGanttView({ items, onEditItem }: WbsGanttViewProps) {
                     className="flex items-center hover:bg-slate-850/50 transition-colors group cursor-pointer"
                   >
                     {/* Left Sidebar Task info */}
-                    <div className="w-64 sm:w-72 p-3 shrink-0 border-e border-slate-800/80 flex items-center gap-2">
+                    <div className="w-48 sm:w-72 p-3 shrink-0 border-e border-slate-800/80 flex items-center gap-2">
                       <span className="font-mono text-[10px] font-bold text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-1.5 py-0.5 rounded">
                         {item.code || `#${item.id}`}
                       </span>

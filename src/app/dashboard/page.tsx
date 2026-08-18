@@ -143,14 +143,14 @@ export default function DashboardPage() {
       </div>
 
       {/* Quick Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
         <Card className="border-slate-800 bg-slate-900/40 backdrop-blur text-white hover:border-slate-700 transition-all">
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-sm font-medium text-slate-400">{isAr ? 'إجمالي المشاريع' : 'Total Projects'}</CardTitle>
-            <FolderKanban className="w-4 h-4 text-indigo-400" />
+            <CardTitle className="text-xs sm:text-sm font-medium text-slate-400">{isAr ? 'إجمالي المشاريع' : 'Total Projects'}</CardTitle>
+            <FolderKanban className="w-4 h-4 text-indigo-400 shrink-0" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white font-sans">
+            <div className="text-xl sm:text-2xl font-bold text-white font-sans">
               {usageLoading ? '...' : (usage ? `${usage.credits.used} / ${usage.credits.total}` : '0 / 0')}
             </div>
             <p className="text-xs text-slate-500 mt-1">
@@ -163,11 +163,11 @@ export default function DashboardPage() {
 
         <Card className="border-slate-800 bg-slate-900/40 backdrop-blur text-white hover:border-slate-700 transition-all">
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-sm font-medium text-slate-400">{isAr ? 'أعضاء الفريق' : 'Team Members'}</CardTitle>
-            <Users2 className="w-4 h-4 text-emerald-400" />
+            <CardTitle className="text-xs sm:text-sm font-medium text-slate-400">{isAr ? 'أعضاء الفريق' : 'Team Members'}</CardTitle>
+            <Users2 className="w-4 h-4 text-emerald-400 shrink-0" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white font-sans">
+            <div className="text-xl sm:text-2xl font-bold text-white font-sans">
               {usageLoading ? '...' : (usage ? `${usage.users.current} / ${usage.users.max}` : '1 / 1')}
             </div>
             <p className="text-xs text-slate-500 mt-1">

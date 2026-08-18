@@ -439,41 +439,41 @@ export default function ProjectsPage() {
       </div>
 
       {/* Stats Board */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4">
         <Card className="border-slate-800 bg-slate-900/20 backdrop-blur text-white">
-          <CardContent className="pt-6">
-            <p className="text-xs text-slate-400">{isAr ? 'إجمالي المشاريع' : 'Total Projects'}</p>
-            <p className="text-2xl font-bold mt-1 text-white font-sans">{projects.length}</p>
+          <CardContent className="pt-4 sm:pt-6 px-3 sm:px-6">
+            <p className="text-[11px] sm:text-xs text-slate-400">{isAr ? 'إجمالي المشاريع' : 'Total Projects'}</p>
+            <p className="text-xl sm:text-2xl font-bold mt-1 text-white font-sans">{projects.length}</p>
           </CardContent>
         </Card>
         <Card className="border-slate-800 bg-slate-900/20 backdrop-blur text-white">
-          <CardContent className="pt-6">
-            <p className="text-xs text-emerald-400">{isAr ? 'المشاريع النشطة' : 'Active Projects'}</p>
-            <p className="text-2xl font-bold mt-1 text-emerald-400 font-sans">
+          <CardContent className="pt-4 sm:pt-6 px-3 sm:px-6">
+            <p className="text-[11px] sm:text-xs text-emerald-400">{isAr ? 'المشاريع النشطة' : 'Active Projects'}</p>
+            <p className="text-xl sm:text-2xl font-bold mt-1 text-emerald-400 font-sans">
               {projects.filter(p => p.status === 'active').length}
             </p>
           </CardContent>
         </Card>
         <Card className="border-slate-800 bg-slate-900/20 backdrop-blur text-white">
-          <CardContent className="pt-6">
-            <p className="text-xs text-violet-400">{isAr ? 'تحت التحضير' : 'Preparation'}</p>
-            <p className="text-2xl font-bold mt-1 text-violet-400 font-sans">
+          <CardContent className="pt-4 sm:pt-6 px-3 sm:px-6">
+            <p className="text-[11px] sm:text-xs text-violet-400">{isAr ? 'تحت التحضير' : 'Preparation'}</p>
+            <p className="text-xl sm:text-2xl font-bold mt-1 text-violet-400 font-sans">
               {projects.filter(p => p.status === 'preparation' || p.status === 'planned').length}
             </p>
           </CardContent>
         </Card>
         <Card className="border-slate-800 bg-slate-900/20 backdrop-blur text-white">
-          <CardContent className="pt-6">
-            <p className="text-xs text-rose-450">{isAr ? 'المتأخرة' : 'Delayed'}</p>
-            <p className="text-2xl font-bold mt-1 text-rose-450 font-sans">
+          <CardContent className="pt-4 sm:pt-6 px-3 sm:px-6">
+            <p className="text-[11px] sm:text-xs text-rose-450">{isAr ? 'المتأخرة' : 'Delayed'}</p>
+            <p className="text-xl sm:text-2xl font-bold mt-1 text-rose-450 font-sans">
               {projects.filter(p => p.status === 'delayed').length}
             </p>
           </CardContent>
         </Card>
-        <Card className="border-slate-800 bg-slate-900/20 backdrop-blur text-white col-span-2 md:col-span-1">
-          <CardContent className="pt-6">
-            <p className="text-xs text-indigo-400">{isAr ? 'المكتملة والمغلقة' : 'Completed & Closed'}</p>
-            <p className="text-2xl font-bold mt-1 text-indigo-400 font-sans">
+        <Card className="border-slate-800 bg-slate-900/20 backdrop-blur text-white col-span-2 sm:col-span-1">
+          <CardContent className="pt-4 sm:pt-6 px-3 sm:px-6">
+            <p className="text-[11px] sm:text-xs text-indigo-400">{isAr ? 'المكتملة والمغلقة' : 'Completed & Closed'}</p>
+            <p className="text-xl sm:text-2xl font-bold mt-1 text-indigo-400 font-sans">
               {projects.filter(p => p.status === 'completed' || p.status === 'closed').length}
             </p>
           </CardContent>

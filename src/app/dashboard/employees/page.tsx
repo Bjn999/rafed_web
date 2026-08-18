@@ -399,7 +399,7 @@ export default function EmployeesPage() {
       )}
 
       {/* Stats Board */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-3xl">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6">
         <Card className="border-slate-800 bg-slate-900/20 text-white pt-6">
           <CardContent>
             <p className="text-xs text-slate-400">{isAr ? 'إجمالي الموظفين' : 'Total Employees'}</p>

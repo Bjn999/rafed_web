@@ -123,6 +123,28 @@ export default function DrawingCanvas({
 
   const handleMouseUp = () => setIsDragging(false);
 
+  // Touch handlers for mobile devices
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 1) {
+      setIsDragging(true);
+      setDragStart({ x: e.touches[0].clientX - pan.x, y: e.touches[0].clientY - pan.y });
+      dragStartPosRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      hasDraggedRef.current = false;
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging || e.touches.length !== 1) return;
+    const dx = Math.abs(e.touches[0].clientX - dragStartPosRef.current.x);
+    const dy = Math.abs(e.touches[0].clientY - dragStartPosRef.current.y);
+    if (dx > 5 || dy > 5) {
+      hasDraggedRef.current = true;
+    }
+    setPan({ x: e.touches[0].clientX - dragStart.x, y: e.touches[0].clientY - dragStart.y });
+  };
+
+  const handleTouchEnd = () => setIsDragging(false);
+
   // Click canvas to place a pin
   const handleCanvasClick = (e: React.MouseEvent) => {
     if (hasDraggedRef.current) {
@@ -168,7 +190,7 @@ export default function DrawingCanvas({
   return (
     <div className="flex flex-col gap-4">
       {/* Controls Bar */}
-      <div className="flex flex-wrap items-center justify-between bg-slate-900 border border-slate-800 rounded-2xl p-3.5 gap-3">
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-3 flex flex-wrap items-center justify-between gap-3 shadow-lg">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-indigo-500/10 rounded-xl border border-indigo-500/20 text-indigo-400">
             <Layers className="w-5 h-5" />
@@ -181,12 +203,11 @@ export default function DrawingCanvas({
               </span>
             </h4>
             <p className="text-xs text-slate-400">
-              {isAr ? 'انقر على أي موقع على المخطط لإضافة ملاحظة ميدانية' : 'Click anywhere on the drawing to add a pin issue'}
+              {isAr ? 'انقر أو المس أي موقع في المخطط لإضافة ملاحظة دبابيس' : 'Tap anywhere on drawing to add issue pin'}
             </p>
           </div>
         </div>
 
-        {/* Canvas Toolbar */}
         <div className="flex items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800">
           <button
             onClick={handleZoomIn}
@@ -195,7 +216,7 @@ export default function DrawingCanvas({
           >
             <ZoomIn className="w-4 h-4" />
           </button>
-          <span className="text-xs font-mono text-slate-400 px-2 select-none">
+          <span className="text-[11px] font-mono font-bold text-indigo-400 px-2 min-w-[45px] text-center">
             {Math.round(scale * 100)}%
           </span>
           <button
@@ -223,7 +244,10 @@ export default function DrawingCanvas({
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
-        className="relative w-full h-[650px] bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden cursor-grab active:cursor-grabbing select-none flex items-center justify-center"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        className="relative w-full h-[420px] sm:h-[650px] bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden cursor-grab active:cursor-grabbing select-none flex items-center justify-center touch-none"
       >
         {!isImage ? (
           <div className="text-center py-20 px-6 max-w-md">

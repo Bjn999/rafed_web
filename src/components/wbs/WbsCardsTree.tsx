@@ -347,7 +347,7 @@ export default function WbsCardsTree({
         {hasChildren && isExpanded && (
           <div
             className={`mt-3 space-y-3 relative ${
-              isAr ? 'mr-4 sm:mr-6 pr-4 border-r-2 border-indigo-500/20' : 'ml-4 sm:ml-6 pl-4 border-l-2 border-indigo-500/20'
+              isAr ? 'mr-2 sm:mr-6 pr-2 sm:pr-4 border-r-2 border-indigo-500/20' : 'ml-2 sm:ml-6 pl-2 sm:pl-4 border-l-2 border-indigo-500/20'
             }`}
           >
             {node.children_recursive!.map((child) => renderCardNode(child, level + 1))}

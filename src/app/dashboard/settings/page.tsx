@@ -280,10 +280,10 @@ export default function SettingsPage() {
     <div className="space-y-6 animate-in fade-in duration-300">
       
       {/* Inner Navigation Tabs */}
-      <div className="flex border-b border-slate-800" dir={isAr ? 'rtl' : 'ltr'}>
+      <div className="flex border-b border-slate-800 overflow-x-auto no-scrollbar whitespace-nowrap touch-scroll gap-1" dir={isAr ? 'rtl' : 'ltr'}>
         <button
           onClick={() => handleTabChange('profile')}
-          className={`flex items-center gap-2 px-6 py-3 border-b-2 text-sm font-semibold transition-all cursor-pointer ${
+          className={`flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-3 border-b-2 text-xs sm:text-sm font-semibold transition-all cursor-pointer shrink-0 ${
             activeTab === 'profile'
               ? 'border-indigo-500 text-indigo-400'
               : 'border-transparent text-slate-400 hover:text-slate-200'
@@ -295,7 +295,7 @@ export default function SettingsPage() {
 
         <button
           onClick={() => handleTabChange('security')}
-          className={`flex items-center gap-2 px-6 py-3 border-b-2 text-sm font-semibold transition-all cursor-pointer ${
+          className={`flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-3 border-b-2 text-xs sm:text-sm font-semibold transition-all cursor-pointer shrink-0 ${
             activeTab === 'security'
               ? 'border-indigo-500 text-indigo-400'
               : 'border-transparent text-slate-400 hover:text-slate-200'
@@ -308,7 +308,7 @@ export default function SettingsPage() {
         {isCompanyAdmin && (
           <button
             onClick={() => handleTabChange('company')}
-            className={`flex items-center gap-2 px-6 py-3 border-b-2 text-sm font-semibold transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-3 border-b-2 text-xs sm:text-sm font-semibold transition-all cursor-pointer shrink-0 ${
               activeTab === 'company'
                 ? 'border-indigo-500 text-indigo-400'
                 : 'border-transparent text-slate-400 hover:text-slate-200'
@@ -321,7 +321,7 @@ export default function SettingsPage() {
 
         <button
           onClick={() => handleTabChange('subscription')}
-          className={`flex items-center gap-2 px-6 py-3 border-b-2 text-sm font-semibold transition-all cursor-pointer ${
+          className={`flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-3 border-b-2 text-xs sm:text-sm font-semibold transition-all cursor-pointer shrink-0 ${
             activeTab === 'subscription'
               ? 'border-indigo-500 text-indigo-400'
               : 'border-transparent text-slate-400 hover:text-slate-200'

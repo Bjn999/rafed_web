@@ -155,49 +155,49 @@ export default function ProjectDetailsPage() {
       </div>
 
       {/* Tab Selector System */}
-      <div className="flex border-b border-slate-800 gap-1.5 pt-2" dir={isAr ? 'rtl' : 'ltr'}>
+      <div className="flex border-b border-slate-800 gap-1 sm:gap-2 pt-2 overflow-x-auto no-scrollbar whitespace-nowrap touch-scroll" dir={isAr ? 'rtl' : 'ltr'}>
         <button
           onClick={() => setActiveTab('overview')}
-          className={`py-3 px-6 text-sm font-semibold transition-all border-b-2 cursor-pointer ${
+          className={`py-2.5 sm:py-3 px-3.5 sm:px-6 text-xs sm:text-sm font-semibold transition-all border-b-2 cursor-pointer shrink-0 ${
             activeTab === 'overview'
               ? 'border-indigo-500 text-indigo-400'
               : 'border-transparent text-slate-400 hover:text-slate-200'
           }`}
         >
-          <FileText className={`w-4 h-4 inline-block ${isAr ? 'ml-2' : 'mr-2'} align-text-bottom`} />
+          <FileText className={`w-4 h-4 inline-block ${isAr ? 'ml-1.5' : 'mr-1.5'} align-text-bottom`} />
           {isAr ? 'نظرة عامة' : 'Overview'}
         </button>
         <button
           onClick={() => setActiveTab('drawings')}
-          className={`py-3 px-6 text-sm font-semibold transition-all border-b-2 cursor-pointer ${
+          className={`py-2.5 sm:py-3 px-3.5 sm:px-6 text-xs sm:text-sm font-semibold transition-all border-b-2 cursor-pointer shrink-0 ${
             activeTab === 'drawings'
               ? 'border-indigo-500 text-indigo-400'
               : 'border-transparent text-slate-400 hover:text-slate-200'
           }`}
         >
-          <Layers className={`w-4 h-4 inline-block ${isAr ? 'ml-2' : 'mr-2'} align-text-bottom`} />
+          <Layers className={`w-4 h-4 inline-block ${isAr ? 'ml-1.5' : 'mr-1.5'} align-text-bottom`} />
           {isAr ? 'المخططات والعيوب' : 'Drawings & Punch List'}
         </button>
         <button
           onClick={() => setActiveTab('team')}
-          className={`py-3 px-6 text-sm font-semibold transition-all border-b-2 cursor-pointer ${
+          className={`py-2.5 sm:py-3 px-3.5 sm:px-6 text-xs sm:text-sm font-semibold transition-all border-b-2 cursor-pointer shrink-0 ${
             activeTab === 'team'
               ? 'border-indigo-500 text-indigo-400'
               : 'border-transparent text-slate-400 hover:text-slate-200'
           }`}
         >
-          <Users className={`w-4 h-4 inline-block ${isAr ? 'ml-2' : 'mr-2'} align-text-bottom`} />
+          <Users className={`w-4 h-4 inline-block ${isAr ? 'ml-1.5' : 'mr-1.5'} align-text-bottom`} />
           {isAr ? 'فريق العمل' : 'Project Team'}
         </button>
         <button
           onClick={() => setActiveTab('tasks')}
-          className={`py-3 px-6 text-sm font-semibold transition-all border-b-2 cursor-pointer ${
+          className={`py-2.5 sm:py-3 px-3.5 sm:px-6 text-xs sm:text-sm font-semibold transition-all border-b-2 cursor-pointer shrink-0 ${
             activeTab === 'tasks'
               ? 'border-indigo-500 text-indigo-400'
               : 'border-transparent text-slate-400 hover:text-slate-200'
           }`}
         >
-          <CheckSquare className={`w-4 h-4 inline-block ${isAr ? 'ml-2' : 'mr-2'} align-text-bottom`} />
+          <CheckSquare className={`w-4 h-4 inline-block ${isAr ? 'ml-1.5' : 'mr-1.5'} align-text-bottom`} />
           {isAr ? 'المهام والمراحل' : 'Tasks & Milestones'}
         </button>
       </div>
@@ -218,7 +218,8 @@ export default function ProjectDetailsPage() {
                 <p className="text-xs font-bold text-slate-350 mb-6">{isAr ? 'مراحل تشغيل ومسار المشروع الإنشائي' : 'Operational Milestones & Project Progress Path'}</p>
                 
                 {/* Horizontal Progress */}
-                <div className="relative flex justify-between items-center w-full max-w-4xl mx-auto pt-2 pb-6">
+                <div className="overflow-x-auto no-scrollbar pb-2">
+                  <div className="relative flex justify-between items-center w-full min-w-[500px] max-w-4xl mx-auto pt-2 pb-6">
                   {/* Line Background */}
                   <div className="absolute left-0 right-0 top-[28px] h-0.5 bg-slate-800 -z-10" />
                   
@@ -256,7 +257,8 @@ export default function ProjectDetailsPage() {
                     );
                   })}
                 </div>
-              </CardContent>
+              </div>
+            </CardContent>
             </Card>
 
             {/* Financial & Location Cards Grid */}
