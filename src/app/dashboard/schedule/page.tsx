@@ -98,8 +98,20 @@ export default function SchedulePage() {
     enabled: !!selectedProjectId,
   });
 
+  // Fetch dependencies
+  const { data: dependenciesData, refetch: refetchDependencies } = useQuery<{ success: boolean; data: any[] }>({
+    queryKey: ['scheduleWbsDependencies', selectedProjectId],
+    queryFn: async () => {
+      if (!selectedProjectId) throw new Error('No project selected');
+      const res = await api.get<{ success: boolean; data: any[] }>(`/projects/${selectedProjectId}/wbs-dependencies`);
+      return res;
+    },
+    enabled: !!selectedProjectId,
+  });
+
   const treeData = Array.isArray(wbsData?.data?.tree) ? wbsData.data.tree : [];
   const flatData = Array.isArray(wbsData?.data?.flat) ? wbsData.data.flat : [];
+  const dependencies = dependenciesData?.data || [];
   const summary = wbsData?.data?.summary || {
     total_items: 0,
     completed_items: 0,
@@ -379,6 +391,7 @@ export default function SchedulePage() {
               onEditItem={handleOpenEditModal}
               projectStartDate={activeProject?.start_date}
               projectEndDate={activeProject?.end_date}
+              dependencies={dependencies}
             />
           )}
 
@@ -408,11 +421,15 @@ export default function SchedulePage() {
         <WbsItemModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          projectId={selectedProjectId}
+          projectId={selectedProjectId!}
           parentItem={parentItem}
           editingItem={editingItem}
           flatItems={flatData}
-          onSuccess={() => refetch()}
+          dependencies={dependencies}
+          onSuccess={() => {
+            refetch();
+            refetchDependencies();
+          }}
         />
       )}
 

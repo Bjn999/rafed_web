@@ -42,6 +42,7 @@ interface WbsItemModalProps {
   parentItem?: WbsItemData | null;
   editingItem?: WbsItemData | null;
   flatItems: WbsItemData[];
+  dependencies?: any[];
   onSuccess: () => void;
 }
 
@@ -52,11 +53,15 @@ export default function WbsItemModal({
   parentItem,
   editingItem,
   flatItems,
+  dependencies,
   onSuccess,
 }: WbsItemModalProps) {
   const { isAr } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [activeTab, setActiveTab] = useState<'details' | 'dependencies'>('details');
+  const [depLoading, setDepLoading] = useState(false);
+  const [newDep, setNewDep] = useState({ predecessor_id: '', type: 'FS' });
 
   const [formData, setFormData] = useState<WbsItemData>({
     name: '',
@@ -132,7 +137,44 @@ export default function WbsItemModal({
       });
     }
     setErrorMessage('');
+    setActiveTab('details');
+    setNewDep({ predecessor_id: '', type: 'FS' });
   }, [editingItem, parentItem, isOpen]);
+
+  const handleAddDependency = async () => {
+    if (!newDep.predecessor_id || !editingItem?.id) return;
+    setDepLoading(true);
+    setErrorMessage('');
+    try {
+      await api.post(`/projects/${projectId}/wbs-dependencies`, {
+        predecessor_id: Number(newDep.predecessor_id),
+        successor_id: editingItem.id,
+        type: newDep.type,
+      });
+      setNewDep({ predecessor_id: '', type: 'FS' });
+      onSuccess(); // refresh dependencies
+    } catch (err: any) {
+      setErrorMessage(err?.response?.data?.message || (isAr ? 'حدث خطأ أثناء إضافة الاعتمادية' : 'Error adding dependency'));
+    } finally {
+      setDepLoading(false);
+    }
+  };
+
+  const handleDeleteDependency = async (id: number) => {
+    if (!window.confirm(isAr ? 'هل أنت متأكد من حذف هذه الاعتمادية؟' : 'Are you sure you want to delete this dependency?')) return;
+    setDepLoading(true);
+    setErrorMessage('');
+    try {
+      await api.delete(`/wbs-dependencies/${id}`);
+      onSuccess(); // refresh
+    } catch (err: any) {
+      setErrorMessage(err?.response?.data?.message || (isAr ? 'حدث خطأ أثناء حذف الاعتمادية' : 'Error deleting dependency'));
+    } finally {
+      setDepLoading(false);
+    }
+  };
+
+  const itemDependencies = dependencies?.filter(d => d.successor_id === editingItem?.id) || [];
 
   if (!isOpen) return null;
 
@@ -193,15 +235,116 @@ export default function WbsItemModal({
           </button>
         </div>
 
+        {/* Tabs */}
+        {editingItem && (
+          <div className="flex border-b border-slate-800 px-6 pt-2 gap-4">
+            <button
+              type="button"
+              onClick={() => setActiveTab('details')}
+              className={`pb-2 text-sm font-bold border-b-2 transition-all ${activeTab === 'details' ? 'border-indigo-500 text-indigo-400' : 'border-transparent text-slate-400 hover:text-white'}`}
+            >
+              {isAr ? 'تفاصيل النشاط' : 'Activity Details'}
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('dependencies')}
+              className={`pb-2 text-sm font-bold border-b-2 transition-all ${activeTab === 'dependencies' ? 'border-indigo-500 text-indigo-400' : 'border-transparent text-slate-400 hover:text-white'}`}
+            >
+              {isAr ? 'الاعتماديات' : 'Dependencies'}
+            </button>
+          </div>
+        )}
+
         {/* Form Body */}
-        <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-5 flex-1 custom-scrollbar">
+        <div className="p-6 overflow-y-auto flex-1 custom-scrollbar">
           
           {errorMessage && (
-            <div className="p-3.5 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-400 text-xs flex items-center gap-2">
+            <div className="p-3.5 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-400 text-xs flex items-center gap-2 mb-4">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{errorMessage}</span>
             </div>
           )}
+
+          {activeTab === 'dependencies' ? (
+            <div className="space-y-5">
+              <div className="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-4">
+                <h4 className="text-sm font-bold text-white">{isAr ? 'إضافة اعتمادية جديدة' : 'Add New Dependency'}</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-semibold text-slate-300">{isAr ? 'النشاط السابق (Predecessor)' : 'Predecessor Activity'}</label>
+                    <select
+                      value={newDep.predecessor_id}
+                      onChange={(e) => setNewDep({...newDep, predecessor_id: e.target.value})}
+                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors"
+                    >
+                      <option value="">{isAr ? '-- اختر النشاط --' : '-- Select Activity --'}</option>
+                      {flatItems.filter(item => item.id !== editingItem?.id).map(item => (
+                        <option key={item.id} value={item.id}>{item.code ? `${item.code} - ` : ''}{item.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-semibold text-slate-300">{isAr ? 'نوع الاعتمادية' : 'Dependency Type'}</label>
+                    <select
+                      value={newDep.type}
+                      onChange={(e) => setNewDep({...newDep, type: e.target.value})}
+                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors"
+                    >
+                      <option value="FS">{isAr ? 'النهاية للبداية (FS)' : 'Finish-to-Start (FS)'}</option>
+                      <option value="SS">{isAr ? 'البداية للبداية (SS)' : 'Start-to-Start (SS)'}</option>
+                      <option value="FF">{isAr ? 'النهاية للنهاية (FF)' : 'Finish-to-Finish (FF)'}</option>
+                      <option value="SF">{isAr ? 'البداية للنهاية (SF)' : 'Start-to-Finish (SF)'}</option>
+                    </select>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleAddDependency}
+                  disabled={depLoading || !newDep.predecessor_id}
+                  className="px-4 py-2 bg-indigo-600/20 hover:bg-indigo-600 text-indigo-400 hover:text-white rounded-lg text-xs font-bold transition-colors cursor-pointer disabled:opacity-50 flex items-center gap-2"
+                >
+                  <Plus className="w-4 h-4" />
+                  {isAr ? 'إضافة' : 'Add'}
+                </button>
+              </div>
+
+              <div className="space-y-3">
+                <h4 className="text-sm font-bold text-white">{isAr ? 'الأنشطة السابقة المرتبطة' : 'Linked Predecessors'}</h4>
+                {itemDependencies.length === 0 ? (
+                  <div className="p-6 text-center text-slate-500 border border-dashed border-slate-800 rounded-xl text-xs">
+                    {isAr ? 'لا يوجد اعتماديات لهذا النشاط' : 'No dependencies for this activity'}
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    {itemDependencies.map(dep => {
+                      const predItem = flatItems.find(i => i.id === dep.predecessor_id);
+                      return (
+                        <div key={dep.id} className="flex items-center justify-between p-3 bg-slate-950 border border-slate-800 rounded-xl">
+                          <div className="flex flex-col">
+                            <span className="text-sm text-white font-semibold">
+                              {predItem?.name || (isAr ? 'نشاط محذوف' : 'Deleted Activity')}
+                            </span>
+                            <span className="text-xs text-indigo-400 font-mono">
+                              Type: {dep.type}
+                            </span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteDependency(dep.id)}
+                            disabled={depLoading}
+                            className="p-2 text-rose-400 hover:bg-rose-500/10 rounded-lg transition-colors cursor-pointer disabled:opacity-50"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            <form id="wbs-form" onSubmit={handleSubmit} className="space-y-5">
 
           {/* Milestone Toggle */}
           <div className="flex items-center gap-3 bg-amber-500/10 border border-amber-500/20 p-3 rounded-xl">
@@ -441,6 +584,7 @@ export default function WbsItemModal({
             </button>
             <button
               type="submit"
+              form="wbs-form"
               disabled={loading}
               className="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all shadow-lg shadow-indigo-600/30 flex items-center gap-2 cursor-pointer disabled:opacity-50"
             >
@@ -449,7 +593,9 @@ export default function WbsItemModal({
             </button>
           </div>
 
-        </form>
+            </form>
+          )}
+        </div>
       </div>
     </div>
   );
