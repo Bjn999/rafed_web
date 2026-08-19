@@ -21,7 +21,8 @@ import {
   FolderKanban,
   Users2,
   Menu,
-  X
+  Calendar,
+  X,
 } from 'lucide-react';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -130,6 +131,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       >
         <FolderKanban className="w-5 h-5 shrink-0" />
         {(!isCollapsed || isMobileOpen) && <span className="animate-in fade-in duration-300">{t('dashboardLayout.menu.projects')}</span>}
+      </Link>
+
+      <Link
+        href="/dashboard/schedule"
+        className={`w-full flex items-center gap-3 py-3 rounded-xl text-sm font-semibold transition-all ${
+          isCollapsed ? 'md:justify-center md:px-0 px-4' : 'px-4'
+        } ${
+          isLinkActive('/dashboard/schedule')
+            ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/10'
+            : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200'
+        }`}
+      >
+        <Calendar className="w-5 h-5 shrink-0" />
+        {(!isCollapsed || isMobileOpen) && <span className="animate-in fade-in duration-300">{isAr ? 'الأنشطة والخطة الزمنية' : 'Activities & Schedule'}</span>}
       </Link>
 
       <Link
@@ -297,6 +312,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               {pathname === '/dashboard' && t('dashboardLayout.headerTitles.performance')}
               {pathname === '/dashboard/projects' && t('dashboardLayout.headerTitles.projects')}
               {pathname.startsWith('/dashboard/projects/') && t('dashboardLayout.headerTitles.projectDetails')}
+              {pathname === '/dashboard/schedule' && (isAr ? 'الأنشطة والخطة الزمنية' : 'Activities & Schedule Workspace')}
               {pathname === '/dashboard/employees' && t('dashboardLayout.headerTitles.employees')}
               {pathname.startsWith('/dashboard/settings') && t('dashboardLayout.headerTitles.settings')}
             </h2>

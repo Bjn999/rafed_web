@@ -19,7 +19,9 @@ import {
   Table as TableIcon,
   BarChart3,
   Layers,
+  ExternalLink,
 } from 'lucide-react';
+import Link from 'next/link';
 import WbsTreeTable, { TreeWbsItem } from './WbsTreeTable';
 import WbsCardsTree from './WbsCardsTree';
 import WbsGanttView from './WbsGanttView';
@@ -44,9 +46,11 @@ interface WbsApiResponse {
 
 interface WbsTabProps {
   projectId: number;
+  projectStartDate?: string | null;
+  projectEndDate?: string | null;
 }
 
-export default function WbsTab({ projectId }: WbsTabProps) {
+export default function WbsTab({ projectId, projectStartDate, projectEndDate }: WbsTabProps) {
   const { isAr } = useLanguage();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -131,7 +135,7 @@ export default function WbsTab({ projectId }: WbsTabProps) {
     return (
       <div className="flex flex-col items-center py-20 text-slate-400 gap-3">
         <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
-        <p className="text-xs font-semibold">{isAr ? 'جاري تحميل جدول الأنشطة والمهام (WBS)...' : 'Loading Work Breakdown Structure...'}</p>
+        <p className="text-xs font-semibold">{isAr ? 'جاري تحميل جدول الأنشطة (WBS)...' : 'Loading Work Breakdown Structure...'}</p>
       </div>
     );
   }
@@ -157,7 +161,7 @@ export default function WbsTab({ projectId }: WbsTabProps) {
       {/* Metrics Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         
-        {/* Total Tasks & Overall Progress */}
+        {/* Total Activities & Overall Progress */}
         <Card className="border-slate-800 bg-slate-900/40 text-white">
           <CardContent className="pt-5 flex items-start gap-4">
             <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center shrink-0">
@@ -297,14 +301,24 @@ export default function WbsTab({ projectId }: WbsTabProps) {
           </select>
         </div>
 
-        {/* Right Side: Add Root Button */}
-        <button
-          onClick={handleOpenCreateRoot}
-          className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl py-2.5 px-5 text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-indigo-600/30 cursor-pointer shrink-0"
-        >
-          <Plus className="w-4 h-4" />
-          <span>{isAr ? 'إضافة بند WBS رئيسي' : 'Add Root WBS Item'}</span>
-        </button>
+        {/* Right Side: Add Root Button & Fullscreen Link */}
+        <div className="flex items-center gap-2 shrink-0">
+          <Link
+            href={`/dashboard/schedule?projectId=${projectId}`}
+            className="bg-slate-800 hover:bg-slate-700 text-indigo-400 hover:text-indigo-300 border border-slate-700 rounded-xl py-2.5 px-4 text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer"
+          >
+            <ExternalLink className="w-4 h-4" />
+            <span>{isAr ? 'عرض الجدولة الشاملة' : 'Fullscreen Schedule'}</span>
+          </Link>
+
+          <button
+            onClick={handleOpenCreateRoot}
+            className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl py-2.5 px-5 text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-indigo-600/30 cursor-pointer shrink-0"
+          >
+            <Plus className="w-4 h-4" />
+            <span>{isAr ? 'إضافة بند WBS رئيسي' : 'Add Root WBS Item'}</span>
+          </button>
+        </div>
 
       </div>
 
@@ -332,6 +346,8 @@ export default function WbsTab({ projectId }: WbsTabProps) {
         <WbsGanttView
           items={flatItems}
           onEditItem={handleOpenEdit}
+          projectStartDate={projectStartDate}
+          projectEndDate={projectEndDate}
         />
       )}
 

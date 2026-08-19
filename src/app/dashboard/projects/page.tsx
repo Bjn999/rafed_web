@@ -23,13 +23,18 @@ import {
   X,
   TrendingUp,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Briefcase,
+  HardHat
 } from 'lucide-react';
 
 interface ProjectItem {
   id: number;
   name: string;
-  project_number?: string | null;
+  project_number: string;
+  client_id?: number | null;
+  contractor_id?: number | null;
+  project_manager_id?: number | null;
   client_name?: string | null;
   contractor_name?: string | null;
   project_manager?: string | null;
@@ -40,7 +45,19 @@ interface ProjectItem {
   description?: string | null;
   budget: number;
   status: string;
+  overall_progress?: number;
   created_at: string;
+}
+
+interface UserOption {
+  id: number;
+  email: string;
+  role: string;
+  profile?: {
+    first_name: string;
+    last_name: string;
+    job_title?: string;
+  } | null;
 }
 
 interface CustomDatePickerProps {
@@ -201,9 +218,9 @@ export default function ProjectsPage() {
   const [formData, setFormData] = useState({
     name: '',
     project_number: '',
-    client_name: '',
-    contractor_name: '',
-    project_manager: '',
+    client_id: '',
+    contractor_id: '',
+    project_manager_id: '',
     location: '',
     contract_value: '',
     start_date: '',
@@ -225,14 +242,49 @@ export default function ProjectsPage() {
   };
 
   // Fetch projects list
-  const { data: projects = [], isLoading } = useQuery<ProjectItem[]>({
+  const { data: rawProjects, isLoading } = useQuery({
     queryKey: ['projectsList'],
     queryFn: async () => {
-      const response = await api.get<{ success: boolean; data: ProjectItem[] }>('/projects');
-      return response.data || [];
+      const response = await api.get<any>('/projects');
+      return response?.data ?? response;
     },
     enabled: !!user,
   });
+
+  const projects: ProjectItem[] = Array.isArray(rawProjects)
+    ? rawProjects
+    : Array.isArray(rawProjects?.data)
+    ? rawProjects.data
+    : [];
+
+  // Fetch company employees / users list
+  const { data: usersResponse } = useQuery<{ success: boolean; data: UserOption[] }>({
+    queryKey: ['companyUsersList'],
+    queryFn: async () => {
+      const response = await api.get<{ success: boolean; data: UserOption[] }>('/users');
+      return response;
+    },
+    enabled: !!user,
+  });
+
+  const rawUsers = Array.isArray(usersResponse?.data) ? usersResponse.data : [];
+
+  const getUserDisplayName = (u: UserOption) => {
+    if (u.profile?.first_name || u.profile?.last_name) {
+      return `${u.profile.first_name || ''} ${u.profile.last_name || ''}`.trim();
+    }
+    return u.email;
+  };
+
+  // Filter users by roles
+  const clientUsers = rawUsers.filter(u => u.role === 'Client' || u.role === 'client');
+  const contractorUsers = rawUsers.filter(u => u.role === 'Contractor' || u.role === 'contractor');
+  const pmUsers = rawUsers.filter(u => u.role === 'Project Manager' || u.role === 'project_manager');
+
+  // Fallbacks if no specific roles exist yet
+  const availableClients = clientUsers.length > 0 ? clientUsers : rawUsers;
+  const availableContractors = contractorUsers.length > 0 ? contractorUsers : rawUsers;
+  const availablePMs = pmUsers.length > 0 ? pmUsers : rawUsers;
 
   // Mutations
   const createMutation = useMutation({
@@ -242,6 +294,9 @@ export default function ProjectsPage() {
         ...data,
         budget: parseFloat(data.budget) || 0,
         contract_value: parseFloat(data.contract_value) || null,
+        client_id: data.client_id ? parseInt(data.client_id) : null,
+        contractor_id: data.contractor_id ? parseInt(data.contractor_id) : null,
+        project_manager_id: data.project_manager_id ? parseInt(data.project_manager_id) : null,
         start_date: data.start_date || null,
         end_date: data.end_date || null,
       });
@@ -276,6 +331,9 @@ export default function ProjectsPage() {
         ...data,
         budget: parseFloat(data.budget) || 0,
         contract_value: parseFloat(data.contract_value) || null,
+        client_id: data.client_id ? parseInt(data.client_id) : null,
+        contractor_id: data.contractor_id ? parseInt(data.contractor_id) : null,
+        project_manager_id: data.project_manager_id ? parseInt(data.project_manager_id) : null,
         start_date: data.start_date || null,
         end_date: data.end_date || null,
       });
@@ -329,9 +387,9 @@ export default function ProjectsPage() {
     setFormData({
       name: '',
       project_number: '',
-      client_name: '',
-      contractor_name: '',
-      project_manager: '',
+      client_id: '',
+      contractor_id: '',
+      project_manager_id: '',
       location: '',
       contract_value: '',
       start_date: '',
@@ -345,10 +403,10 @@ export default function ProjectsPage() {
 
   const handleCreateSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.budget) {
+    if (!formData.name || !formData.project_number || !formData.budget || !formData.start_date || !formData.end_date) {
       toast.add({
         title: isAr ? 'تنبيه' : 'Alert',
-        description: isAr ? 'يرجى إدخال اسم المشروع والميزانية على الأقل.' : 'Please enter project name and budget at least.',
+        description: isAr ? 'يرجى إدخال اسم المشروع، رقم المشروع، الميزانية، وتاريخي البدء والنهاية.' : 'Please enter project name, project number, budget, start date, and end date.',
         type: 'error',
       });
       return;
@@ -359,10 +417,10 @@ export default function ProjectsPage() {
   const handleEditSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedProject) return;
-    if (!formData.name || !formData.budget) {
+    if (!formData.name || !formData.project_number || !formData.budget || !formData.start_date || !formData.end_date) {
       toast.add({
         title: isAr ? 'تنبيه' : 'Alert',
-        description: isAr ? 'يرجى إدخال اسم المشروع والميزانية.' : 'Please enter project name and budget.',
+        description: isAr ? 'يرجى إدخال اسم المشروع، رقم المشروع، الميزانية، وتاريخي البدء والنهاية.' : 'Please enter project name, project number, budget, start date, and end date.',
         type: 'error',
       });
       return;
@@ -375,9 +433,9 @@ export default function ProjectsPage() {
     setFormData({
       name: project.name,
       project_number: project.project_number || '',
-      client_name: project.client_name || '',
-      contractor_name: project.contractor_name || '',
-      project_manager: project.project_manager || '',
+      client_id: project.client_id ? project.client_id.toString() : '',
+      contractor_id: project.contractor_id ? project.contractor_id.toString() : '',
+      project_manager_id: project.project_manager_id ? project.project_manager_id.toString() : '',
       location: project.location || '',
       contract_value: project.contract_value ? project.contract_value.toString() : '',
       start_date: project.start_date || '',
@@ -404,7 +462,8 @@ export default function ProjectsPage() {
   };
 
   // Filters logic
-  const filteredProjects = projects.filter((prj) => {
+  const projectsList = Array.isArray(projects) ? projects : [];
+  const filteredProjects = projectsList.filter((prj) => {
     const matchesSearch =
       prj.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (prj.project_number && prj.project_number.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -443,14 +502,14 @@ export default function ProjectsPage() {
         <Card className="border-slate-800 bg-slate-900/20 backdrop-blur text-white">
           <CardContent className="pt-4 sm:pt-6 px-3 sm:px-6">
             <p className="text-[11px] sm:text-xs text-slate-400">{isAr ? 'إجمالي المشاريع' : 'Total Projects'}</p>
-            <p className="text-xl sm:text-2xl font-bold mt-1 text-white font-sans">{projects.length}</p>
+            <p className="text-xl sm:text-2xl font-bold mt-1 text-white font-sans">{projectsList.length}</p>
           </CardContent>
         </Card>
         <Card className="border-slate-800 bg-slate-900/20 backdrop-blur text-white">
           <CardContent className="pt-4 sm:pt-6 px-3 sm:px-6">
             <p className="text-[11px] sm:text-xs text-emerald-400">{isAr ? 'المشاريع النشطة' : 'Active Projects'}</p>
             <p className="text-xl sm:text-2xl font-bold mt-1 text-emerald-400 font-sans">
-              {projects.filter(p => p.status === 'active').length}
+              {projectsList.filter(p => p.status === 'active').length}
             </p>
           </CardContent>
         </Card>
@@ -458,7 +517,7 @@ export default function ProjectsPage() {
           <CardContent className="pt-4 sm:pt-6 px-3 sm:px-6">
             <p className="text-[11px] sm:text-xs text-violet-400">{isAr ? 'تحت التحضير' : 'Preparation'}</p>
             <p className="text-xl sm:text-2xl font-bold mt-1 text-violet-400 font-sans">
-              {projects.filter(p => p.status === 'preparation' || p.status === 'planned').length}
+              {projectsList.filter(p => p.status === 'preparation' || p.status === 'planned').length}
             </p>
           </CardContent>
         </Card>
@@ -466,7 +525,7 @@ export default function ProjectsPage() {
           <CardContent className="pt-4 sm:pt-6 px-3 sm:px-6">
             <p className="text-[11px] sm:text-xs text-rose-450">{isAr ? 'المتأخرة' : 'Delayed'}</p>
             <p className="text-xl sm:text-2xl font-bold mt-1 text-rose-450 font-sans">
-              {projects.filter(p => p.status === 'delayed').length}
+              {projectsList.filter(p => p.status === 'delayed').length}
             </p>
           </CardContent>
         </Card>
@@ -474,7 +533,7 @@ export default function ProjectsPage() {
           <CardContent className="pt-4 sm:pt-6 px-3 sm:px-6">
             <p className="text-[11px] sm:text-xs text-indigo-400">{isAr ? 'المكتملة والمغلقة' : 'Completed & Closed'}</p>
             <p className="text-xl sm:text-2xl font-bold mt-1 text-indigo-400 font-sans">
-              {projects.filter(p => p.status === 'completed' || p.status === 'closed').length}
+              {projectsList.filter(p => p.status === 'completed' || p.status === 'closed').length}
             </p>
           </CardContent>
         </Card>
@@ -647,7 +706,10 @@ export default function ProjectsPage() {
               {/* Row 1: Name and Number */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-300 block">{isAr ? 'اسم المشروع *' : 'Project Name *'}</label>
+                  <label className="text-xs font-bold text-slate-300 flex items-center gap-1">
+                    <span>{isAr ? 'اسم المشروع' : 'Project Name'}</span>
+                    <span className="text-rose-400 font-bold">*</span>
+                  </label>
                   <input
                     type="text"
                     required
@@ -662,10 +724,15 @@ export default function ProjectsPage() {
                     </p>
                   )}
                 </div>
+
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-300 block">{isAr ? 'رقم المشروع' : 'Project Number'}</label>
+                  <label className="text-xs font-bold text-slate-300 flex items-center gap-1">
+                    <span>{isAr ? 'رقم المشروع' : 'Project Number'}</span>
+                    <span className="text-rose-400 font-bold">*</span>
+                  </label>
                   <input
                     type="text"
+                    required
                     value={formData.project_number}
                     onChange={(e) => setFormData({ ...formData, project_number: e.target.value })}
                     className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all"
@@ -679,57 +746,79 @@ export default function ProjectsPage() {
                 </div>
               </div>
 
-              {/* Row 2: Client and Contractor */}
+              {/* Row 2: Client and Contractor Select Dropdowns */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                {/* Client Select */}
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-slate-300 block">{isAr ? 'المالك / العميل' : 'Owner / Client'}</label>
-                  <input
-                    type="text"
-                    value={formData.client_name}
-                    onChange={(e) => setFormData({ ...formData, client_name: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all"
-                    placeholder={isAr ? 'اسم الشركة المالكة أو العميل' : 'Name of client or owner company'}
-                  />
-                  {validationErrors.client_name && (
+                  <select
+                    value={formData.client_id}
+                    onChange={(e) => setFormData({ ...formData, client_id: e.target.value })}
+                    className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all cursor-pointer"
+                  >
+                    <option value="">{isAr ? '-- اختر العميل من قائمة الموظفين --' : '-- Select Client from Employees --'}</option>
+                    {availableClients.map((u) => (
+                      <option key={u.id} value={u.id} className="bg-slate-900 text-white">
+                        {getUserDisplayName(u)} ({u.role})
+                      </option>
+                    ))}
+                  </select>
+                  {validationErrors.client_id && (
                     <p className="text-xs text-rose-500 font-semibold mt-1 animate-in fade-in duration-200">
-                      {validationErrors.client_name[0]}
+                      {validationErrors.client_id[0]}
                     </p>
                   )}
                 </div>
+
+                {/* Contractor Select */}
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-slate-300 block">{isAr ? 'المقاول الرئيسي' : 'Main Contractor'}</label>
-                  <input
-                    type="text"
-                    value={formData.contractor_name}
-                    onChange={(e) => setFormData({ ...formData, contractor_name: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all"
-                    placeholder={isAr ? 'اسم شركة المقاولات المنفذة' : 'Executing contracting company name'}
-                  />
-                  {validationErrors.contractor_name && (
+                  <select
+                    value={formData.contractor_id}
+                    onChange={(e) => setFormData({ ...formData, contractor_id: e.target.value })}
+                    className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all cursor-pointer"
+                  >
+                    <option value="">{isAr ? '-- اختر المقاول الرئيسي من قائمة الموظفين --' : '-- Select Main Contractor --'}</option>
+                    {availableContractors.map((u) => (
+                      <option key={u.id} value={u.id} className="bg-slate-900 text-white">
+                        {getUserDisplayName(u)} ({u.role})
+                      </option>
+                    ))}
+                  </select>
+                  {validationErrors.contractor_id && (
                     <p className="text-xs text-rose-500 font-semibold mt-1 animate-in fade-in duration-200">
-                      {validationErrors.contractor_name[0]}
+                      {validationErrors.contractor_id[0]}
                     </p>
                   )}
                 </div>
               </div>
 
-              {/* Row 3: Manager and Location */}
+              {/* Row 3: Manager Select and Location */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                {/* PM Select */}
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-slate-300 block">{isAr ? 'مدير المشروع' : 'Project Manager'}</label>
-                  <input
-                    type="text"
-                    value={formData.project_manager}
-                    onChange={(e) => setFormData({ ...formData, project_manager: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all"
-                    placeholder={isAr ? 'اسم المهندس المسؤول' : 'Responsible engineer name'}
-                  />
-                  {validationErrors.project_manager && (
+                  <select
+                    value={formData.project_manager_id}
+                    onChange={(e) => setFormData({ ...formData, project_manager_id: e.target.value })}
+                    className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all cursor-pointer"
+                  >
+                    <option value="">{isAr ? '-- اختر مدير المشروع من قائمة الموظفين --' : '-- Select Project Manager --'}</option>
+                    {availablePMs.map((u) => (
+                      <option key={u.id} value={u.id} className="bg-slate-900 text-white">
+                        {getUserDisplayName(u)} ({u.role})
+                      </option>
+                    ))}
+                  </select>
+                  {validationErrors.project_manager_id && (
                     <p className="text-xs text-rose-500 font-semibold mt-1 animate-in fade-in duration-200">
-                      {validationErrors.project_manager[0]}
+                      {validationErrors.project_manager_id[0]}
                     </p>
                   )}
                 </div>
+
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-slate-300 block">{isAr ? 'موقع المشروع' : 'Project Location'}</label>
                   <input
@@ -750,7 +839,10 @@ export default function ProjectsPage() {
               {/* Row 4: Budget and Contract Value */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-300 block">{isAr ? 'الميزانية المرصودة *' : 'Allocated Budget *'}</label>
+                  <label className="text-xs font-bold text-slate-300 flex items-center gap-1">
+                    <span>{isAr ? 'الميزانية المرصودة' : 'Allocated Budget'}</span>
+                    <span className="text-rose-400 font-bold">*</span>
+                  </label>
                   <input
                     type="number"
                     step="0.01"
@@ -787,11 +879,14 @@ export default function ProjectsPage() {
               {/* Row 5: Start / End Dates */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-300 block">{isAr ? 'تاريخ بداية المشروع' : 'Project Start Date'}</label>
+                  <label className="text-xs font-bold text-slate-300 flex items-center gap-1">
+                    <span>{isAr ? 'تاريخ البدء المتوقع' : 'Expected Start Date'}</span>
+                    <span className="text-rose-400 font-bold">*</span>
+                  </label>
                   <CustomDatePicker
                     value={formData.start_date}
                     onChange={(val) => setFormData({ ...formData, start_date: val })}
-                    placeholder={isAr ? 'حدد تاريخ البدء' : 'Select start date'}
+                    placeholder={isAr ? 'تاريخ بداية المشروع' : 'Project start date'}
                     isAr={isAr}
                   />
                   {validationErrors.start_date && (
@@ -801,11 +896,14 @@ export default function ProjectsPage() {
                   )}
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-300 block">{isAr ? 'تاريخ نهاية المشروع المتوقع' : 'Expected End Date'}</label>
+                  <label className="text-xs font-bold text-slate-300 flex items-center gap-1">
+                    <span>{isAr ? 'تاريخ الانتهاء المتوقع' : 'Expected End Date'}</span>
+                    <span className="text-rose-400 font-bold">*</span>
+                  </label>
                   <CustomDatePicker
                     value={formData.end_date}
                     onChange={(val) => setFormData({ ...formData, end_date: val })}
-                    placeholder={isAr ? 'حدد التاريخ المتوقع' : 'Select expected end date'}
+                    placeholder={isAr ? 'تاريخ تسليم المشروع' : 'Project delivery date'}
                     isAr={isAr}
                   />
                   {validationErrors.end_date && (
@@ -817,7 +915,7 @@ export default function ProjectsPage() {
               </div>
 
               {/* Row 6: Status & Description */}
-              <div className="grid grid-cols-1 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-slate-300 block">{isAr ? 'حالة المشروع' : 'Project Status'}</label>
                   <select
@@ -826,7 +924,7 @@ export default function ProjectsPage() {
                     className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all cursor-pointer"
                   >
                     {Object.entries(STATUS_MAP).map(([key, value]) => (
-                      <option key={key} value={key}>
+                      <option key={key} value={key} className="bg-slate-900 text-white">
                         {value.label}
                       </option>
                     ))}
@@ -837,25 +935,21 @@ export default function ProjectsPage() {
                     </p>
                   )}
                 </div>
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-300 block">{isAr ? 'وصف المشروع' : 'Project Description'}</label>
-                  <textarea
-                    value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    rows={3}
-                    className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all resize-none"
-                    placeholder={isAr ? 'اكتب وصفاً مختصراً لأعمال المشروع ومراحله...' : 'Write a brief description of project works and phases...'}
-                  />
-                  {validationErrors.description && (
-                    <p className="text-xs text-rose-550 text-rose-500 font-semibold mt-1 animate-in fade-in duration-200">
-                      {validationErrors.description[0]}
-                    </p>
-                  )}
-                </div>
               </div>
 
-              {/* Buttons */}
-              <div className="flex justify-end gap-3 pt-4 border-t border-slate-800 mt-6">
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-300 block">{isAr ? 'وصف المشروع' : 'Project Description'}</label>
+                <textarea
+                  rows={3}
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all resize-none"
+                  placeholder={isAr ? 'أدخل تفاصيل ومواصفات المشروع الإنشائي...' : 'Enter construction project details...'}
+                />
+              </div>
+
+              {/* Submit / Action Buttons */}
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800/80">
                 <button
                   type="button"
                   onClick={() => {
@@ -863,23 +957,24 @@ export default function ProjectsPage() {
                     setIsEditOpen(false);
                     setSelectedProject(null);
                   }}
-                  className="bg-slate-800 hover:bg-slate-700/80 text-slate-200 rounded-xl py-3 px-6 text-sm font-semibold transition-all cursor-pointer"
+                  className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold transition-all cursor-pointer"
                 >
                   {isAr ? 'إلغاء' : 'Cancel'}
                 </button>
+
                 <button
                   type="submit"
                   disabled={createMutation.isPending || updateMutation.isPending}
-                  className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl py-3 px-6 text-sm font-semibold transition-all cursor-pointer flex items-center gap-2"
+                  className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold transition-all shadow-lg shadow-indigo-600/30 flex items-center gap-2 cursor-pointer disabled:opacity-50"
                 >
-                  {createMutation.isPending || updateMutation.isPending ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin ml-1" />
-                      {isAr ? 'جاري الحفظ...' : 'Saving...'}
-                    </>
-                  ) : (
-                    isAr ? 'حفظ البيانات' : 'Save Changes'
+                  {(createMutation.isPending || updateMutation.isPending) && (
+                    <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   )}
+                  <span>
+                    {isCreateOpen 
+                      ? (isAr ? 'إنشاء المشروع' : 'Create Project') 
+                      : (isAr ? 'حفظ التعديلات' : 'Save Changes')}
+                  </span>
                 </button>
               </div>
 

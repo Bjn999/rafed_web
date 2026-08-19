@@ -67,8 +67,8 @@ export default function WbsCardsTree({
     if (
       !window.confirm(
         isAr
-          ? 'هل أنت تأكد من حذف هذا البند وكافة المهام الفرعية التابعة له؟'
-          : 'Are you sure you want to delete this item and all its sub-tasks?'
+          ? 'هل أنت تأكد من حذف هذا النشاط وكافة الأنشطة الفرعية التابعة له؟'
+          : 'Are you sure you want to delete this activity and all its sub-activities?'
       )
     ) {
       return;
@@ -274,7 +274,7 @@ export default function WbsCardsTree({
                 {/* Add Child */}
                 <button
                   onClick={() => onAddSubItem(node)}
-                  title={isAr ? 'إضافة فرعية' : 'Add Sub-task'}
+                  title={isAr ? 'إضافة نشاط فرعي' : 'Add Sub-activity'}
                   className="p-1.5 rounded-lg bg-indigo-600/20 hover:bg-indigo-600 text-indigo-400 hover:text-white transition-all cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
@@ -366,7 +366,7 @@ export default function WbsCardsTree({
         <div className="p-12 text-center text-slate-500 bg-slate-900/30 border border-slate-800 rounded-2xl flex flex-col items-center gap-3">
           <FolderTree className="w-12 h-12 text-slate-700" />
           <p className="text-xs font-semibold">
-            {isAr ? 'لا يوجد أنشطة أو مهام مضافة لهذا المشروع حتى الآن.' : 'No activities or WBS items added to this project yet.'}
+            {isAr ? 'لا يوجد أنشطة مضافة لهذا المشروع حتى الآن.' : 'No activities added to this project yet.'}
           </p>
         </div>
       )}

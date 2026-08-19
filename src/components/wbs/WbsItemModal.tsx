@@ -21,6 +21,9 @@ export interface WbsItemData {
   start_date?: string | null;
   end_date?: string | null;
   assigned_to?: number | null;
+  is_milestone?: boolean;
+  predecessor_dependencies?: any[];
+  successor_dependencies?: any[];
 }
 
 interface UserOption {
@@ -95,6 +98,7 @@ export default function WbsItemModal({
         start_date: editingItem.start_date || '',
         end_date: editingItem.end_date || '',
         assigned_to: editingItem.assigned_to ?? null,
+        is_milestone: editingItem.is_milestone ?? false,
       });
     } else if (parentItem) {
       setFormData({
@@ -109,6 +113,7 @@ export default function WbsItemModal({
         start_date: parentItem.start_date || '',
         end_date: parentItem.end_date || '',
         assigned_to: null,
+        is_milestone: false,
       });
     } else {
       setFormData({
@@ -123,6 +128,7 @@ export default function WbsItemModal({
         start_date: '',
         end_date: '',
         assigned_to: null,
+        is_milestone: false,
       });
     }
     setErrorMessage('');
@@ -133,7 +139,7 @@ export default function WbsItemModal({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name.trim()) {
-      setErrorMessage(isAr ? 'يرجى إدخال اسم النشاط أو المهمة' : 'Please enter activity/task name');
+      setErrorMessage(isAr ? 'يرجى إدخال اسم النشاط' : 'Please enter activity name');
       return;
     }
 
@@ -196,6 +202,31 @@ export default function WbsItemModal({
               <span>{errorMessage}</span>
             </div>
           )}
+
+          {/* Milestone Toggle */}
+          <div className="flex items-center gap-3 bg-amber-500/10 border border-amber-500/20 p-3 rounded-xl">
+            <input
+              type="checkbox"
+              id="is_milestone"
+              checked={formData.is_milestone || false}
+              onChange={(e) => {
+                const checked = e.target.checked;
+                setFormData({
+                  ...formData,
+                  is_milestone: checked,
+                  end_date: checked ? formData.start_date : formData.end_date,
+                });
+              }}
+              className="w-4 h-4 text-amber-500 rounded focus:ring-amber-500 bg-slate-950 border-slate-800 cursor-pointer"
+            />
+            <label htmlFor="is_milestone" className="text-xs font-bold text-amber-400 cursor-pointer flex items-center gap-2">
+              <span className="text-base font-bold">◆</span>
+              {isAr ? 'تعيين كـ معلم رئيسي (Milestone)' : 'Set as Milestone'}
+              <span className="text-[10px] text-slate-400 font-normal block">
+                ({isAr ? 'محطة محورية مدتها 0 أيام' : 'Key progress checkpoint with 0 days duration'})
+              </span>
+            </label>
+          </div>
 
           {/* Name & Parent selection */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -303,27 +334,63 @@ export default function WbsItemModal({
           </div>
 
           {/* Dates & Financials */}
+          {(() => {
+            const selectedParent = flatItems.find((item) => item.id === formData.parent_id);
+            const dateMin = selectedParent?.start_date || undefined;
+            const dateMax = selectedParent?.end_date || undefined;
+
+            return (
+              <div className="space-y-4">
+                {selectedParent && (selectedParent.start_date || selectedParent.end_date) && (
+                  <div className="p-2.5 bg-indigo-500/10 border border-indigo-500/20 rounded-xl text-[11px] text-indigo-300 flex items-center justify-between">
+                    <span className="font-semibold">
+                      {isAr
+                        ? `💡 نطاق تواريخ البند الأب (${selectedParent.code || ''} ${selectedParent.name}):`
+                        : `💡 Parent Activity Date Range (${selectedParent.code || ''} ${selectedParent.name}):`}
+                    </span>
+                    <span className="font-mono font-bold">
+                      {selectedParent.start_date || '...'} ➔ {selectedParent.end_date || '...'}
+                    </span>
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-semibold text-slate-300">{isAr ? 'تاريخ البدء المتوقع' : 'Start Date'}</label>
+                    <input
+                      type="date"
+                      value={formData.start_date || ''}
+                      min={dateMin}
+                      max={dateMax}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          start_date: e.target.value,
+                          end_date: formData.is_milestone ? e.target.value : formData.end_date,
+                        })
+                      }
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-semibold text-slate-300">{isAr ? 'تاريخ الانتهاء المتوقع' : 'End Date'}</label>
+                    <input
+                      type="date"
+                      value={formData.end_date || ''}
+                      min={formData.start_date || dateMin}
+                      max={dateMax}
+                      disabled={formData.is_milestone}
+                      onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors disabled:opacity-50"
+                    />
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300">{isAr ? 'تاريخ البدء المتوقع' : 'Start Date'}</label>
-              <input
-                type="date"
-                value={formData.start_date || ''}
-                onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors"
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300">{isAr ? 'تاريخ الانتهاء المتوقع' : 'End Date'}</label>
-              <input
-                type="date"
-                value={formData.end_date || ''}
-                onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors"
-              />
-            </div>
-
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-slate-300">{isAr ? 'التكلفة التقديرية (ريال)' : 'Estimated Cost (SAR)'}</label>
               <input

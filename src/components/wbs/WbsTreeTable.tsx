@@ -73,7 +73,7 @@ export default function WbsTreeTable({
   };
 
   const handleDelete = async (id: number) => {
-    if (!window.confirm(isAr ? 'هل أنت تأكد من حذف هذا البند وكافة المهام الفرعية التابعة له؟' : 'Are you sure you want to delete this item and all its sub-tasks?')) {
+    if (!window.confirm(isAr ? 'هل أنت تأكد من حذف هذا النشاط وكافة الأنشطة الفرعية التابعة له؟' : 'Are you sure you want to delete this activity and all its sub-activities?')) {
       return;
     }
     setDeletingId(id);
@@ -244,7 +244,7 @@ export default function WbsTreeTable({
               {/* Add Sub-Item */}
               <button
                 onClick={() => onAddSubItem(node)}
-                title={isAr ? 'إضافة مهمة فرعية' : 'Add Sub-task'}
+                title={isAr ? 'إضافة نشاط فرعي' : 'Add Sub-activity'}
                 className="p-1.5 rounded-lg bg-indigo-600/20 hover:bg-indigo-600 text-indigo-400 hover:text-white transition-all cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
@@ -254,7 +254,7 @@ export default function WbsTreeTable({
               <button
                 onClick={() => handleMove(node.id!, 'indent')}
                 disabled={movingId === node.id}
-                title={isAr ? 'إزاحة للداخل (جعلها فرعية)' : 'Indent (Make sub-task)'}
+                title={isAr ? 'إزاحة للداخل (جعله فرعي)' : 'Indent (Make sub-activity)'}
                 className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer disabled:opacity-30"
               >
                 {isAr ? <ArrowLeft className="w-3.5 h-3.5" /> : <ArrowRight className="w-3.5 h-3.5" />}
@@ -341,7 +341,7 @@ export default function WbsTreeTable({
               <td colSpan={8} className="py-12 text-center text-slate-500">
                 <div className="flex flex-col items-center gap-3">
                   <FolderTree className="w-10 h-10 text-slate-700" />
-                  <p className="text-xs font-semibold">{isAr ? 'لا يوجد أنشطة أو مهام مضافة لهذا المشروع حتى الآن.' : 'No activities or WBS items added to this project yet.'}</p>
+                  <p className="text-xs font-semibold">{isAr ? 'لا يوجد أنشطة مضافة لهذا المشروع حتى الآن.' : 'No activities added to this project yet.'}</p>
                 </div>
               </td>
             </tr>
