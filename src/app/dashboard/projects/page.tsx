@@ -137,33 +137,33 @@ function CustomDatePicker({ value, onChange, placeholder, isAr }: CustomDatePick
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between bg-slate-950 border border-slate-800 hover:border-slate-700/80 focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all cursor-pointer text-right"
+        className="w-full flex items-center justify-between bg-background border border-border hover:border-border focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all cursor-pointer text-right"
       >
-        <span className={value ? 'text-slate-200 font-sans' : 'text-slate-500 font-normal font-sans'}>{displayDate}</span>
-        <Calendar className="w-4 h-4 text-slate-400 shrink-0" />
+        <span className={value ? 'text-slate-200 font-sans' : 'text-muted-foreground font-normal font-sans'}>{displayDate}</span>
+        <Calendar className="w-4 h-4 text-muted-foreground shrink-0" />
       </button>
 
       {isOpen && (
-        <div className={`absolute bottom-full mb-2 ${isAr ? 'right-0' : 'left-0'} z-50 bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-2xl w-64 animate-in slide-in-from-bottom-2 duration-200`}>
+        <div className={`absolute bottom-full mb-2 ${isAr ? 'right-0' : 'left-0'} z-50 bg-card border border-border rounded-2xl p-4 shadow-2xl w-64 animate-in slide-in-from-bottom-2 duration-200`}>
           <div className="flex justify-between items-center mb-3" dir={isAr ? 'rtl' : 'ltr'}>
             <button
               type="button"
               onClick={handlePrevMonth}
-              className="p-1 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-white transition-colors cursor-pointer"
+              className="p-1 hover:bg-muted rounded-lg text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
             >
               {isAr ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
             </button>
-            <span className="text-xs font-bold text-white font-sans">{MONTH_NAME} {year}</span>
+            <span className="text-xs font-bold text-foreground font-sans">{MONTH_NAME} {year}</span>
             <button
               type="button"
               onClick={handleNextMonth}
-              className="p-1 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-white transition-colors cursor-pointer"
+              className="p-1 hover:bg-muted rounded-lg text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
             >
               {isAr ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
             </button>
           </div>
 
-          <div className="grid grid-cols-7 gap-1 text-center text-[10px] text-slate-500 font-bold mb-2">
+          <div className="grid grid-cols-7 gap-1 text-center text-[10px] text-muted-foreground font-bold mb-2">
             {WEEK_DAYS.map((d, idx) => (
               <div key={idx}>{d}</div>
             ))}
@@ -187,7 +187,7 @@ function CustomDatePicker({ value, onChange, placeholder, isAr }: CustomDatePick
                   className={`py-1.5 rounded-lg font-medium transition-all cursor-pointer font-sans ${
                     isSelected 
                       ? 'bg-indigo-600 text-white font-bold' 
-                      : 'text-slate-300 hover:bg-slate-800/80 hover:text-white'
+                      : 'text-foreground hover:bg-muted hover:text-foreground'
                   }`}
                 >
                   {day}
@@ -238,7 +238,7 @@ export default function ProjectsPage() {
     on_hold: { label: isAr ? 'متوقف مؤقتاً' : 'On Hold', color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20' },
     delayed: { label: isAr ? 'متأخر' : 'Delayed', color: 'text-rose-400', bg: 'bg-rose-500/10', border: 'border-rose-500/20' },
     completed: { label: isAr ? 'مكتمل' : 'Completed', color: 'text-indigo-400', bg: 'bg-indigo-500/10', border: 'border-indigo-500/20' },
-    closed: { label: isAr ? 'مغلق' : 'Closed', color: 'text-slate-400', bg: 'bg-slate-500/10', border: 'border-slate-500/20' },
+    closed: { label: isAr ? 'مغلق' : 'Closed', color: 'text-muted-foreground', bg: 'bg-slate-500/10', border: 'border-slate-500/20' },
   };
 
   // Fetch projects list
@@ -475,13 +475,13 @@ export default function ProjectsPage() {
     <div className="space-y-8 animate-in fade-in duration-300">
       
       {/* Header Panel */}
-      <div className={`flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-900/40 p-6 rounded-2xl border border-slate-800 backdrop-blur-xl`}>
+      <div className={`flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-card p-6 rounded-2xl border border-border backdrop-blur-xl`}>
         <div className="space-y-1">
-          <h1 className={`text-2xl font-bold text-white flex items-center gap-2.5 ${isAr ? 'text-right' : 'text-left'}`}>
+          <h1 className={`text-2xl font-bold text-foreground flex items-center gap-2.5 ${isAr ? 'text-right' : 'text-left'}`}>
             <FolderKanban className={`w-6 h-6 text-indigo-400 ${isAr ? 'ml-1' : 'mr-1'}`} />
             {isAr ? 'إدارة ومتابعة المشاريع الإنشائية' : 'Construction Projects Management'}
           </h1>
-          <p className={`text-slate-400 text-xs ${isAr ? 'text-right' : 'text-left'}`}>
+          <p className={`text-muted-foreground text-xs ${isAr ? 'text-right' : 'text-left'}`}>
             {isAr ? 'قم بإنشاء وتحديث مشاريع المؤسسة، تتبع الميزانيات، عقود العملاء وحالات التشغيل.' : 'Create and update company projects, track budgets, client contracts, and status.'}
           </p>
         </div>
@@ -499,13 +499,13 @@ export default function ProjectsPage() {
 
       {/* Stats Board */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4">
-        <Card className="border-slate-800 bg-slate-900/20 backdrop-blur text-white">
+        <Card className="border-border bg-card backdrop-blur text-foreground">
           <CardContent className="pt-4 sm:pt-6 px-3 sm:px-6">
-            <p className="text-[11px] sm:text-xs text-slate-400">{isAr ? 'إجمالي المشاريع' : 'Total Projects'}</p>
-            <p className="text-xl sm:text-2xl font-bold mt-1 text-white font-sans">{projectsList.length}</p>
+            <p className="text-[11px] sm:text-xs text-muted-foreground">{isAr ? 'إجمالي المشاريع' : 'Total Projects'}</p>
+            <p className="text-xl sm:text-2xl font-bold mt-1 text-foreground font-sans">{projectsList.length}</p>
           </CardContent>
         </Card>
-        <Card className="border-slate-800 bg-slate-900/20 backdrop-blur text-white">
+        <Card className="border-border bg-card backdrop-blur text-foreground">
           <CardContent className="pt-4 sm:pt-6 px-3 sm:px-6">
             <p className="text-[11px] sm:text-xs text-emerald-400">{isAr ? 'المشاريع النشطة' : 'Active Projects'}</p>
             <p className="text-xl sm:text-2xl font-bold mt-1 text-emerald-400 font-sans">
@@ -513,7 +513,7 @@ export default function ProjectsPage() {
             </p>
           </CardContent>
         </Card>
-        <Card className="border-slate-800 bg-slate-900/20 backdrop-blur text-white">
+        <Card className="border-border bg-card backdrop-blur text-foreground">
           <CardContent className="pt-4 sm:pt-6 px-3 sm:px-6">
             <p className="text-[11px] sm:text-xs text-violet-400">{isAr ? 'تحت التحضير' : 'Preparation'}</p>
             <p className="text-xl sm:text-2xl font-bold mt-1 text-violet-400 font-sans">
@@ -521,7 +521,7 @@ export default function ProjectsPage() {
             </p>
           </CardContent>
         </Card>
-        <Card className="border-slate-800 bg-slate-900/20 backdrop-blur text-white">
+        <Card className="border-border bg-card backdrop-blur text-foreground">
           <CardContent className="pt-4 sm:pt-6 px-3 sm:px-6">
             <p className="text-[11px] sm:text-xs text-rose-450">{isAr ? 'المتأخرة' : 'Delayed'}</p>
             <p className="text-xl sm:text-2xl font-bold mt-1 text-rose-450 font-sans">
@@ -529,7 +529,7 @@ export default function ProjectsPage() {
             </p>
           </CardContent>
         </Card>
-        <Card className="border-slate-800 bg-slate-900/20 backdrop-blur text-white col-span-2 sm:col-span-1">
+        <Card className="border-border bg-card backdrop-blur text-foreground col-span-2 sm:col-span-1">
           <CardContent className="pt-4 sm:pt-6 px-3 sm:px-6">
             <p className="text-[11px] sm:text-xs text-indigo-400">{isAr ? 'المكتملة والمغلقة' : 'Completed & Closed'}</p>
             <p className="text-xl sm:text-2xl font-bold mt-1 text-indigo-400 font-sans">
@@ -543,23 +543,23 @@ export default function ProjectsPage() {
       <div className="flex flex-col md:flex-row gap-4">
         {/* Search */}
         <div className="relative flex-1">
-          <Search className={`absolute ${isAr ? 'right-3.5' : 'left-3.5'} top-3.5 w-4 h-4 text-slate-500`} />
+          <Search className={`absolute ${isAr ? 'right-3.5' : 'left-3.5'} top-3.5 w-4 h-4 text-muted-foreground`} />
           <input
             type="text"
             placeholder={isAr ? 'البحث باسم المشروع أو رقم المشروع...' : 'Search by project name or code...'}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className={`w-full bg-slate-900/40 border border-slate-800 hover:border-slate-700/80 focus:border-indigo-500 text-slate-100 rounded-xl py-3 ${isAr ? 'pr-10 pl-4' : 'pl-10 pr-4'} text-sm outline-none transition-all`}
+            className={`w-full bg-card border border-border hover:border-border focus:border-indigo-500 text-foreground rounded-xl py-3 ${isAr ? 'pr-10 pl-4' : 'pl-10 pr-4'} text-sm outline-none transition-all`}
           />
         </div>
 
         {/* Filter Dropdown */}
         <div className="relative min-w-[200px]">
-          <Filter className={`absolute ${isAr ? 'right-3.5' : 'left-3.5'} top-3.5 w-4 h-4 text-slate-500 pointer-events-none`} />
+          <Filter className={`absolute ${isAr ? 'right-3.5' : 'left-3.5'} top-3.5 w-4 h-4 text-muted-foreground pointer-events-none`} />
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className={`w-full bg-slate-900/40 border border-slate-800 hover:border-slate-700/80 focus:border-indigo-500 text-slate-100 rounded-xl py-3 ${isAr ? 'pr-10 pl-4' : 'pl-10 pr-4'} text-sm outline-none transition-all appearance-none cursor-pointer`}
+            className={`w-full bg-card border border-border hover:border-border focus:border-indigo-500 text-foreground rounded-xl py-3 ${isAr ? 'pr-10 pl-4' : 'pl-10 pr-4'} text-sm outline-none transition-all appearance-none cursor-pointer`}
           >
             <option value="all">{isAr ? 'كل الحالات' : 'All Statuses'}</option>
             {Object.entries(STATUS_MAP).map(([key, value]) => (
@@ -578,12 +578,12 @@ export default function ProjectsPage() {
           <p className="text-sm font-medium">{isAr ? 'جاري تحميل قائمة المشاريع...' : 'Loading projects list...'}</p>
         </div>
       ) : filteredProjects.length === 0 ? (
-        <div className="flex flex-col items-center py-20 text-slate-400 bg-slate-900/10 border border-slate-800/80 rounded-2xl gap-3">
-          <div className="w-12 h-12 bg-slate-900/60 rounded-2xl border border-slate-800 flex items-center justify-center text-slate-500">
+        <div className="flex flex-col items-center py-20 text-muted-foreground bg-card border border-border rounded-2xl gap-3">
+          <div className="w-12 h-12 bg-card rounded-2xl border border-border flex items-center justify-center text-muted-foreground">
             <FolderKanban className="w-6 h-6" />
           </div>
           <p className="text-sm font-semibold">{isAr ? 'لم نجد أي مشاريع تطابق خيارات البحث' : 'No projects match your search'}</p>
-          <p className="text-xs text-slate-500">{isAr ? 'جرب البحث بكلمات أخرى أو قم بإنشاء مشروع جديد.' : 'Try different search keywords or create a new project.'}</p>
+          <p className="text-xs text-muted-foreground">{isAr ? 'جرب البحث بكلمات أخرى أو قم بإنشاء مشروع جديد.' : 'Try different search keywords or create a new project.'}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -592,11 +592,11 @@ export default function ProjectsPage() {
             return (
               <div
                 key={project.id}
-                className="bg-slate-900/30 border border-slate-800 rounded-2xl p-5 hover:border-slate-700/60 transition-all flex flex-col justify-between group hover:shadow-lg hover:shadow-indigo-500/[0.02]"
+                className="bg-card border border-border rounded-2xl p-5 hover:border-border transition-all flex flex-col justify-between group hover:shadow-lg hover:shadow-indigo-500/[0.02]"
               >
                 {/* Badge Status & ID */}
                 <div className="flex justify-between items-center mb-4">
-                  <span className="text-[10px] text-slate-500 font-mono tracking-wider font-bold">
+                  <span className="text-[10px] text-muted-foreground font-mono tracking-wider font-bold">
                     {project.project_number || `#PRJ-${project.id}`}
                   </span>
                   <span className={`${statusConfig.color} ${statusConfig.bg} ${statusConfig.border} border text-[11px] px-2.5 py-1 rounded-full font-bold`}>
@@ -606,34 +606,34 @@ export default function ProjectsPage() {
 
                 {/* Project Details */}
                 <div className="space-y-3 flex-1 mb-5">
-                  <h3 className={`text-base font-bold text-white group-hover:text-indigo-400 transition-colors ${isAr ? 'text-right' : 'text-left'}`}>
+                  <h3 className={`text-base font-bold text-foreground group-hover:text-indigo-400 transition-colors ${isAr ? 'text-right' : 'text-left'}`}>
                     {project.name}
                   </h3>
                   
                   {project.description && (
-                    <p className={`text-xs text-slate-400 line-clamp-2 leading-relaxed ${isAr ? 'text-right' : 'text-left'}`}>
+                    <p className={`text-xs text-muted-foreground line-clamp-2 leading-relaxed ${isAr ? 'text-right' : 'text-left'}`}>
                       {project.description}
                     </p>
                   )}
 
                   {/* Indicators Grid */}
-                  <div className={`grid grid-cols-2 gap-2 pt-2 border-t border-slate-800/60 text-xs text-slate-400 ${isAr ? 'text-right' : 'text-left'}`}>
+                  <div className={`grid grid-cols-2 gap-2 pt-2 border-t border-border text-xs text-muted-foreground ${isAr ? 'text-right' : 'text-left'}`}>
                     <div className="flex items-center gap-1.5 min-w-0">
-                      <UserIcon className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                      <UserIcon className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
                       <span className="truncate">{project.client_name || (isAr ? 'بدون عميل' : 'No client')}</span>
                     </div>
                     <div className="flex items-center gap-1.5 min-w-0">
-                      <MapPin className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                      <MapPin className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
                       <span className="truncate">{project.location || (isAr ? 'غير محدد' : 'Not specified')}</span>
                     </div>
                     <div className="flex items-center gap-1.5 min-w-0">
-                      <DollarSign className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                      <DollarSign className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
                       <span className="truncate font-mono font-bold text-indigo-400">
                         {formatCurrency(project.budget)}
                       </span>
                     </div>
                     <div className="flex items-center gap-1.5 min-w-0">
-                      <Calendar className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                      <Calendar className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
                       <span className="truncate font-mono">
                         {project.start_date ? new Date(project.start_date).toLocaleDateString(isAr ? 'ar-SA' : 'en-US') : (isAr ? 'مفتوح' : 'Open')}
                       </span>
@@ -642,10 +642,10 @@ export default function ProjectsPage() {
                 </div>
 
                 {/* Card Actions */}
-                <div className="flex items-center gap-2 pt-3 border-t border-slate-800/80">
+                <div className="flex items-center gap-2 pt-3 border-t border-border">
                   <Link
                     href={`/dashboard/projects/${project.id}`}
-                    className="flex-1 bg-slate-850 hover:bg-slate-800 border border-slate-800 text-slate-200 hover:text-white rounded-lg py-2 px-3 text-xs font-semibold flex items-center justify-center gap-1.5 transition-all"
+                    className="flex-1 bg-slate-850 hover:bg-muted border border-border text-slate-200 hover:text-foreground rounded-lg py-2 px-3 text-xs font-semibold flex items-center justify-center gap-1.5 transition-all"
                   >
                     <Eye className="w-3.5 h-3.5" />
                     {isAr ? 'عرض التفاصيل' : 'View Details'}
@@ -653,7 +653,7 @@ export default function ProjectsPage() {
 
                   <button
                     onClick={() => openEditModal(project)}
-                    className="p-2 bg-slate-850 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-indigo-400 rounded-lg transition-all cursor-pointer"
+                    className="p-2 bg-slate-850 hover:bg-muted border border-border text-muted-foreground hover:text-indigo-400 rounded-lg transition-all cursor-pointer"
                     title={isAr ? 'تعديل' : 'Edit'}
                   >
                     <Edit2 className="w-3.5 h-3.5" />
@@ -661,7 +661,7 @@ export default function ProjectsPage() {
 
                   <button
                     onClick={() => handleDelete(project.id, project.name)}
-                    className="p-2 bg-slate-850 hover:bg-rose-500/10 border border-slate-800 hover:border-rose-500/20 text-slate-400 hover:text-rose-455 rounded-lg transition-all cursor-pointer"
+                    className="p-2 bg-slate-850 hover:bg-rose-500/10 border border-border hover:border-rose-500/20 text-muted-foreground hover:text-rose-455 rounded-lg transition-all cursor-pointer"
                     title={isAr ? 'حذف' : 'Delete'}
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -676,7 +676,7 @@ export default function ProjectsPage() {
       {/* --- CREATE / EDIT MODAL --- */}
       {(isCreateOpen || isEditOpen) && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 w-full max-w-2xl shadow-2xl relative max-h-[90vh] overflow-y-auto">
+          <div className="bg-card border border-border rounded-2xl p-6 w-full max-w-2xl shadow-2xl relative max-h-[90vh] overflow-y-auto">
             
             {/* Close Button */}
             <button
@@ -685,17 +685,17 @@ export default function ProjectsPage() {
                 setIsEditOpen(false);
                 setSelectedProject(null);
               }}
-              className={`absolute ${isAr ? 'left-4' : 'right-4'} top-4 p-2 text-slate-500 hover:text-slate-350 hover:bg-slate-800/50 rounded-xl transition-all cursor-pointer`}
+              className={`absolute ${isAr ? 'left-4' : 'right-4'} top-4 p-2 text-muted-foreground hover:text-slate-350 hover:bg-muted rounded-xl transition-all cursor-pointer`}
             >
               <X className="w-4 h-4" />
             </button>
 
             {/* Modal Title */}
             <div className={`mb-6 space-y-1 ${isAr ? 'text-right' : 'text-left'}`}>
-              <h2 className="text-lg font-bold text-white font-sans">
+              <h2 className="text-lg font-bold text-foreground font-sans">
                 {isCreateOpen ? (isAr ? 'إضافة مشروع إنشائي جديد' : 'Create New Construction Project') : (isAr ? `تعديل بيانات مشروع: ${selectedProject?.name}` : `Edit Project: ${selectedProject?.name}`)}
               </h2>
-              <p className="text-slate-400 text-xs">
+              <p className="text-muted-foreground text-xs">
                 {isAr ? 'أدخل تفاصيل المشروع وعقوده المرصودة، الحقول المعلمة بـ (*) مطلوبة.' : 'Enter project details and allocated budgets. Fields marked with (*) are required.'}
               </p>
             </div>
@@ -706,7 +706,7 @@ export default function ProjectsPage() {
               {/* Row 1: Name and Number */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-300 flex items-center gap-1">
+                  <label className="text-xs font-bold text-foreground flex items-center gap-1">
                     <span>{isAr ? 'اسم المشروع' : 'Project Name'}</span>
                     <span className="text-rose-400 font-bold">*</span>
                   </label>
@@ -715,7 +715,7 @@ export default function ProjectsPage() {
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all"
+                    className="w-full bg-background border border-border focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all"
                     placeholder={isAr ? 'مثال: برج الجوهرة السكني' : 'e.g. Al-Jawhara Residential Tower'}
                   />
                   {validationErrors.name && (
@@ -726,7 +726,7 @@ export default function ProjectsPage() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-300 flex items-center gap-1">
+                  <label className="text-xs font-bold text-foreground flex items-center gap-1">
                     <span>{isAr ? 'رقم المشروع' : 'Project Number'}</span>
                     <span className="text-rose-400 font-bold">*</span>
                   </label>
@@ -735,7 +735,7 @@ export default function ProjectsPage() {
                     required
                     value={formData.project_number}
                     onChange={(e) => setFormData({ ...formData, project_number: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all"
+                    className="w-full bg-background border border-border focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all"
                     placeholder={isAr ? 'مثال: PRJ-2026-88' : 'e.g. PRJ-2026-88'}
                   />
                   {validationErrors.project_number && (
@@ -751,15 +751,15 @@ export default function ProjectsPage() {
                 
                 {/* Client Select */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-300 block">{isAr ? 'المالك / العميل' : 'Owner / Client'}</label>
+                  <label className="text-xs font-bold text-foreground block">{isAr ? 'المالك / العميل' : 'Owner / Client'}</label>
                   <select
                     value={formData.client_id}
                     onChange={(e) => setFormData({ ...formData, client_id: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all cursor-pointer"
+                    className="w-full bg-background border border-border focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all cursor-pointer"
                   >
                     <option value="">{isAr ? '-- اختر العميل من قائمة الموظفين --' : '-- Select Client from Employees --'}</option>
                     {availableClients.map((u) => (
-                      <option key={u.id} value={u.id} className="bg-slate-900 text-white">
+                      <option key={u.id} value={u.id} className="bg-card text-foreground">
                         {getUserDisplayName(u)} ({u.role})
                       </option>
                     ))}
@@ -773,15 +773,15 @@ export default function ProjectsPage() {
 
                 {/* Contractor Select */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-300 block">{isAr ? 'المقاول الرئيسي' : 'Main Contractor'}</label>
+                  <label className="text-xs font-bold text-foreground block">{isAr ? 'المقاول الرئيسي' : 'Main Contractor'}</label>
                   <select
                     value={formData.contractor_id}
                     onChange={(e) => setFormData({ ...formData, contractor_id: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all cursor-pointer"
+                    className="w-full bg-background border border-border focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all cursor-pointer"
                   >
                     <option value="">{isAr ? '-- اختر المقاول الرئيسي من قائمة الموظفين --' : '-- Select Main Contractor --'}</option>
                     {availableContractors.map((u) => (
-                      <option key={u.id} value={u.id} className="bg-slate-900 text-white">
+                      <option key={u.id} value={u.id} className="bg-card text-foreground">
                         {getUserDisplayName(u)} ({u.role})
                       </option>
                     ))}
@@ -799,15 +799,15 @@ export default function ProjectsPage() {
                 
                 {/* PM Select */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-300 block">{isAr ? 'مدير المشروع' : 'Project Manager'}</label>
+                  <label className="text-xs font-bold text-foreground block">{isAr ? 'مدير المشروع' : 'Project Manager'}</label>
                   <select
                     value={formData.project_manager_id}
                     onChange={(e) => setFormData({ ...formData, project_manager_id: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all cursor-pointer"
+                    className="w-full bg-background border border-border focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all cursor-pointer"
                   >
                     <option value="">{isAr ? '-- اختر مدير المشروع من قائمة الموظفين --' : '-- Select Project Manager --'}</option>
                     {availablePMs.map((u) => (
-                      <option key={u.id} value={u.id} className="bg-slate-900 text-white">
+                      <option key={u.id} value={u.id} className="bg-card text-foreground">
                         {getUserDisplayName(u)} ({u.role})
                       </option>
                     ))}
@@ -820,12 +820,12 @@ export default function ProjectsPage() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-300 block">{isAr ? 'موقع المشروع' : 'Project Location'}</label>
+                  <label className="text-xs font-bold text-foreground block">{isAr ? 'موقع المشروع' : 'Project Location'}</label>
                   <input
                     type="text"
                     value={formData.location}
                     onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all"
+                    className="w-full bg-background border border-border focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all"
                     placeholder={isAr ? 'المدينة، الحي أو الإحداثيات' : 'City, district or coordinates'}
                   />
                   {validationErrors.location && (
@@ -839,7 +839,7 @@ export default function ProjectsPage() {
               {/* Row 4: Budget and Contract Value */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-300 flex items-center gap-1">
+                  <label className="text-xs font-bold text-foreground flex items-center gap-1">
                     <span>{isAr ? 'الميزانية المرصودة' : 'Allocated Budget'}</span>
                     <span className="text-rose-400 font-bold">*</span>
                   </label>
@@ -849,7 +849,7 @@ export default function ProjectsPage() {
                     required
                     value={formData.budget}
                     onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all font-mono"
+                    className="w-full bg-background border border-border focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all font-mono"
                     placeholder={isAr ? 'مثال: 500000' : 'e.g. 500000'}
                   />
                   {validationErrors.budget && (
@@ -859,13 +859,13 @@ export default function ProjectsPage() {
                   )}
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-300 block">{isAr ? 'قيمة العقد الكلية' : 'Total Contract Value'}</label>
+                  <label className="text-xs font-bold text-foreground block">{isAr ? 'قيمة العقد الكلية' : 'Total Contract Value'}</label>
                   <input
                     type="number"
                     step="0.01"
                     value={formData.contract_value}
                     onChange={(e) => setFormData({ ...formData, contract_value: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all font-mono"
+                    className="w-full bg-background border border-border focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all font-mono"
                     placeholder={isAr ? 'مثال: 600000' : 'e.g. 600000'}
                   />
                   {validationErrors.contract_value && (
@@ -879,7 +879,7 @@ export default function ProjectsPage() {
               {/* Row 5: Start / End Dates */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-300 flex items-center gap-1">
+                  <label className="text-xs font-bold text-foreground flex items-center gap-1">
                     <span>{isAr ? 'تاريخ البدء المتوقع' : 'Expected Start Date'}</span>
                     <span className="text-rose-400 font-bold">*</span>
                   </label>
@@ -896,7 +896,7 @@ export default function ProjectsPage() {
                   )}
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-300 flex items-center gap-1">
+                  <label className="text-xs font-bold text-foreground flex items-center gap-1">
                     <span>{isAr ? 'تاريخ الانتهاء المتوقع' : 'Expected End Date'}</span>
                     <span className="text-rose-400 font-bold">*</span>
                   </label>
@@ -917,14 +917,14 @@ export default function ProjectsPage() {
               {/* Row 6: Status & Description */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-300 block">{isAr ? 'حالة المشروع' : 'Project Status'}</label>
+                  <label className="text-xs font-bold text-foreground block">{isAr ? 'حالة المشروع' : 'Project Status'}</label>
                   <select
                     value={formData.status}
                     onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all cursor-pointer"
+                    className="w-full bg-background border border-border focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all cursor-pointer"
                   >
                     {Object.entries(STATUS_MAP).map(([key, value]) => (
-                      <option key={key} value={key} className="bg-slate-900 text-white">
+                      <option key={key} value={key} className="bg-card text-foreground">
                         {value.label}
                       </option>
                     ))}
@@ -938,18 +938,18 @@ export default function ProjectsPage() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-300 block">{isAr ? 'وصف المشروع' : 'Project Description'}</label>
+                <label className="text-xs font-bold text-foreground block">{isAr ? 'وصف المشروع' : 'Project Description'}</label>
                 <textarea
                   rows={3}
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all resize-none"
+                  className="w-full bg-background border border-border focus:border-indigo-500 text-slate-200 text-sm rounded-xl p-3 outline-none transition-all resize-none"
                   placeholder={isAr ? 'أدخل تفاصيل ومواصفات المشروع الإنشائي...' : 'Enter construction project details...'}
                 />
               </div>
 
               {/* Submit / Action Buttons */}
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800/80">
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-border">
                 <button
                   type="button"
                   onClick={() => {
@@ -957,7 +957,7 @@ export default function ProjectsPage() {
                     setIsEditOpen(false);
                     setSelectedProject(null);
                   }}
-                  className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold transition-all cursor-pointer"
+                  className="px-5 py-2.5 bg-muted hover:bg-slate-700 text-foreground rounded-xl text-xs font-semibold transition-all cursor-pointer"
                 >
                   {isAr ? 'إلغاء' : 'Cancel'}
                 </button>

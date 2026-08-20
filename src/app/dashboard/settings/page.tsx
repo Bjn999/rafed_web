@@ -273,7 +273,7 @@ export default function SettingsPage() {
 
   if (authLoading) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 text-slate-400 gap-3">
+      <div className="flex flex-col items-center justify-center py-20 text-muted-foreground gap-3">
         <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
         <p className="font-medium text-sm">{isAr ? 'جاري تحميل الإعدادات...' : 'Loading settings...'}</p>
       </div>
@@ -284,13 +284,13 @@ export default function SettingsPage() {
     <div className="space-y-6 animate-in fade-in duration-300">
       
       {/* Inner Navigation Tabs */}
-      <div className="flex border-b border-slate-800 overflow-x-auto no-scrollbar whitespace-nowrap touch-scroll gap-1" dir={isAr ? 'rtl' : 'ltr'}>
+      <div className="flex border-b border-border overflow-x-auto no-scrollbar whitespace-nowrap touch-scroll gap-1" dir={isAr ? 'rtl' : 'ltr'}>
         <button
           onClick={() => handleTabChange('profile')}
           className={`flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-3 border-b-2 text-xs sm:text-sm font-semibold transition-all cursor-pointer shrink-0 ${
             activeTab === 'profile'
               ? 'border-indigo-500 text-indigo-400'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              : 'border-transparent text-muted-foreground hover:text-slate-200'
           }`}
         >
           <User className={`w-4 h-4 ${isAr ? 'ml-1' : 'mr-1'}`} />
@@ -302,7 +302,7 @@ export default function SettingsPage() {
           className={`flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-3 border-b-2 text-xs sm:text-sm font-semibold transition-all cursor-pointer shrink-0 ${
             activeTab === 'security'
               ? 'border-indigo-500 text-indigo-400'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              : 'border-transparent text-muted-foreground hover:text-slate-200'
           }`}
         >
           <Lock className={`w-4 h-4 ${isAr ? 'ml-1' : 'mr-1'}`} />
@@ -315,7 +315,7 @@ export default function SettingsPage() {
             className={`flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-3 border-b-2 text-xs sm:text-sm font-semibold transition-all cursor-pointer shrink-0 ${
               activeTab === 'company'
                 ? 'border-indigo-500 text-indigo-400'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                : 'border-transparent text-muted-foreground hover:text-slate-200'
             }`}
           >
             <Building2 className={`w-4 h-4 ${isAr ? 'ml-1' : 'mr-1'}`} />
@@ -328,7 +328,7 @@ export default function SettingsPage() {
           className={`flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-3 border-b-2 text-xs sm:text-sm font-semibold transition-all cursor-pointer shrink-0 ${
             activeTab === 'subscription'
               ? 'border-indigo-500 text-indigo-400'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              : 'border-transparent text-muted-foreground hover:text-slate-200'
           }`}
         >
           <CreditCard className={`w-4 h-4 ${isAr ? 'ml-1' : 'mr-1'}`} />
@@ -339,8 +339,8 @@ export default function SettingsPage() {
       {/* --- PROFILE TAB (Read Only + Edit Modal) --- */}
       {activeTab === 'profile' && (
         <div className={`space-y-6 ${isAr ? 'text-right' : 'text-left'}`} dir={isAr ? 'rtl' : 'ltr'}>
-          <Card className="border-slate-800 bg-slate-900/40 text-white max-w-2xl">
-            <CardHeader className={`flex flex-row justify-between items-center pb-4 border-b border-slate-800/60`}>
+          <Card className="border-border bg-card text-foreground max-w-2xl">
+            <CardHeader className={`flex flex-row justify-between items-center pb-4 border-b border-border`}>
               <div className="space-y-1">
                 <CardTitle className="text-lg">{isAr ? 'بيانات الملف الشخصي' : 'Profile Information'}</CardTitle>
                 <CardDescription className="text-slate-450 text-xs">{isAr ? 'عرض تفاصيل الحساب والمسمى الوظيفي الخاص بك' : 'View account credentials and system job titles'}</CardDescription>
@@ -358,7 +358,7 @@ export default function SettingsPage() {
                 
                 <div className={`space-y-1 ${isAr ? 'text-right' : 'text-left'}`}>
                   <span className="text-xs text-slate-450 block font-semibold">{isAr ? 'الاسم بالكامل' : 'Full Name'}</span>
-                  <div className="flex items-center gap-2 text-slate-105 bg-slate-950/40 border border-slate-800/40 px-4 py-2.5 rounded-xl text-sm font-medium">
+                  <div className="flex items-center gap-2 text-slate-105 bg-background/40 border border-border px-4 py-2.5 rounded-xl text-sm font-medium">
                     <User className={`w-4 h-4 text-indigo-400/80 ${isAr ? 'ml-1' : 'mr-1'} shrink-0`} />
                     <span>{authUser?.profile?.first_name} {authUser?.profile?.last_name}</span>
                   </div>
@@ -366,7 +366,7 @@ export default function SettingsPage() {
 
                 <div className={`space-y-1 ${isAr ? 'text-right' : 'text-left'}`}>
                   <span className="text-xs text-slate-455 block font-semibold">{isAr ? 'البريد الإلكتروني' : 'Email Address'}</span>
-                  <div className="flex items-center gap-2 text-slate-105 bg-slate-950/40 border border-slate-800/40 px-4 py-2.5 rounded-xl text-sm font-mono font-medium">
+                  <div className="flex items-center gap-2 text-slate-105 bg-background/40 border border-border px-4 py-2.5 rounded-xl text-sm font-mono font-medium">
                     <Mail className={`w-4 h-4 text-indigo-400/80 ${isAr ? 'ml-1' : 'mr-1'} shrink-0`} />
                     <span className="truncate">{authUser?.email}</span>
                   </div>
@@ -374,7 +374,7 @@ export default function SettingsPage() {
 
                 <div className={`space-y-1 ${isAr ? 'text-right' : 'text-left'}`}>
                   <span className="text-xs text-slate-455 block font-semibold">{isAr ? 'رقم الجوال' : 'Phone Number'}</span>
-                  <div className={`flex items-center gap-2 text-slate-105 bg-slate-950/40 border border-slate-800/40 px-4 py-2.5 rounded-xl text-sm font-medium`} dir="ltr">
+                  <div className={`flex items-center gap-2 text-slate-105 bg-background/40 border border-border px-4 py-2.5 rounded-xl text-sm font-medium`} dir="ltr">
                     <Phone className="w-4 h-4 text-indigo-400/80 shrink-0 mr-1" />
                     <span>{authUser?.profile?.phone_number || (isAr ? 'غير محدد' : 'Not specified')}</span>
                   </div>
@@ -382,7 +382,7 @@ export default function SettingsPage() {
 
                 <div className={`space-y-1 ${isAr ? 'text-right' : 'text-left'}`}>
                   <span className="text-xs text-slate-455 block font-semibold">{isAr ? 'المسمى الوظيفي' : 'Job Title'}</span>
-                  <div className="flex items-center gap-2 text-slate-105 bg-slate-950/40 border border-slate-800/40 px-4 py-2.5 rounded-xl text-sm font-medium">
+                  <div className="flex items-center gap-2 text-slate-105 bg-background/40 border border-border px-4 py-2.5 rounded-xl text-sm font-medium">
                     <Briefcase className={`w-4 h-4 text-indigo-400/80 ${isAr ? 'ml-1' : 'mr-1'} shrink-0`} />
                     <span>{authUser?.profile?.job_title || (isAr ? 'غير محدد' : 'Not specified')}</span>
                   </div>
@@ -394,16 +394,16 @@ export default function SettingsPage() {
 
           {/* EDIT PROFILE MODAL */}
           {isEditModalOpen && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-sm p-4 animate-in fade-in duration-250">
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/70 backdrop-blur-sm p-4 animate-in fade-in duration-250">
               <div 
-                className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl space-y-4 animate-in zoom-in-95 duration-200"
+                className="bg-card border border-border rounded-2xl w-full max-w-lg p-6 shadow-2xl space-y-4 animate-in zoom-in-95 duration-200"
                 dir={isAr ? 'rtl' : 'ltr'}
               >
-                <div className="flex justify-between items-center border-b border-slate-800/80 pb-3">
-                  <h3 className="text-lg font-bold text-white">{isAr ? 'تعديل بيانات الملف الشخصي' : 'Edit Profile Details'}</h3>
+                <div className="flex justify-between items-center border-b border-border pb-3">
+                  <h3 className="text-lg font-bold text-foreground">{isAr ? 'تعديل بيانات الملف الشخصي' : 'Edit Profile Details'}</h3>
                   <button
                     onClick={() => setIsEditModalOpen(false)}
-                    className="text-slate-400 hover:text-slate-200 transition-all p-1"
+                    className="text-muted-foreground hover:text-slate-200 transition-all p-1"
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -412,54 +412,54 @@ export default function SettingsPage() {
                 <form onSubmit={handleUpdateProfile} className={`space-y-4 pt-2 ${isAr ? 'text-right' : 'text-left'}`}>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                      <label className="text-xs text-slate-400 font-semibold">{isAr ? 'الاسم الأول' : 'First Name'}</label>
+                      <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'الاسم الأول' : 'First Name'}</label>
                       <input
                         type="text"
                         required
                         value={profileFirstName}
                         onChange={(e) => setProfileFirstName(e.target.value)}
-                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none text-white"
+                        className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none text-foreground"
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-xs text-slate-400 font-semibold">{isAr ? 'الاسم الأخير' : 'Last Name'}</label>
+                      <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'الاسم الأخير' : 'Last Name'}</label>
                       <input
                         type="text"
                         required
                         value={profileLastName}
                         onChange={(e) => setProfileLastName(e.target.value)}
-                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none text-white"
+                        className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none text-foreground"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-xs text-slate-400 font-semibold">{isAr ? 'رقم الجوال' : 'Phone Number'}</label>
+                    <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'رقم الجوال' : 'Phone Number'}</label>
                     <input
                       type="text"
                       value={profilePhone}
                       onChange={(e) => setProfilePhone(e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none text-white"
+                      className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none text-foreground"
                       dir="ltr"
                     />
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-xs text-slate-400 font-semibold">{isAr ? 'المسمى الوظيفي' : 'Job Title'}</label>
+                    <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'المسمى الوظيفي' : 'Job Title'}</label>
                     <input
                       type="text"
                       value={profileJobTitle}
                       onChange={(e) => setProfileJobTitle(e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none text-white"
+                      className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none text-foreground"
                     />
                   </div>
 
-                  <div className="flex justify-end gap-3 pt-3 border-t border-slate-800/80 mt-2">
+                  <div className="flex justify-end gap-3 pt-3 border-t border-border mt-2">
                     <Button
                       type="button"
                       variant="outline"
                       onClick={() => setIsEditModalOpen(false)}
-                      className="border-slate-800 hover:bg-slate-800 hover:text-white text-slate-400 rounded-xl px-5"
+                      className="border-border hover:bg-muted hover:text-foreground text-muted-foreground rounded-xl px-5"
                     >
                       {isAr ? 'إلغاء' : 'Cancel'}
                     </Button>
@@ -480,43 +480,43 @@ export default function SettingsPage() {
 
       {/* --- SECURITY TAB --- */}
       {activeTab === 'security' && (
-        <Card className="border-slate-800 bg-slate-900/40 text-white max-w-2xl">
+        <Card className="border-border bg-card text-foreground max-w-2xl">
           <CardHeader className={`${isAr ? 'text-right' : 'text-left'}`}>
             <CardTitle className="text-lg">{isAr ? 'تغيير كلمة المرور' : 'Change Password'}</CardTitle>
-            <CardDescription className="text-slate-400">{isAr ? 'تحديث كلمة مرور الحساب لضمان أمان معلوماتك' : 'Update account password to maintain your profile security'}</CardDescription>
+            <CardDescription className="text-muted-foreground">{isAr ? 'تحديث كلمة مرور الحساب لضمان أمان معلوماتك' : 'Update account password to maintain your profile security'}</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleChangePassword} className="space-y-4" dir={isAr ? 'rtl' : 'ltr'}>
               <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                <label className="text-xs text-slate-400 font-semibold">{isAr ? 'كلمة المرور الحالية' : 'Current Password'}</label>
+                <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'كلمة المرور الحالية' : 'Current Password'}</label>
                 <input
                   type="password"
                   required
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-850 rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none"
+                  className="w-full bg-background border border-slate-850 rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none"
                 />
               </div>
 
               <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                <label className="text-xs text-slate-400 font-semibold">{isAr ? 'كلمة المرور الجديدة' : 'New Password'}</label>
+                <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'كلمة المرور الجديدة' : 'New Password'}</label>
                 <input
                   type="password"
                   required
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-850 rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none"
+                  className="w-full bg-background border border-slate-850 rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none"
                 />
               </div>
 
               <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                <label className="text-xs text-slate-400 font-semibold">{isAr ? 'تأكيد كلمة المرور الجديدة' : 'Confirm New Password'}</label>
+                <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'تأكيد كلمة المرور الجديدة' : 'Confirm New Password'}</label>
                 <input
                   type="password"
                   required
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-850 rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none"
+                  className="w-full bg-background border border-slate-850 rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none"
                 />
               </div>
 
@@ -536,33 +536,33 @@ export default function SettingsPage() {
 
       {/* --- COMPANY DETAILS TAB --- */}
       {activeTab === 'company' && isCompanyAdmin && (
-        <Card className="border-slate-800 bg-slate-900/40 text-white max-w-2xl">
+        <Card className="border-border bg-card text-foreground max-w-2xl">
           <CardHeader className={`${isAr ? 'text-right' : 'text-left'}`}>
             <CardTitle className="text-lg">{isAr ? 'بيانات الشركة والمؤسسة' : 'Company & Organization Details'}</CardTitle>
-            <CardDescription className="text-slate-400">{isAr ? 'تعديل معلومات الهوية والمستندات والفوترة الخاصة بمؤسستك' : 'Edit registry, VAT numbers, identity records, and billing settings'}</CardDescription>
+            <CardDescription className="text-muted-foreground">{isAr ? 'تعديل معلومات الهوية والمستندات والفوترة الخاصة بمؤسستك' : 'Edit registry, VAT numbers, identity records, and billing settings'}</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleUpdateCompany} className="space-y-4" dir={isAr ? 'rtl' : 'ltr'}>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                  <label className="text-xs text-slate-400 font-semibold">{isAr ? 'اسم الشركة (عربي)' : 'Company Name (Arabic)'}</label>
+                  <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'اسم الشركة (عربي)' : 'Company Name (Arabic)'}</label>
                   <input
                     type="text"
                     required
                     value={companyName}
                     onChange={(e) => setCompanyName(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none"
+                    className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none"
                   />
                 </div>
 
                 <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                  <label className="text-xs text-slate-400 font-semibold">{isAr ? 'اسم الشركة (إنجليزي)' : 'Company Name (English)'}</label>
+                  <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'اسم الشركة (إنجليزي)' : 'Company Name (English)'}</label>
                   <input
                     type="text"
                     value={companyNameEn}
                     onChange={(e) => setCompanyNameEn(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none text-left"
+                    className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none text-left"
                     dir="ltr"
                   />
                 </div>
@@ -570,45 +570,45 @@ export default function SettingsPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                  <label className="text-xs text-slate-400 font-semibold">{isAr ? 'رقم السجل التجاري' : 'CR Registration Number'}</label>
+                  <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'رقم السجل التجاري' : 'CR Registration Number'}</label>
                   <input
                     type="text"
                     value={companyCr}
                     onChange={(e) => setCompanyCr(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none font-mono text-left"
+                    className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none font-mono text-left"
                     dir="ltr"
                   />
                 </div>
 
                 <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                  <label className="text-xs text-slate-400 font-semibold">{isAr ? 'الرقم الضريبي (TIN / VAT)' : 'Tax Number (TIN / VAT)'}</label>
+                  <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'الرقم الضريبي (TIN / VAT)' : 'Tax Number (TIN / VAT)'}</label>
                   <input
                     type="text"
                     value={companyTax}
                     onChange={(e) => setCompanyTax(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none font-mono text-left"
+                    className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none font-mono text-left"
                     dir="ltr"
                   />
                 </div>
               </div>
 
               <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                <label className="text-xs text-slate-400 font-semibold">{isAr ? 'بيانات وعنوان الفوترة' : 'Billing Details & Address'}</label>
+                <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'بيانات وعنوان الفوترة' : 'Billing Details & Address'}</label>
                 <textarea
                   value={companyBilling}
                   onChange={(e) => setCompanyBilling(e.target.value)}
                   rows={3}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none resize-none"
+                  className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none resize-none"
                   placeholder={isAr ? 'مثال: الرياض، حي السليمانية، مبنى رقم 45 - الرمز البريدي 12243' : 'e.g. Riyadh, Sulimaniyah District, Bldg 45 - Zip 12243'}
                 />
               </div>
 
               <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                <label className="text-xs text-slate-400 font-semibold">{isAr ? 'المنطقة الزمنية للشركة' : 'Company Timezone'}</label>
+                <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'المنطقة الزمنية للشركة' : 'Company Timezone'}</label>
                 <select
                   value={companyTimezone}
                   onChange={(e) => setCompanyTimezone(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none text-slate-200"
+                  className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none text-slate-200"
                   dir="ltr"
                 >
                   <option value="UTC">UTC (التوقيت العالمي)</option>
@@ -618,7 +618,7 @@ export default function SettingsPage() {
                   <option value="Asia/Amman">Asia/Amman (توقيت الأردن)</option>
                   <option value="Europe/London">Europe/London (توقيت لندن)</option>
                 </select>
-                <p className="text-[10px] text-slate-500 mt-1">
+                <p className="text-[10px] text-muted-foreground mt-1">
                   {isAr 
                     ? '* سيتم الاعتماد على هذا التوقيت في العمليات الحساسة كحساب أوقات انتهاء الاشتراك وأوقات الدوام.' 
                     : '* This timezone will be used for critical backend operations like subscription expiry.'}
@@ -626,15 +626,15 @@ export default function SettingsPage() {
               </div>
 
               <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                <label className="text-xs text-slate-400 font-semibold">{isAr ? 'رابط النطاق (Domain) المشغل' : 'Workspace Domain Link'}</label>
+                <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'رابط النطاق (Domain) المشغل' : 'Workspace Domain Link'}</label>
                 <input
                   type="text"
                   disabled
                   value={tenant?.domain || ''}
-                  className="w-full bg-slate-950/40 border border-slate-900 text-slate-500 rounded-xl px-4 py-2.5 text-sm cursor-not-allowed font-mono text-left"
+                  className="w-full bg-background/40 border border-slate-900 text-muted-foreground rounded-xl px-4 py-2.5 text-sm cursor-not-allowed font-mono text-left"
                   dir="ltr"
                 />
-                <p className="text-[10px] text-slate-500 mt-1">
+                <p className="text-[10px] text-muted-foreground mt-1">
                   {isAr 
                     ? '* رابط النطاق مخصص وثابت للمؤسسة ولا يمكن تعديله إلا من خلال مسؤول النظام العام.' 
                     : '* Domain handles are fixed for the enterprise and can only be updated by system super-admins.'}
@@ -659,7 +659,7 @@ export default function SettingsPage() {
       {activeTab === 'subscription' && (
         <div className="space-y-6" dir={isAr ? 'rtl' : 'ltr'}>
           {usageLoading ? (
-            <div className="flex flex-col items-center py-10 text-slate-400 gap-2">
+            <div className="flex flex-col items-center py-10 text-muted-foreground gap-2">
               <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
               <p className="text-sm">{isAr ? 'جاري تحميل بيانات الاشتراك...' : 'Loading subscription details...'}</p>
             </div>
@@ -679,12 +679,12 @@ export default function SettingsPage() {
                     <AlertCircle className="w-6 h-6" />
                   </div>
                   <div className="space-y-1.5 flex-1 text-right" dir={isAr ? 'rtl' : 'ltr'}>
-                    <h3 className="text-lg font-bold text-white">
+                    <h3 className="text-lg font-bold text-foreground">
                       {authUser.subscription_alert.status === 'grace_period' 
                         ? (isAr ? `انتهى اشتراكك ${authUser.subscription_alert.billing_cycle === 'monthly' ? 'الشهري' : 'السنوي'}!` : `Your ${authUser.subscription_alert.billing_cycle === 'monthly' ? 'monthly' : 'annual'} subscription expired!`)
                         : (isAr ? 'اقترب موعد تجديد الاشتراك' : 'Subscription renewal is approaching')}
                     </h3>
-                    <p className="text-sm text-slate-300 leading-relaxed">
+                    <p className="text-sm text-foreground leading-relaxed">
                       {authUser.subscription_alert.status === 'grace_period'
                         ? (isAr 
                           ? `أنت الآن في فترة السماح. يرجى مسارعة تجديد الاشتراك لتجنب إيقاف الحساب. متبقي ${authUser.subscription_alert.billing_cycle === 'monthly' ? Math.ceil(authUser.subscription_alert.days_left * 24) + ' ساعة' : Math.ceil(authUser.subscription_alert.days_left) + ' يوم'} فقط على إيقاف الخدمة.`
@@ -705,15 +705,15 @@ export default function SettingsPage() {
               )}
 
               {/* Main Usage panel (Moved from dashboard) */}
-              <div className="bg-slate-900/50 border border-slate-800/80 rounded-2xl p-6 space-y-6 backdrop-blur-xl relative overflow-hidden">
+              <div className="bg-card border border-border rounded-2xl p-6 space-y-6 backdrop-blur-xl relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-[60px] pointer-events-none" />
-                <div className={`flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-800/50 pb-4`}>
+                <div className={`flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-border pb-4`}>
                   <div className={`space-y-1 ${isAr ? 'text-right' : 'text-left'}`}>
-                    <h2 className="text-base font-bold text-white flex items-center gap-2">
+                    <h2 className="text-base font-bold text-foreground flex items-center gap-2">
                       <CreditCard className={`w-4 h-4 text-indigo-400 ${isAr ? 'ml-1' : 'mr-1'}`} />
                       {isAr ? 'مستوى استهلاك باقة الاشتراك والحدود المتاحة' : 'Subscription usage levels & limits'}
                     </h2>
-                    <p className="text-xs text-slate-400">
+                    <p className="text-xs text-muted-foreground">
                       {isAr ? 'متابعة حية لرصيد مشاريع شركتك ومقاعد الموظفين النشطين' : 'Realtime tracking of project credits and active user seats'}
                     </p>
                   </div>
@@ -729,7 +729,7 @@ export default function SettingsPage() {
                   {/* Projects Credit Progress */}
                   <div className="space-y-3">
                     <div className="flex justify-between items-center text-sm">
-                      <span className="font-semibold text-slate-300">{isAr ? 'رصيد المشاريع المتبقي' : 'Remaining Project Credits'}</span>
+                      <span className="font-semibold text-foreground">{isAr ? 'رصيد المشاريع المتبقي' : 'Remaining Project Credits'}</span>
                       <span className="text-indigo-400 font-mono font-bold">
                         {isAr 
                           ? `متبقي ${usage.credits.remaining} من أصل ${usage.credits.total} مشاريع`
@@ -738,14 +738,14 @@ export default function SettingsPage() {
                     </div>
                     
                     {/* Progress Bar Container */}
-                    <div className="w-full h-3 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+                    <div className="w-full h-3 bg-background rounded-full overflow-hidden border border-border">
                       <div 
                         className="h-full bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full transition-all duration-500 shadow-[0_0_12px_rgba(99,102,241,0.3)]"
                         style={{ width: `${usage.credits.total > 0 ? Math.min(100, (usage.credits.used / usage.credits.total) * 100) : 0}%` }}
                       />
                     </div>
                     
-                    <div className="flex justify-between text-[11px] text-slate-500">
+                    <div className="flex justify-between text-[11px] text-muted-foreground">
                       <span>{isAr ? `تم استهلاك ${usage.credits.used} مشاريع` : `${usage.credits.used} projects used`}</span>
                       <span>{isAr ? 'نسبة الاستهلاك' : 'Usage ratio'} {usage.credits.total > 0 ? ((usage.credits.used / usage.credits.total) * 100).toFixed(0) : 0}%</span>
                     </div>
@@ -754,7 +754,7 @@ export default function SettingsPage() {
                   {/* Active Users Progress */}
                   <div className="space-y-3">
                     <div className="flex justify-between items-center text-sm">
-                      <span className="font-semibold text-slate-300">{isAr ? 'مقاعد الموظفين النشطين' : 'Active User Seats'}</span>
+                      <span className="font-semibold text-foreground">{isAr ? 'مقاعد الموظفين النشطين' : 'Active User Seats'}</span>
                       <span className="text-emerald-400 font-mono font-bold">
                         {isAr 
                           ? `تم استخدام ${usage.users.current} من ${usage.users.max} مستخدم`
@@ -763,14 +763,14 @@ export default function SettingsPage() {
                     </div>
                     
                     {/* Progress Bar Container */}
-                    <div className="w-full h-3 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+                    <div className="w-full h-3 bg-background rounded-full overflow-hidden border border-border">
                       <div 
                         className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-500 shadow-[0_0_12px_rgba(16,185,129,0.3)]"
                         style={{ width: `${usage.users.max > 0 ? Math.min(100, (usage.users.current / usage.users.max) * 100) : 0}%` }}
                       />
                     </div>
                     
-                    <div className="flex justify-between text-[11px] text-slate-500">
+                    <div className="flex justify-between text-[11px] text-muted-foreground">
                       <span>{isAr ? `متبقي ${usage.users.remaining} مقاعد شاغرة` : `${usage.users.remaining} seats remaining`}</span>
                       <span>{isAr ? 'نسبة الامتلاء' : 'Occupancy ratio'} {usage.users.max > 0 ? ((usage.users.current / usage.users.max) * 100).toFixed(0) : 0}%</span>
                     </div>
@@ -779,13 +779,13 @@ export default function SettingsPage() {
               </div>
 
               {/* Detailed subscription parameters card */}
-              <Card className="border-slate-800 bg-slate-900/40 text-white max-w-2xl">
+              <Card className="border-border bg-card text-foreground max-w-2xl">
                 <CardHeader className={`${isAr ? 'text-right' : 'text-left'}`}>
                   <CardTitle className="text-sm font-semibold">{isAr ? 'تفاصيل الباقة والحدود المتاحة' : 'Plan Details & Limits'}</CardTitle>
                 </CardHeader>
                 <CardContent className="divide-y divide-slate-800/60 pt-0 text-sm">
                   <div className="py-3 flex justify-between items-center">
-                    <span className="text-slate-400 font-medium">{isAr ? 'الباقة الحالية' : 'Current Plan'}</span>
+                    <span className="text-muted-foreground font-medium">{isAr ? 'الباقة الحالية' : 'Current Plan'}</span>
                     <span className="font-bold text-indigo-400 text-base">
                       {usage.plan_name === 'basic' ? (isAr ? 'الأساسية' : 'Basic') :
                        usage.plan_name === 'professional' ? (isAr ? 'الاحترافية' : 'Professional') :
@@ -795,22 +795,22 @@ export default function SettingsPage() {
                     </span>
                   </div>
                   <div className="py-3 flex justify-between items-center">
-                    <span className="text-slate-400 font-medium">{isAr ? 'دورة الفوترة' : 'Billing Cycle'}</span>
+                    <span className="text-muted-foreground font-medium">{isAr ? 'دورة الفوترة' : 'Billing Cycle'}</span>
                     <span className="font-semibold">{usage.billing_cycle === 'yearly' ? (isAr ? 'دورة فوترة سنوية' : 'Annual Billing') : (isAr ? 'دورة فوترة شهرية' : 'Monthly Billing')}</span>
                   </div>
                   <div className="py-3 flex justify-between items-center">
-                    <span className="text-slate-400 font-medium">{isAr ? 'الحد الأقصى لميزانية المشروع الواحد' : 'Max Budget Per Project'}</span>
+                    <span className="text-muted-foreground font-medium">{isAr ? 'الحد الأقصى لميزانية المشروع الواحد' : 'Max Budget Per Project'}</span>
                     <span className="font-bold text-emerald-400 text-base">{formatBudget(usage.max_project_budget)}</span>
                   </div>
                   {usage.starts_at && (
                     <div className="py-3 flex justify-between items-center">
-                      <span className="text-slate-400 font-medium">{isAr ? 'تاريخ بدء الاشتراك' : 'Subscription Start Date'}</span>
+                      <span className="text-muted-foreground font-medium">{isAr ? 'تاريخ بدء الاشتراك' : 'Subscription Start Date'}</span>
                       <span className="font-semibold">{new Date(usage.starts_at).toLocaleDateString(isAr ? 'ar-SA' : 'en-US')}</span>
                     </div>
                   )}
                   {usage.ends_at && (
                     <div className="py-3 flex justify-between items-center">
-                      <span className="text-slate-400 font-medium">{isAr ? 'تاريخ انتهاء الاشتراك' : 'Subscription Expiry Date'}</span>
+                      <span className="text-muted-foreground font-medium">{isAr ? 'تاريخ انتهاء الاشتراك' : 'Subscription Expiry Date'}</span>
                       <span className="font-semibold text-rose-400">{new Date(usage.ends_at).toLocaleDateString(isAr ? 'ar-SA' : 'en-US')}</span>
                     </div>
                   )}
@@ -819,7 +819,7 @@ export default function SettingsPage() {
 
             </div>
           ) : (
-            <div className="bg-slate-900/40 border border-slate-800 p-8 text-center text-slate-400 rounded-2xl">
+            <div className="bg-card border border-border p-8 text-center text-muted-foreground rounded-2xl">
               {isAr ? 'لا توجد معلومات اشتراك متاحة حالياً. يرجى مراجعة الدعم الفني.' : 'No subscription details are currently available. Please contact support.'}
             </div>
           )}

@@ -160,22 +160,22 @@ export default function WbsGanttView({
   };
 
   return (
-    <div className="w-full bg-slate-900/60 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl animate-in fade-in duration-300" dir={isAr ? 'rtl' : 'ltr'}>
+    <div className="w-full bg-card border border-border rounded-2xl overflow-hidden shadow-2xl animate-in fade-in duration-300" dir={isAr ? 'rtl' : 'ltr'}>
 
       {/* Header Banner */}
-      <div className="p-4 bg-slate-950/80 border-b border-slate-800 flex flex-wrap items-center justify-between gap-4">
+      <div className="p-4 bg-background/80 border-b border-border flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center shrink-0">
             <Layers className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-white flex items-center gap-2">
+            <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
               <span>{isAr ? 'مخطط جانت الزمني (Gantt Chart Roadmap)' : 'Gantt Chart Roadmap'}</span>
               <span className="text-[10px] font-mono text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded-full">
                 {totalDays} {isAr ? 'يوم' : 'days'}
               </span>
             </h3>
-            <p className="text-[11px] text-slate-400">
+            <p className="text-[11px] text-muted-foreground">
               {isAr ? 'نطاق المخطط محصور بتاريخ بداية ونهاية المشروع بالتحديد، مع التكبير والتلميحات عند الحواف' : 'Timeline bounded strictly by project start and end dates with edge hover tooltips'}
             </p>
           </div>
@@ -185,39 +185,39 @@ export default function WbsGanttView({
         <div className="flex flex-wrap items-center gap-3">
 
           {/* Zoom Mode Selector */}
-          <div className="flex items-center gap-1 bg-slate-950 border border-slate-800 p-1 rounded-xl text-[10px]">
-            <ZoomIn className="w-3.5 h-3.5 text-slate-400 ms-1" />
+          <div className="flex items-center gap-1 bg-background border border-border p-1 rounded-xl text-[10px]">
+            <ZoomIn className="w-3.5 h-3.5 text-muted-foreground ms-1" />
             <button
               onClick={() => setZoomMode('auto')}
-              className={`px-2 py-1 rounded-lg font-bold transition-all cursor-pointer ${zoomMode === 'auto' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
+              className={`px-2 py-1 rounded-lg font-bold transition-all cursor-pointer ${zoomMode === 'auto' ? 'bg-indigo-600 text-white' : 'text-muted-foreground hover:text-foreground'
                 }`}
             >
               {isAr ? 'تلقائي' : 'Auto'}
             </button>
             <button
               onClick={() => setZoomMode('5days')}
-              className={`px-2 py-1 rounded-lg font-bold transition-all cursor-pointer ${zoomMode === '5days' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
+              className={`px-2 py-1 rounded-lg font-bold transition-all cursor-pointer ${zoomMode === '5days' ? 'bg-indigo-600 text-white' : 'text-muted-foreground hover:text-foreground'
                 }`}
             >
               {isAr ? 'كل 5 أيام' : '5 Days'}
             </button>
             <button
               onClick={() => setZoomMode('10days')}
-              className={`px-2 py-1 rounded-lg font-bold transition-all cursor-pointer ${zoomMode === '10days' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
+              className={`px-2 py-1 rounded-lg font-bold transition-all cursor-pointer ${zoomMode === '10days' ? 'bg-indigo-600 text-white' : 'text-muted-foreground hover:text-foreground'
                 }`}
             >
               {isAr ? 'كل 10 أيام' : '10 Days'}
             </button>
             <button
               onClick={() => setZoomMode('monthly')}
-              className={`px-2 py-1 rounded-lg font-bold transition-all cursor-pointer ${zoomMode === 'monthly' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
+              className={`px-2 py-1 rounded-lg font-bold transition-all cursor-pointer ${zoomMode === 'monthly' ? 'bg-indigo-600 text-white' : 'text-muted-foreground hover:text-foreground'
                 }`}
             >
               {isAr ? 'شهري' : 'Monthly'}
             </button>
           </div>
 
-          <div className="hidden lg:flex items-center gap-3 text-[10px] font-semibold text-slate-400 border-s border-slate-800 ps-3">
+          <div className="hidden lg:flex items-center gap-3 text-[10px] font-semibold text-muted-foreground border-s border-border ps-3">
             <div className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-indigo-600" /> {isAr ? 'قيد التنفيذ' : 'In Progress'}</div>
             <div className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> {isAr ? 'مكتمل' : 'Completed'}</div>
             <div className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-rose-600" /> {isAr ? 'متأخر' : 'Delayed'}</div>
@@ -232,12 +232,12 @@ export default function WbsGanttView({
         <div className="min-w-[750px] sm:min-w-[900px]">
 
           {/* Timeline Header Columns */}
-          <div className="flex border-b border-slate-800 bg-slate-950/60 text-[11px] font-bold text-slate-400">
+          <div className="flex border-b border-border bg-background/60 text-[11px] font-bold text-muted-foreground">
 
             {/* Task Name Sidebar Header */}
-            <div className="w-48 sm:w-72 p-3 shrink-0 border-e border-slate-800 flex items-center justify-between">
+            <div className="w-48 sm:w-72 p-3 shrink-0 border-e border-border flex items-center justify-between">
               <span>{isAr ? 'اسم البند / النشاط' : 'Activity Name'}</span>
-              <span className="text-[10px] text-slate-500 font-mono">({items.length})</span>
+              <span className="text-[10px] text-muted-foreground font-mono">({items.length})</span>
             </div>
 
             {/* Dates Bar Header (Aggregated Scale) */}
@@ -345,17 +345,17 @@ export default function WbsGanttView({
                       className="flex items-center hover:bg-slate-850/50 transition-colors group cursor-pointer"
                     >
                       {/* Left Sidebar Task info */}
-                      <div className="w-48 sm:w-72 p-3 shrink-0 border-e border-slate-800/80 flex items-center gap-2">
+                      <div className="w-48 sm:w-72 p-3 shrink-0 border-e border-border flex items-center gap-2">
                         <span className="font-mono text-[10px] font-bold text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-1.5 py-0.5 rounded">
                           {item.code || `#${item.id}`}
                         </span>
                         {isMilestone && (
                           <span className="text-amber-400 font-bold text-xs shrink-0" title={isAr ? 'معلم رئيسي' : 'Milestone'}>◆</span>
                         )}
-                        <span className="text-xs font-semibold text-white truncate flex-1">
+                        <span className="text-xs font-semibold text-foreground truncate flex-1">
                           {item.name}
                         </span>
-                        <span className="text-[10px] text-slate-400 font-mono font-bold">
+                        <span className="text-[10px] text-muted-foreground font-mono font-bold">
                           {item.progress}%
                         </span>
                       </div>
@@ -377,7 +377,7 @@ export default function WbsGanttView({
                             style={barLayout.style}
                           >
                             <div className="w-6 h-6 rotate-45 bg-amber-500 border-2 border-amber-300 shadow-lg shadow-amber-500/30 flex items-center justify-center shrink-0" />
-                            <span className="text-[10px] font-bold text-amber-300 bg-slate-900/90 border border-amber-500/30 px-2 py-0.5 rounded-full whitespace-nowrap shadow-md">
+                            <span className="text-[10px] font-bold text-amber-300 bg-card border border-amber-500/30 px-2 py-0.5 rounded-full whitespace-nowrap shadow-md">
                               {item.name} ({item.start_date || (isAr ? 'غير محدد' : 'No Date')})
                             </span>
                           </div>
@@ -397,12 +397,12 @@ export default function WbsGanttView({
                             </span>
 
                             {/* Hover Start Date Badge (Top-Start Edge) */}
-                            <div className={`absolute -top-8 ${isAr ? 'right-0 -mr-1' : 'left-0 -ml-1'} bg-slate-950/95 border border-indigo-500/80 text-indigo-300 text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-lg shadow-2xl opacity-0 group-hover/bar:opacity-100 transition-all pointer-events-none whitespace-nowrap z-50 flex items-center gap-1`}>
+                            <div className={`absolute -top-8 ${isAr ? 'right-0 -mr-1' : 'left-0 -ml-1'} bg-background/95 border border-indigo-500/80 text-indigo-300 text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-lg shadow-2xl opacity-0 group-hover/bar:opacity-100 transition-all pointer-events-none whitespace-nowrap z-50 flex items-center gap-1`}>
                               <span className="text-indigo-400">▶</span> {isAr ? 'بدء:' : 'Start:'} {item.start_date || (isAr ? 'غير محدد' : 'N/A')}
                             </div>
 
                             {/* Hover End Date Badge (Bottom-End Edge) */}
-                            <div className={`absolute -bottom-8 ${isAr ? 'left-0 -ml-1' : 'right-0 -mr-1'} bg-slate-950/95 border border-emerald-500/80 text-emerald-300 text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-lg shadow-2xl opacity-0 group-hover/bar:opacity-100 transition-all pointer-events-none whitespace-nowrap z-50 flex items-center gap-1`}>
+                            <div className={`absolute -bottom-8 ${isAr ? 'left-0 -ml-1' : 'right-0 -mr-1'} bg-background/95 border border-emerald-500/80 text-emerald-300 text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-lg shadow-2xl opacity-0 group-hover/bar:opacity-100 transition-all pointer-events-none whitespace-nowrap z-50 flex items-center gap-1`}>
                               {isAr ? 'نهاية:' : 'End:'} {item.end_date || (isAr ? 'غير محدد' : 'N/A')} <span className="text-emerald-400">🏁</span>
                             </div>
                           </div>
@@ -412,7 +412,7 @@ export default function WbsGanttView({
                   );
                 })
               ) : (
-                <div className="p-8 text-center text-slate-500 text-xs font-semibold">
+                <div className="p-8 text-center text-muted-foreground text-xs font-semibold">
                   {isAr ? 'لا يوجد أنشطة مضافة لعرضها في خطة جانت.' : 'No activities added to display in Gantt chart.'}
                 </div>
               )}

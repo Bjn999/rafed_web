@@ -115,7 +115,7 @@ export default function WbsTreeTable({
         );
       default:
         return (
-          <span className="bg-slate-500/10 border border-slate-500/20 text-slate-400 text-[10px] font-bold px-2 py-0.5 rounded-full">
+          <span className="bg-slate-500/10 border border-slate-500/20 text-muted-foreground text-[10px] font-bold px-2 py-0.5 rounded-full">
             {isAr ? 'لم يبدأ' : 'Not Started'}
           </span>
         );
@@ -131,7 +131,7 @@ export default function WbsTreeTable({
       case 'medium':
         return <span className="text-sky-400 font-bold text-[10px]">{isAr ? 'متوسطة' : 'Medium'}</span>;
       default:
-        return <span className="text-slate-400 text-[10px]">{isAr ? 'منخفضة' : 'Low'}</span>;
+        return <span className="text-muted-foreground text-[10px]">{isAr ? 'منخفضة' : 'Low'}</span>;
     }
   };
 
@@ -150,7 +150,7 @@ export default function WbsTreeTable({
 
     return (
       <React.Fragment key={node.id}>
-        <tr className="border-b border-slate-800/60 hover:bg-slate-850/40 transition-colors group">
+        <tr className="border-b border-border hover:bg-slate-850/40 transition-colors group">
           
           {/* WBS Code & Name */}
           <td className="py-3 px-4 text-xs">
@@ -161,7 +161,7 @@ export default function WbsTreeTable({
               {hasChildren ? (
                 <button
                   onClick={() => toggleExpand(node.id!)}
-                  className="w-5 h-5 rounded hover:bg-slate-800 text-slate-400 flex items-center justify-center cursor-pointer shrink-0"
+                  className="w-5 h-5 rounded hover:bg-muted text-muted-foreground flex items-center justify-center cursor-pointer shrink-0"
                 >
                   {isExpanded ? <ChevronDown className="w-4 h-4" /> : isAr ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
                 </button>
@@ -175,7 +175,7 @@ export default function WbsTreeTable({
                 {node.code || `#${node.id}`}
               </span>
 
-              <span className={`font-semibold text-white truncate max-w-xs ${level === 0 ? 'text-sm' : 'text-xs'}`}>
+              <span className={`font-semibold text-foreground truncate max-w-xs ${level === 0 ? 'text-sm' : 'text-xs'}`}>
                 {node.name}
               </span>
             </div>
@@ -190,10 +190,10 @@ export default function WbsTreeTable({
           {/* Progress */}
           <td className="py-3 px-3 min-w-[120px]">
             <div className="flex flex-col gap-1">
-              <div className="flex justify-between text-[10px] font-bold text-slate-300">
+              <div className="flex justify-between text-[10px] font-bold text-foreground">
                 <span>{node.progress}%</span>
               </div>
-              <div className="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden border border-slate-800">
+              <div className="w-full bg-background rounded-full h-1.5 overflow-hidden border border-border">
                 <div
                   className={`h-full transition-all duration-300 ${
                     node.progress === 100 ? 'bg-emerald-500' : 'bg-indigo-500'
@@ -205,7 +205,7 @@ export default function WbsTreeTable({
           </td>
 
           {/* Costs */}
-          <td className="py-3 px-3 font-mono text-[11px] text-slate-300 text-center whitespace-nowrap">
+          <td className="py-3 px-3 font-mono text-[11px] text-foreground text-center whitespace-nowrap">
             <div>{formatMoney(node.estimated_cost)}</div>
             {node.actual_cost ? (
               <div className="text-[10px] text-emerald-400 font-bold">{formatMoney(node.actual_cost)}</div>
@@ -213,10 +213,10 @@ export default function WbsTreeTable({
           </td>
 
           {/* Dates */}
-          <td className="py-3 px-3 text-[11px] text-slate-400 whitespace-nowrap text-center">
+          <td className="py-3 px-3 text-[11px] text-muted-foreground whitespace-nowrap text-center">
             {node.start_date || node.end_date ? (
               <div className="flex items-center justify-center gap-1">
-                <Calendar className="w-3 h-3 text-slate-500" />
+                <Calendar className="w-3 h-3 text-muted-foreground" />
                 <span>{node.start_date ? new Date(node.start_date).toLocaleDateString(isAr ? 'ar-SA' : 'en-US') : ''}</span>
                 {node.end_date ? <span>- {new Date(node.end_date).toLocaleDateString(isAr ? 'ar-SA' : 'en-US')}</span> : null}
               </div>
@@ -226,9 +226,9 @@ export default function WbsTreeTable({
           </td>
 
           {/* Assigned User */}
-          <td className="py-3 px-3 text-[11px] text-slate-300 whitespace-nowrap text-center">
+          <td className="py-3 px-3 text-[11px] text-foreground whitespace-nowrap text-center">
             {userName ? (
-              <div className="inline-flex items-center gap-1.5 bg-slate-800 px-2 py-1 rounded-md text-[10px]">
+              <div className="inline-flex items-center gap-1.5 bg-muted px-2 py-1 rounded-md text-[10px]">
                 <UserIcon className="w-3 h-3 text-indigo-400" />
                 <span className="truncate max-w-[100px]">{userName}</span>
               </div>
@@ -255,7 +255,7 @@ export default function WbsTreeTable({
                 onClick={() => handleMove(node.id!, 'indent')}
                 disabled={movingId === node.id}
                 title={isAr ? 'إزاحة للداخل (جعله فرعي)' : 'Indent (Make sub-activity)'}
-                className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer disabled:opacity-30"
+                className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer disabled:opacity-30"
               >
                 {isAr ? <ArrowLeft className="w-3.5 h-3.5" /> : <ArrowRight className="w-3.5 h-3.5" />}
               </button>
@@ -264,7 +264,7 @@ export default function WbsTreeTable({
                 onClick={() => handleMove(node.id!, 'outdent')}
                 disabled={movingId === node.id || !node.parent_id}
                 title={isAr ? 'إزاحة للخارج (ترقية كعنصر أعلى)' : 'Outdent (Promote)'}
-                className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer disabled:opacity-30"
+                className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer disabled:opacity-30"
               >
                 {isAr ? <ArrowRight className="w-3.5 h-3.5" /> : <ArrowLeft className="w-3.5 h-3.5" />}
               </button>
@@ -273,7 +273,7 @@ export default function WbsTreeTable({
                 onClick={() => handleMove(node.id!, 'up')}
                 disabled={movingId === node.id}
                 title={isAr ? 'تحريك للأعلى' : 'Move Up'}
-                className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer disabled:opacity-30"
+                className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer disabled:opacity-30"
               >
                 <ArrowUp className="w-3.5 h-3.5" />
               </button>
@@ -282,7 +282,7 @@ export default function WbsTreeTable({
                 onClick={() => handleMove(node.id!, 'down')}
                 disabled={movingId === node.id}
                 title={isAr ? 'تحريك للأسفل' : 'Move Down'}
-                className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer disabled:opacity-30"
+                className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer disabled:opacity-30"
               >
                 <ArrowDown className="w-3.5 h-3.5" />
               </button>
@@ -291,7 +291,7 @@ export default function WbsTreeTable({
               <button
                 onClick={() => onEditItem(node)}
                 title={isAr ? 'تعديل البند' : 'Edit Item'}
-                className="p-1.5 rounded-lg hover:bg-slate-800 text-amber-400 hover:text-amber-300 transition-colors cursor-pointer"
+                className="p-1.5 rounded-lg hover:bg-muted text-amber-400 hover:text-amber-300 transition-colors cursor-pointer"
               >
                 <Edit2 className="w-3.5 h-3.5" />
               </button>
@@ -319,10 +319,10 @@ export default function WbsTreeTable({
   };
 
   return (
-    <div className="w-full overflow-x-auto touch-scroll rounded-2xl border border-slate-800 bg-slate-900/40 backdrop-blur-xl">
+    <div className="w-full overflow-x-auto touch-scroll rounded-2xl border border-border bg-card backdrop-blur-xl">
       <table className="w-full text-right min-w-[750px]" dir={isAr ? 'rtl' : 'ltr'}>
         <thead>
-          <tr className="border-b border-slate-800 bg-slate-950/60 text-slate-400 text-[11px] font-bold uppercase tracking-wider">
+          <tr className="border-b border-border bg-background/60 text-muted-foreground text-[11px] font-bold uppercase tracking-wider">
             <th className="py-3 px-4 text-right">{isAr ? 'رمز WBS وبند العمل' : 'WBS Code & Activity'}</th>
             <th className="py-3 px-3 text-center">{isAr ? 'الحالة' : 'Status'}</th>
             <th className="py-3 px-3 text-center">{isAr ? 'الأولوية' : 'Priority'}</th>
@@ -338,7 +338,7 @@ export default function WbsTreeTable({
             treeData.map((node) => renderTreeRow(node, 0))
           ) : (
             <tr>
-              <td colSpan={8} className="py-12 text-center text-slate-500">
+              <td colSpan={8} className="py-12 text-center text-muted-foreground">
                 <div className="flex flex-col items-center gap-3">
                   <FolderTree className="w-10 h-10 text-slate-700" />
                   <p className="text-xs font-semibold">{isAr ? 'لا يوجد أنشطة مضافة لهذا المشروع حتى الآن.' : 'No activities added to this project yet.'}</p>

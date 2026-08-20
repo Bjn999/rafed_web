@@ -113,16 +113,16 @@ export default function PunchListView({
   return (
     <div className="space-y-4">
       {/* Search & Filter Header */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3">
+      <div className="bg-card border border-border rounded-2xl p-4 space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="relative flex-1 min-w-[240px]">
-            <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-muted-foreground absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder={isAr ? 'بحث برقم الملاحظة أو العنوان...' : 'Search by issue number or title...'}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+              className="w-full bg-background border border-border rounded-xl pl-10 pr-3.5 py-2 text-xs text-foreground placeholder-slate-500 focus:outline-none focus:border-indigo-500"
             />
           </div>
 
@@ -130,7 +130,7 @@ export default function PunchListView({
             <select
               value={priorityFilter}
               onChange={(e) => setPriorityFilter(e.target.value)}
-              className="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500"
+              className="bg-background border border-border rounded-xl px-3 py-2 text-xs text-foreground focus:outline-none focus:border-indigo-500"
             >
               <option value="all">{isAr ? 'جميع الأولويات' : 'All Priorities'}</option>
               <option value="critical">{isAr ? 'حرجة' : 'Critical'}</option>
@@ -142,7 +142,7 @@ export default function PunchListView({
         </div>
 
         {/* Status Filter Tabs */}
-        <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-slate-800/80">
+        <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-border">
           {[
             { key: 'all', label: isAr ? 'الكل' : 'All', count: issues.length },
             { key: 'new', label: isAr ? 'جديدة' : 'New', count: issues.filter((i) => i.status === 'new').length },
@@ -156,12 +156,12 @@ export default function PunchListView({
               className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
                 statusFilter === tab.key
                   ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20'
-                  : 'bg-slate-950 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800'
+                  : 'bg-background hover:bg-muted text-muted-foreground hover:text-slate-200 border border-border'
               }`}
             >
               <span>{tab.label}</span>
               <span className={`px-1.5 py-0.2 rounded-md text-[10px] font-mono ${
-                statusFilter === tab.key ? 'bg-white/20 text-white' : 'bg-slate-800 text-slate-400'
+                statusFilter === tab.key ? 'bg-white/20 text-foreground' : 'bg-muted text-muted-foreground'
               }`}>
                 {tab.count}
               </span>
@@ -172,8 +172,8 @@ export default function PunchListView({
 
       {/* Issues Table / Cards */}
       {filteredIssues.length === 0 ? (
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-12 text-center text-slate-400">
-          <CheckSquare className="w-12 h-12 text-slate-600 mx-auto mb-3" />
+        <div className="bg-card border border-border rounded-2xl p-12 text-center text-muted-foreground">
+          <CheckSquare className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
           <p className="text-sm font-medium">{isAr ? 'لا يوجد ملاحظات مطابقة للفلتر المحظور.' : 'No issues matching the filter criteria.'}</p>
         </div>
       ) : (
@@ -188,7 +188,7 @@ export default function PunchListView({
             return (
               <div
                 key={issue.id}
-                className="bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-2xl p-4 transition-all space-y-3"
+                className="bg-card border border-border hover:border-border rounded-2xl p-4 transition-all space-y-3"
               >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="space-y-1">
@@ -204,9 +204,9 @@ export default function PunchListView({
                       </span>
                     </div>
 
-                    <h4 className="text-sm font-semibold text-white mt-1">{issue.title}</h4>
+                    <h4 className="text-sm font-semibold text-foreground mt-1">{issue.title}</h4>
                     {issue.description && (
-                      <p className="text-xs text-slate-400 line-clamp-2">{issue.description}</p>
+                      <p className="text-xs text-muted-foreground line-clamp-2">{issue.description}</p>
                     )}
                   </div>
 
@@ -214,7 +214,7 @@ export default function PunchListView({
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setCompareIssue(issue)}
-                      className="bg-slate-950 hover:bg-slate-800 text-slate-300 rounded-xl px-3 py-1.5 text-xs font-medium border border-slate-800 flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="bg-background hover:bg-muted text-foreground rounded-xl px-3 py-1.5 text-xs font-medium border border-border flex items-center gap-1.5 transition-colors cursor-pointer"
                     >
                       <Camera className="w-3.5 h-3.5 text-sky-400" />
                       <span>{isAr ? 'معاينة التوثيق (Before/After)' : 'View Photos'}</span>
@@ -237,7 +237,7 @@ export default function PunchListView({
                 </div>
 
                 {/* Metadata Row */}
-                <div className="flex flex-wrap items-center justify-between pt-3 border-t border-slate-800/80 text-[11px] text-slate-400 gap-3">
+                <div className="flex flex-wrap items-center justify-between pt-3 border-t border-border text-[11px] text-muted-foreground gap-3">
                   <div className="flex items-center gap-4">
                     <span className="flex items-center gap-1">
                       <UserIcon className="w-3.5 h-3.5 text-indigo-400" />
@@ -250,7 +250,7 @@ export default function PunchListView({
                       </span>
                     )}
                     {issue.drawing && (
-                      <span className="flex items-center gap-1 font-mono text-slate-300">
+                      <span className="flex items-center gap-1 font-mono text-foreground">
                         {issue.drawing.drawing_number} - {issue.drawing.title}
                       </span>
                     )}
@@ -258,11 +258,11 @@ export default function PunchListView({
 
                   {/* Status Dropdown */}
                   <div className="flex items-center gap-2">
-                    <span className="text-slate-500">{isAr ? 'تحديث الحالة:' : 'Status:'}</span>
+                    <span className="text-muted-foreground">{isAr ? 'تحديث الحالة:' : 'Status:'}</span>
                     <select
                       value={issue.status}
                       onChange={(e) => handleStatusChange(issue, e.target.value)}
-                      className="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:border-indigo-500"
+                      className="bg-background border border-border rounded-lg px-2 py-1 text-xs text-foreground focus:outline-none focus:border-indigo-500"
                     >
                       <option value="new">{isAr ? 'جديدة' : 'New'}</option>
                       <option value="in_progress">{isAr ? 'قيد التنفيذ' : 'In Progress'}</option>
@@ -279,21 +279,21 @@ export default function PunchListView({
 
       {/* Upload Attachment Dialog */}
       {uploadIssue && (
-        <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-            <h3 className="text-base font-semibold text-white">
+        <div className="fixed inset-0 z-50 bg-background/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-card border border-border rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <h3 className="text-base font-semibold text-foreground">
               {isAr ? `إرفاق صورة توثيقية لملاحظة (${uploadIssue.issue_number})` : `Upload Documentation Photo (${uploadIssue.issue_number})`}
             </h3>
 
             <form onSubmit={handleUploadAttachment} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                <label className="block text-xs font-medium text-foreground mb-1.5">
                   {isAr ? 'مرحلة الصورة (Stage)' : 'Photo Stage'}
                 </label>
                 <select
                   value={uploadStage}
                   onChange={(e) => setUploadStage(e.target.value as any)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white"
+                  className="w-full bg-background border border-border rounded-xl px-3.5 py-2 text-sm text-foreground"
                 >
                   <option value="before">{isAr ? 'قبل التنفيذ (Before Observation)' : 'Before Execution'}</option>
                   <option value="after">{isAr ? 'بعد المعالجة والإنهاء (After Remediation)' : 'After Remediation'}</option>
@@ -301,7 +301,7 @@ export default function PunchListView({
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                <label className="block text-xs font-medium text-foreground mb-1.5">
                   {isAr ? 'اختيار أو التقاط الصورة' : 'Choose or Capture Image'}
                 </label>
                 <input
@@ -310,15 +310,15 @@ export default function PunchListView({
                   capture="environment"
                   required
                   onChange={(e) => setUploadFile(e.target.files?.[0] || null)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-xs text-slate-300"
+                  className="w-full bg-background border border-border rounded-xl p-2 text-xs text-foreground"
                 />
               </div>
 
-              <div className="flex justify-end gap-2 pt-3 border-t border-slate-800">
+              <div className="flex justify-end gap-2 pt-3 border-t border-border">
                 <button
                   type="button"
                   onClick={() => setUploadIssue(null)}
-                  className="px-4 py-2 text-xs font-medium text-slate-300 hover:bg-slate-800 rounded-xl"
+                  className="px-4 py-2 text-xs font-medium text-foreground hover:bg-muted rounded-xl"
                 >
                   {isAr ? 'إلغاء' : 'Cancel'}
                 </button>

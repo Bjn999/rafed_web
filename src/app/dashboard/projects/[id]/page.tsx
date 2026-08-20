@@ -102,7 +102,7 @@ export default function ProjectDetailsPage() {
     { key: 'on_hold', label: isAr ? 'متوقف مؤقتاً' : 'On Hold', step: 4, color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/30', activeGradient: 'from-amber-600 to-orange-600', icon: PauseCircle },
     { key: 'delayed', label: isAr ? 'متأخر' : 'Delayed', step: 5, color: 'text-rose-400', bg: 'bg-rose-500/10', border: 'border-rose-500/30', activeGradient: 'from-rose-600 to-pink-600', icon: AlertTriangle },
     { key: 'completed', label: isAr ? 'مكتمل' : 'Completed', step: 6, color: 'text-indigo-400', bg: 'bg-indigo-500/10', border: 'border-indigo-500/30', activeGradient: 'from-indigo-600 to-blue-600', icon: CheckCircle2 },
-    { key: 'closed', label: isAr ? 'مغلق' : 'Closed', step: 7, color: 'text-slate-400', bg: 'bg-slate-500/10', border: 'border-slate-500/30', activeGradient: 'from-slate-700 to-slate-800', icon: Lock },
+    { key: 'closed', label: isAr ? 'مغلق' : 'Closed', step: 7, color: 'text-muted-foreground', bg: 'bg-slate-500/10', border: 'border-slate-500/30', activeGradient: 'from-slate-700 to-slate-800', icon: Lock },
   ];
 
   // Fetch project details
@@ -193,7 +193,7 @@ export default function ProjectDetailsPage() {
 
   if (error || !project) {
     return (
-      <div className="flex flex-col items-center py-16 text-slate-400 gap-4">
+      <div className="flex flex-col items-center py-16 text-muted-foreground gap-4">
         <p className="text-sm font-semibold text-rose-455">
           {isAr ? 'حدث خطأ أثناء تحميل بيانات المشروع أو أن المشروع غير موجود.' : 'An error occurred while loading project details or it does not exist.'}
         </p>
@@ -241,9 +241,9 @@ export default function ProjectDetailsPage() {
     <div className="space-y-6 animate-in fade-in duration-300">
       
       {/* Top Navigation / Breadcrumb */}
-      <div className={`flex items-center justify-between text-xs text-slate-400 font-sans ${isAr ? 'text-right' : 'text-left'}`}>
+      <div className={`flex items-center justify-between text-xs text-muted-foreground font-sans ${isAr ? 'text-right' : 'text-left'}`}>
         <div className="flex items-center gap-2">
-          <Link href="/dashboard/projects" className="hover:text-white transition-colors">{isAr ? 'المشاريع' : 'Projects'}</Link>
+          <Link href="/dashboard/projects" className="hover:text-foreground transition-colors">{isAr ? 'المشاريع' : 'Projects'}</Link>
           <span>/</span>
           <span className="text-slate-200 truncate">{project.name}</span>
         </div>
@@ -258,10 +258,10 @@ export default function ProjectDetailsPage() {
       </div>
 
       {/* Project Banner Header */}
-      <div className={`bg-gradient-to-r from-indigo-950/40 to-slate-900/40 border border-slate-800 rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative overflow-hidden backdrop-blur-xl`}>
+      <div className={`bg-gradient-to-r from-indigo-950/40 to-slate-900/40 border border-border rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative overflow-hidden backdrop-blur-xl`}>
         <div className={`space-y-2 ${isAr ? 'text-right' : 'text-left'}`}>
           <div className="flex items-center gap-3 flex-wrap">
-            <h1 className="text-xl sm:text-2xl font-bold text-white font-sans">
+            <h1 className="text-xl sm:text-2xl font-bold text-foreground font-sans">
               {project.name}
             </h1>
             
@@ -275,7 +275,7 @@ export default function ProjectDetailsPage() {
                 title={isAr ? 'اضغط لتحديث حالة المشروع بسرعة' : 'Click to quickly update project status'}
               >
                 {STATUSES.map((st) => (
-                  <option key={st.key} value={st.key} className="bg-slate-900 text-white font-sans">
+                  <option key={st.key} value={st.key} className="bg-card text-foreground font-sans">
                     {st.label}
                   </option>
                 ))}
@@ -284,14 +284,14 @@ export default function ProjectDetailsPage() {
             </div>
 
           </div>
-          <p className="text-xs text-slate-400 font-mono">
+          <p className="text-xs text-muted-foreground font-mono">
             {isAr ? 'رقم المشروع الإجباري:' : 'Mandatory Project Number:'} <span className="font-bold text-slate-200">{project.project_number}</span>
           </p>
         </div>
         
         <button
           onClick={() => router.push('/dashboard/projects')}
-          className="bg-slate-850 hover:bg-slate-800 border border-slate-800 text-slate-200 rounded-xl py-2.5 px-4 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer self-stretch md:self-auto justify-center"
+          className="bg-slate-850 hover:bg-muted border border-border text-slate-200 rounded-xl py-2.5 px-4 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer self-stretch md:self-auto justify-center"
         >
           <ArrowRight className={`w-4 h-4 ${isAr ? 'ml-1' : 'mr-1 rotate-180'}`} />
           {isAr ? 'العودة إلى المشاريع' : 'Back to Projects'}
@@ -299,13 +299,13 @@ export default function ProjectDetailsPage() {
       </div>
 
       {/* Tab Selector System (Removed Tasks Tab as requested) */}
-      <div className="flex border-b border-slate-800 gap-1 sm:gap-2 pt-2 overflow-x-auto no-scrollbar whitespace-nowrap touch-scroll" dir={isAr ? 'rtl' : 'ltr'}>
+      <div className="flex border-b border-border gap-1 sm:gap-2 pt-2 overflow-x-auto no-scrollbar whitespace-nowrap touch-scroll" dir={isAr ? 'rtl' : 'ltr'}>
         <button
           onClick={() => setActiveTab('overview')}
           className={`py-2.5 sm:py-3 px-3.5 sm:px-6 text-xs sm:text-sm font-semibold transition-all border-b-2 cursor-pointer shrink-0 ${
             activeTab === 'overview'
               ? 'border-indigo-500 text-indigo-400'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              : 'border-transparent text-muted-foreground hover:text-slate-200'
           }`}
         >
           <FileText className={`w-4 h-4 inline-block ${isAr ? 'ml-1.5' : 'mr-1.5'} align-text-bottom`} />
@@ -317,7 +317,7 @@ export default function ProjectDetailsPage() {
           className={`py-2.5 sm:py-3 px-3.5 sm:px-6 text-xs sm:text-sm font-semibold transition-all border-b-2 cursor-pointer shrink-0 ${
             activeTab === 'drawings'
               ? 'border-indigo-500 text-indigo-400'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              : 'border-transparent text-muted-foreground hover:text-slate-200'
           }`}
         >
           <Layers className={`w-4 h-4 inline-block ${isAr ? 'ml-1.5' : 'mr-1.5'} align-text-bottom`} />
@@ -329,7 +329,7 @@ export default function ProjectDetailsPage() {
           className={`py-2.5 sm:py-3 px-3.5 sm:px-6 text-xs sm:text-sm font-semibold transition-all border-b-2 cursor-pointer shrink-0 ${
             activeTab === 'team'
               ? 'border-indigo-500 text-indigo-400'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              : 'border-transparent text-muted-foreground hover:text-slate-200'
           }`}
         >
           <Users className={`w-4 h-4 inline-block ${isAr ? 'ml-1.5' : 'mr-1.5'} align-text-bottom`} />
@@ -351,7 +351,7 @@ export default function ProjectDetailsPage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               
               {/* Overall Progress Percentage Card */}
-              <Card className="border-indigo-500/20 bg-gradient-to-br from-indigo-950/30 to-slate-900/60 text-white relative overflow-hidden">
+              <Card className="border-indigo-500/20 bg-gradient-to-br from-indigo-950/30 to-slate-900/60 text-foreground relative overflow-hidden">
                 <CardContent className="pt-6 flex flex-col justify-between h-full">
                   <div>
                     <div className="flex items-center justify-between">
@@ -364,7 +364,7 @@ export default function ProjectDetailsPage() {
                       </span>
                     </div>
 
-                    <div className="w-full bg-slate-950 border border-slate-800 h-3.5 rounded-full overflow-hidden mt-4 relative">
+                    <div className="w-full bg-background border border-border h-3.5 rounded-full overflow-hidden mt-4 relative">
                       <div 
                         className="h-full bg-gradient-to-r from-indigo-600 via-indigo-500 to-emerald-400 transition-all duration-700 rounded-full shadow-lg shadow-indigo-500/20"
                         style={{ width: `${project.overall_progress ?? 0}%` }}
@@ -372,7 +372,7 @@ export default function ProjectDetailsPage() {
                     </div>
                   </div>
 
-                  <p className="text-[11px] text-slate-400 mt-4 leading-relaxed">
+                  <p className="text-[11px] text-muted-foreground mt-4 leading-relaxed">
                     {isAr 
                       ? 'تم تحسيب نسبة الإنجاز تلقائياً بناءً على إنجاز البنود والأنشطة الهندسية المسجلة بالخطة الزمنية.'
                       : 'Progress calculated automatically based on completion of engineering activities in the WBS schedule.'}
@@ -381,7 +381,7 @@ export default function ProjectDetailsPage() {
               </Card>
 
               {/* Connected Chevron Arrow Pipeline (7 Ordered Statuses) */}
-              <Card className="border-slate-800 bg-slate-900/40 text-white lg:col-span-2 shadow-xl">
+              <Card className="border-border bg-card text-foreground lg:col-span-2 shadow-xl">
                 <CardContent className="pt-5 space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -393,7 +393,7 @@ export default function ProjectDetailsPage() {
                     {updateStatusMutation.isPending ? (
                       <span className="text-xs text-indigo-400 animate-pulse">{isAr ? 'جاري تحديث الحالة...' : 'Updating status...'}</span>
                     ) : (
-                      <span className="text-[11px] text-slate-400">
+                      <span className="text-[11px] text-muted-foreground">
                         {isAr ? 'اضغط على أي سهم لتغيير حالة المشروع فوراً' : 'Click any arrow step to change status'}
                       </span>
                     )}
@@ -415,10 +415,10 @@ export default function ProjectDetailsPage() {
                               disabled={updateStatusMutation.isPending}
                               className={`group relative flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-2xl text-xs font-bold transition-all duration-300 cursor-pointer border ${
                                 isCurrent
-                                  ? `bg-gradient-to-r ${st.activeGradient} text-white border-white/30 shadow-lg shadow-indigo-600/30 ring-2 ring-indigo-500/50 scale-[1.03] z-10`
+                                  ? `bg-gradient-to-r ${st.activeGradient} text-foreground border-white/30 shadow-lg shadow-indigo-600/30 ring-2 ring-indigo-500/50 scale-[1.03] z-10`
                                   : isPassed
-                                  ? 'bg-slate-900/90 text-indigo-300 border-indigo-500/20 hover:bg-slate-800 hover:border-indigo-500/40'
-                                  : 'bg-slate-950/60 text-slate-400 border-slate-800/80 hover:bg-slate-900 hover:text-slate-200 hover:border-slate-700'
+                                  ? 'bg-card text-indigo-300 border-indigo-500/20 hover:bg-muted hover:border-indigo-500/40'
+                                  : 'bg-background/60 text-muted-foreground border-border hover:bg-card hover:text-slate-200 hover:border-border'
                               }`}
                               title={isAr ? `تغيير حالة المشروع إلى: ${st.label}` : `Set status to: ${st.label}`}
                             >
@@ -428,12 +428,12 @@ export default function ProjectDetailsPage() {
                                   ? 'bg-white text-slate-950 shadow-sm' 
                                   : isPassed 
                                   ? 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/30' 
-                                  : 'bg-slate-800 text-slate-500 group-hover:bg-slate-700'
+                                  : 'bg-muted text-muted-foreground group-hover:bg-slate-700'
                               }`}>
                                 {st.step}
                               </div>
 
-                              <IconComp className={`w-3.5 h-3.5 shrink-0 ${isCurrent ? 'text-white' : st.color}`} />
+                              <IconComp className={`w-3.5 h-3.5 shrink-0 ${isCurrent ? 'text-foreground' : st.color}`} />
                               
                               <span className="truncate whitespace-nowrap text-xs">{st.label}</span>
 
@@ -470,40 +470,40 @@ export default function ProjectDetailsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               
               {/* Budget */}
-              <Card className="border-slate-800 bg-slate-900/30 text-white font-sans">
+              <Card className="border-border bg-card text-foreground font-sans">
                 <CardContent className="pt-5 flex items-start gap-4">
                   <div className="w-10 h-10 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-xl flex items-center justify-center shrink-0">
                     <DollarSign className="w-5 h-5" />
                   </div>
                   <div className="space-y-0.5">
-                    <span className="text-[10px] text-slate-400 block font-bold">{isAr ? 'الميزانية المرصودة' : 'Allocated Budget'}</span>
-                    <span className="text-base font-bold font-mono text-white block">{formatCurrency(project.budget)}</span>
+                    <span className="text-[10px] text-muted-foreground block font-bold">{isAr ? 'الميزانية المرصودة' : 'Allocated Budget'}</span>
+                    <span className="text-base font-bold font-mono text-foreground block">{formatCurrency(project.budget)}</span>
                   </div>
                 </CardContent>
               </Card>
 
               {/* Contract Value */}
-              <Card className="border-slate-800 bg-slate-900/30 text-white font-sans">
+              <Card className="border-border bg-card text-foreground font-sans">
                 <CardContent className="pt-5 flex items-start gap-4">
                   <div className="w-10 h-10 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl flex items-center justify-center shrink-0">
                     <DollarSign className="w-5 h-5" />
                   </div>
                   <div className="space-y-0.5">
-                    <span className="text-[10px] text-slate-400 block font-bold">{isAr ? 'قيمة العقد الإجمالية' : 'Total Contract Value'}</span>
+                    <span className="text-[10px] text-muted-foreground block font-bold">{isAr ? 'قيمة العقد الإجمالية' : 'Total Contract Value'}</span>
                     <span className="text-base font-bold font-mono text-emerald-400 block">{formatCurrency(project.contract_value)}</span>
                   </div>
                 </CardContent>
               </Card>
 
               {/* Profitability / Remaining */}
-              <Card className="border-slate-800 bg-slate-900/30 text-white font-sans">
+              <Card className="border-border bg-card text-foreground font-sans">
                 <CardContent className="pt-5 flex items-start gap-4">
                   <div className="w-10 h-10 bg-violet-500/10 text-violet-400 border border-violet-500/20 rounded-xl flex items-center justify-center shrink-0">
                     <DollarSign className="w-5 h-5" />
                   </div>
                   <div className="space-y-0.5">
-                    <span className="text-[10px] text-slate-400 block font-bold">{isAr ? 'صافي الميزانية المتبقية' : 'Net Remaining Budget'}</span>
-                    <span className="text-base font-bold font-mono text-white block">
+                    <span className="text-[10px] text-muted-foreground block font-bold">{isAr ? 'صافي الميزانية المتبقية' : 'Net Remaining Budget'}</span>
+                    <span className="text-base font-bold font-mono text-foreground block">
                       {project.contract_value ? formatCurrency(getRemainingBudget()) : (isAr ? 'غير محدد' : 'Not specified')}
                     </span>
                   </div>
@@ -511,14 +511,14 @@ export default function ProjectDetailsPage() {
               </Card>
 
               {/* Location */}
-              <Card className="border-slate-800 bg-slate-900/30 text-white font-sans">
+              <Card className="border-border bg-card text-foreground font-sans">
                 <CardContent className="pt-5 flex items-start gap-4">
                   <div className="w-10 h-10 bg-sky-500/10 text-sky-400 border border-sky-500/20 rounded-xl flex items-center justify-center shrink-0">
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div className="space-y-0.5 min-w-0 flex-1">
-                    <span className="text-[10px] text-slate-400 block font-bold">{isAr ? 'موقع المشروع' : 'Project Location'}</span>
-                    <span className="text-xs font-semibold text-white block truncate">{project.location || (isAr ? 'غير محدد' : 'Not specified')}</span>
+                    <span className="text-[10px] text-muted-foreground block font-bold">{isAr ? 'موقع المشروع' : 'Project Location'}</span>
+                    <span className="text-xs font-semibold text-foreground block truncate">{project.location || (isAr ? 'غير محدد' : 'Not specified')}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -529,17 +529,17 @@ export default function ProjectDetailsPage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               
               {/* Left Column: Description */}
-              <Card className="border-slate-800 bg-slate-900/40 lg:col-span-2 text-white">
-                <CardHeader className="border-b border-slate-800/80 pb-4">
+              <Card className="border-border bg-card lg:col-span-2 text-foreground">
+                <CardHeader className="border-b border-border pb-4">
                   <CardTitle className="text-sm font-bold text-slate-200">{isAr ? 'وصف وأهداف المشروع' : 'Project Description & Goals'}</CardTitle>
                 </CardHeader>
                 <CardContent className="pt-5">
                   {project.description ? (
-                    <p className="text-sm text-slate-300 leading-relaxed font-sans whitespace-pre-line">
+                    <p className="text-sm text-foreground leading-relaxed font-sans whitespace-pre-line">
                       {project.description}
                     </p>
                   ) : (
-                    <p className="text-xs text-slate-500 italic">{isAr ? 'لا يوجد وصف مضاف لهذا المشروع حالياً.' : 'No description is currently added to this project.'}</p>
+                    <p className="text-xs text-muted-foreground italic">{isAr ? 'لا يوجد وصف مضاف لهذا المشروع حالياً.' : 'No description is currently added to this project.'}</p>
                   )}
                 </CardContent>
               </Card>
@@ -548,19 +548,19 @@ export default function ProjectDetailsPage() {
               <div className="space-y-6">
                 
                 {/* Timeline */}
-                <Card className="border-slate-800 bg-slate-900/40 text-white font-sans">
-                  <CardHeader className="border-b border-slate-800/80 pb-3">
+                <Card className="border-border bg-card text-foreground font-sans">
+                  <CardHeader className="border-b border-border pb-3">
                     <CardTitle className="text-xs font-bold text-slate-350">{isAr ? 'الجدول الزمني' : 'Timeline'}</CardTitle>
                   </CardHeader>
-                  <CardContent className="pt-4 space-y-3.5 text-xs text-slate-300">
+                  <CardContent className="pt-4 space-y-3.5 text-xs text-foreground">
                     <div className="flex justify-between items-center">
-                      <span className="text-slate-500">{isAr ? 'تاريخ البدء:' : 'Start Date:'}</span>
+                      <span className="text-muted-foreground">{isAr ? 'تاريخ البدء:' : 'Start Date:'}</span>
                       <span className="font-mono font-bold">
                         {project.start_date ? new Date(project.start_date).toLocaleDateString(isAr ? 'ar-SA' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : (isAr ? 'غير محدد' : 'Not specified')}
                       </span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-slate-500">{isAr ? 'تاريخ الانتهاء:' : 'Expected End:'}</span>
+                      <span className="text-muted-foreground">{isAr ? 'تاريخ الانتهاء:' : 'Expected End:'}</span>
                       <span className="font-mono font-bold">
                         {project.end_date ? new Date(project.end_date).toLocaleDateString(isAr ? 'ar-SA' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : (isAr ? 'غير محدد' : 'Not specified')}
                       </span>
@@ -569,18 +569,18 @@ export default function ProjectDetailsPage() {
                 </Card>
 
                 {/* Key Stakeholders */}
-                <Card className="border-slate-800 bg-slate-900/40 text-white">
-                  <CardHeader className="border-b border-slate-800/80 pb-3">
+                <Card className="border-border bg-card text-foreground">
+                  <CardHeader className="border-b border-border pb-3">
                     <CardTitle className="text-xs font-bold text-slate-350">{isAr ? 'أطراف المشروع الرئيسيون' : 'Key Project Parties'}</CardTitle>
                   </CardHeader>
-                  <CardContent className="pt-4 space-y-4 text-xs text-slate-300">
+                  <CardContent className="pt-4 space-y-4 text-xs text-foreground">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center shrink-0 border border-indigo-500/20">
                         <Briefcase className="w-4 h-4" />
                       </div>
                       <div className="min-w-0">
-                        <span className="text-[10px] text-slate-500 block">{isAr ? 'المالك / العميل' : 'Owner / Client'}</span>
-                        <span className="font-bold text-white truncate block">{project.client_name || (isAr ? 'غير محدد' : 'Not specified')}</span>
+                        <span className="text-[10px] text-muted-foreground block">{isAr ? 'المالك / العميل' : 'Owner / Client'}</span>
+                        <span className="font-bold text-foreground truncate block">{project.client_name || (isAr ? 'غير محدد' : 'Not specified')}</span>
                       </div>
                     </div>
 
@@ -589,8 +589,8 @@ export default function ProjectDetailsPage() {
                         <HardHat className="w-4 h-4" />
                       </div>
                       <div className="min-w-0">
-                        <span className="text-[10px] text-slate-500 block">{isAr ? 'المقاول المنفذ' : 'Main Contractor'}</span>
-                        <span className="font-bold text-white truncate block">{project.contractor_name || (isAr ? 'غير محدد' : 'Not specified')}</span>
+                        <span className="text-[10px] text-muted-foreground block">{isAr ? 'المقاول المنفذ' : 'Main Contractor'}</span>
+                        <span className="font-bold text-foreground truncate block">{project.contractor_name || (isAr ? 'غير محدد' : 'Not specified')}</span>
                       </div>
                     </div>
 
@@ -599,8 +599,8 @@ export default function ProjectDetailsPage() {
                         <UserIcon className="w-4 h-4" />
                       </div>
                       <div className="min-w-0">
-                        <span className="text-[10px] text-slate-500 block">{isAr ? 'مدير المشروع' : 'Project Manager'}</span>
-                        <span className="font-bold text-white truncate block">{project.project_manager || (isAr ? 'غير محدد' : 'Not specified')}</span>
+                        <span className="text-[10px] text-muted-foreground block">{isAr ? 'مدير المشروع' : 'Project Manager'}</span>
+                        <span className="font-bold text-foreground truncate block">{project.project_manager || (isAr ? 'غير محدد' : 'Not specified')}</span>
                       </div>
                     </div>
                   </CardContent>
@@ -618,13 +618,13 @@ export default function ProjectDetailsPage() {
           <div className="space-y-6">
             
             {/* Header Title Banner */}
-            <div className="bg-slate-900/40 border border-slate-800 p-5 rounded-2xl flex items-center justify-between">
+            <div className="bg-card border border-border p-5 rounded-2xl flex items-center justify-between">
               <div>
-                <h3 className="text-base font-bold text-white flex items-center gap-2">
+                <h3 className="text-base font-bold text-foreground flex items-center gap-2">
                   <Users className="w-5 h-5 text-indigo-400" />
                   {isAr ? 'فريق عمل وأطراف المشروع الإنشائي' : 'Project Team Members & Stakeholders'}
                 </h3>
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-xs text-muted-foreground mt-1">
                   {isAr 
                     ? 'قائمة الموظفين والمهندسين وأطراف المشروع المسندين مع إحصائيات المهام والملاحظات المسندة.'
                     : 'List of assigned staff, engineers, and stakeholders with task and issue metrics.'}
@@ -654,7 +654,7 @@ export default function ProjectDetailsPage() {
                               <Briefcase className="w-5 h-5" />
                             </div>
                             <div>
-                              <h4 className="text-sm font-bold text-white">{getUserName(clientMember, project.client_name)}</h4>
+                              <h4 className="text-sm font-bold text-foreground">{getUserName(clientMember, project.client_name)}</h4>
                               <span className="text-[10px] font-bold text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded-full border border-indigo-500/20">
                                 {isAr ? 'المالك / العميل' : 'Client / Owner'}
                               </span>
@@ -662,29 +662,29 @@ export default function ProjectDetailsPage() {
                           </div>
                         </div>
 
-                        <div className="space-y-1.5 text-xs text-slate-400 border-t border-slate-800/60 pt-3">
+                        <div className="space-y-1.5 text-xs text-muted-foreground border-t border-border pt-3">
                           {clientMember?.email && (
                             <div className="flex items-center gap-2">
-                              <Mail className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                              <Mail className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
                               <span className="truncate">{clientMember.email}</span>
                             </div>
                           )}
                           {clientMember?.profile?.phone_number && (
                             <div className="flex items-center gap-2">
-                              <Phone className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                              <Phone className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
                               <span className="font-mono">{clientMember.profile.phone_number}</span>
                             </div>
                           )}
                         </div>
 
                         {/* Counts Metrics */}
-                        <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800/60 text-xs">
-                          <div className="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800 text-center">
-                            <span className="text-[10px] text-slate-400 block">{isAr ? 'المهام المسندة' : 'Assigned Tasks'}</span>
+                        <div className="grid grid-cols-2 gap-2 pt-2 border-t border-border text-xs">
+                          <div className="bg-background/60 p-2.5 rounded-xl border border-border text-center">
+                            <span className="text-[10px] text-muted-foreground block">{isAr ? 'المهام المسندة' : 'Assigned Tasks'}</span>
                             <span className="text-sm font-bold text-indigo-400 font-mono">{tasksCount}</span>
                           </div>
-                          <div className="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800 text-center">
-                            <span className="text-[10px] text-slate-400 block">{isAr ? 'الملاحظات والعيوب' : 'Assigned Issues'}</span>
+                          <div className="bg-background/60 p-2.5 rounded-xl border border-border text-center">
+                            <span className="text-[10px] text-muted-foreground block">{isAr ? 'الملاحظات والعيوب' : 'Assigned Issues'}</span>
                             <span className="text-sm font-bold text-rose-400 font-mono">{issuesCount}</span>
                           </div>
                         </div>
@@ -708,7 +708,7 @@ export default function ProjectDetailsPage() {
                               <HardHat className="w-5 h-5" />
                             </div>
                             <div>
-                              <h4 className="text-sm font-bold text-white">{getUserName(contractorMember, project.contractor_name)}</h4>
+                              <h4 className="text-sm font-bold text-foreground">{getUserName(contractorMember, project.contractor_name)}</h4>
                               <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
                                 {isAr ? 'المقاول الرئيسي' : 'Main Contractor'}
                               </span>
@@ -716,29 +716,29 @@ export default function ProjectDetailsPage() {
                           </div>
                         </div>
 
-                        <div className="space-y-1.5 text-xs text-slate-400 border-t border-slate-800/60 pt-3">
+                        <div className="space-y-1.5 text-xs text-muted-foreground border-t border-border pt-3">
                           {contractorMember?.email && (
                             <div className="flex items-center gap-2">
-                              <Mail className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                              <Mail className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
                               <span className="truncate">{contractorMember.email}</span>
                             </div>
                           )}
                           {contractorMember?.profile?.phone_number && (
                             <div className="flex items-center gap-2">
-                              <Phone className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                              <Phone className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
                               <span className="font-mono">{contractorMember.profile.phone_number}</span>
                             </div>
                           )}
                         </div>
 
                         {/* Counts Metrics */}
-                        <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800/60 text-xs">
-                          <div className="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800 text-center">
-                            <span className="text-[10px] text-slate-400 block">{isAr ? 'المهام المسندة' : 'Assigned Tasks'}</span>
+                        <div className="grid grid-cols-2 gap-2 pt-2 border-t border-border text-xs">
+                          <div className="bg-background/60 p-2.5 rounded-xl border border-border text-center">
+                            <span className="text-[10px] text-muted-foreground block">{isAr ? 'المهام المسندة' : 'Assigned Tasks'}</span>
                             <span className="text-sm font-bold text-indigo-400 font-mono">{tasksCount}</span>
                           </div>
-                          <div className="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800 text-center">
-                            <span className="text-[10px] text-slate-400 block">{isAr ? 'الملاحظات والعيوب' : 'Assigned Issues'}</span>
+                          <div className="bg-background/60 p-2.5 rounded-xl border border-border text-center">
+                            <span className="text-[10px] text-muted-foreground block">{isAr ? 'الملاحظات والعيوب' : 'Assigned Issues'}</span>
                             <span className="text-sm font-bold text-rose-400 font-mono">{issuesCount}</span>
                           </div>
                         </div>
@@ -754,7 +754,7 @@ export default function ProjectDetailsPage() {
                   const tasksCount = getAssignedTasksCount(project.project_manager_id);
                   const issuesCount = getAssignedIssuesCount(project.project_manager_id);
                   return (
-                    <Card key={`stakeholder-pm-${project.project_manager_id}`} className="border-violet-500/30 bg-violet-950/20 text-white relative">
+                    <Card key={`stakeholder-pm-${project.project_manager_id}`} className="border-violet-500/30 bg-violet-950/20 text-foreground relative">
                       <CardContent className="pt-5 space-y-4">
                         <div className="flex items-start justify-between">
                           <div className="flex items-center gap-3">
@@ -762,7 +762,7 @@ export default function ProjectDetailsPage() {
                               <UserIcon className="w-5 h-5" />
                             </div>
                             <div>
-                              <h4 className="text-sm font-bold text-white">{getUserName(pmMember, project.project_manager)}</h4>
+                              <h4 className="text-sm font-bold text-foreground">{getUserName(pmMember, project.project_manager)}</h4>
                               <span className="text-[10px] font-bold text-violet-400 bg-violet-500/10 px-2 py-0.5 rounded-full border border-violet-500/20">
                                 {isAr ? 'مدير المشروع' : 'Project Manager'}
                               </span>
@@ -770,29 +770,29 @@ export default function ProjectDetailsPage() {
                           </div>
                         </div>
 
-                        <div className="space-y-1.5 text-xs text-slate-400 border-t border-slate-800/60 pt-3">
+                        <div className="space-y-1.5 text-xs text-muted-foreground border-t border-border pt-3">
                           {pmMember?.email && (
                             <div className="flex items-center gap-2">
-                              <Mail className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                              <Mail className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
                               <span className="truncate">{pmMember.email}</span>
                             </div>
                           )}
                           {pmMember?.profile?.phone_number && (
                             <div className="flex items-center gap-2">
-                              <Phone className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                              <Phone className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
                               <span className="font-mono">{pmMember.profile.phone_number}</span>
                             </div>
                           )}
                         </div>
 
                         {/* Counts Metrics */}
-                        <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800/60 text-xs">
-                          <div className="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800 text-center">
-                            <span className="text-[10px] text-slate-400 block">{isAr ? 'المهام المسندة' : 'Assigned Tasks'}</span>
+                        <div className="grid grid-cols-2 gap-2 pt-2 border-t border-border text-xs">
+                          <div className="bg-background/60 p-2.5 rounded-xl border border-border text-center">
+                            <span className="text-[10px] text-muted-foreground block">{isAr ? 'المهام المسندة' : 'Assigned Tasks'}</span>
                             <span className="text-sm font-bold text-indigo-400 font-mono">{tasksCount}</span>
                           </div>
-                          <div className="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800 text-center">
-                            <span className="text-[10px] text-slate-400 block">{isAr ? 'الملاحظات والعيوب' : 'Assigned Issues'}</span>
+                          <div className="bg-background/60 p-2.5 rounded-xl border border-border text-center">
+                            <span className="text-[10px] text-muted-foreground block">{isAr ? 'الملاحظات والعيوب' : 'Assigned Issues'}</span>
                             <span className="text-sm font-bold text-rose-400 font-mono">{issuesCount}</span>
                           </div>
                         </div>
@@ -809,43 +809,43 @@ export default function ProjectDetailsPage() {
                   const tasksCount = getAssignedTasksCount(member.id);
                   const issuesCount = getAssignedIssuesCount(member.id);
                   return (
-                    <Card key={`team-user-${member.id}`} className="border-slate-800 bg-slate-900/30 text-white">
+                    <Card key={`team-user-${member.id}`} className="border-border bg-card text-foreground">
                       <CardContent className="pt-5 space-y-4">
                         <div className="flex items-start justify-between">
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-slate-800 text-slate-300 rounded-xl flex items-center justify-center font-bold text-sm">
+                            <div className="w-10 h-10 bg-muted text-foreground rounded-xl flex items-center justify-center font-bold text-sm">
                               {member.profile?.first_name?.charAt(0) || <UserIcon className="w-4 h-4" />}
                             </div>
                             <div>
-                              <h4 className="text-sm font-bold text-white">{getUserName(member)}</h4>
-                              <span className="text-[10px] text-slate-400 font-medium">
+                              <h4 className="text-sm font-bold text-foreground">{getUserName(member)}</h4>
+                              <span className="text-[10px] text-muted-foreground font-medium">
                                 {member.profile?.job_title || member.role}
                               </span>
                             </div>
                           </div>
                         </div>
 
-                        <div className="space-y-1.5 text-xs text-slate-400 border-t border-slate-800/60 pt-3">
+                        <div className="space-y-1.5 text-xs text-muted-foreground border-t border-border pt-3">
                           <div className="flex items-center gap-2">
-                            <Mail className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                            <Mail className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
                             <span className="truncate">{member.email}</span>
                           </div>
                           {member.profile?.phone_number && (
                             <div className="flex items-center gap-2">
-                              <Phone className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                              <Phone className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
                               <span className="font-mono">{member.profile.phone_number}</span>
                             </div>
                           )}
                         </div>
 
                         {/* Counts Metrics */}
-                        <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800/60 text-xs">
-                          <div className="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800 text-center">
-                            <span className="text-[10px] text-slate-400 block">{isAr ? 'المهام المسندة' : 'Assigned Tasks'}</span>
+                        <div className="grid grid-cols-2 gap-2 pt-2 border-t border-border text-xs">
+                          <div className="bg-background/60 p-2.5 rounded-xl border border-border text-center">
+                            <span className="text-[10px] text-muted-foreground block">{isAr ? 'المهام المسندة' : 'Assigned Tasks'}</span>
                             <span className="text-sm font-bold text-indigo-400 font-mono">{tasksCount}</span>
                           </div>
-                          <div className="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800 text-center">
-                            <span className="text-[10px] text-slate-400 block">{isAr ? 'الملاحظات والعيوب' : 'Assigned Issues'}</span>
+                          <div className="bg-background/60 p-2.5 rounded-xl border border-border text-center">
+                            <span className="text-[10px] text-muted-foreground block">{isAr ? 'الملاحظات والعيوب' : 'Assigned Issues'}</span>
                             <span className="text-sm font-bold text-rose-400 font-mono">{issuesCount}</span>
                           </div>
                         </div>

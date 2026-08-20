@@ -157,7 +157,7 @@ export default function AdminLogsPage() {
       case 'POST': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
       case 'PUT': return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
       case 'DELETE': return 'bg-rose-500/10 text-rose-400 border-rose-500/20';
-      default: return 'bg-slate-500/10 text-slate-400 border-slate-500/20';
+      default: return 'bg-slate-500/10 text-muted-foreground border-slate-500/20';
     }
   };
 
@@ -165,37 +165,37 @@ export default function AdminLogsPage() {
     if (code >= 200 && code < 300) return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
     if (code >= 400 && code < 500) return 'bg-orange-500/10 text-orange-400 border-orange-500/20';
     if (code >= 500) return 'bg-red-500/10 text-red-400 border-red-500/20';
-    return 'bg-slate-500/10 text-slate-400 border-slate-500/20';
+    return 'bg-slate-500/10 text-muted-foreground border-slate-500/20';
   };
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300" dir={isAr ? 'rtl' : 'ltr'}>
       
       {/* Filters Card */}
-      <Card className="border-slate-800 bg-slate-900/40 backdrop-blur text-white">
+      <Card className="border-border bg-card backdrop-blur text-foreground">
         <CardContent className="pt-6 space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             
             <div className="space-y-1.5">
-              <label className="text-xs text-slate-400 font-medium">{isAr ? 'بحث بالمسار (Path)' : 'Search by Path URL'}</label>
+              <label className="text-xs text-muted-foreground font-medium">{isAr ? 'بحث بالمسار (Path)' : 'Search by Path URL'}</label>
               <div className="relative">
-                <Search className={`w-4 h-4 text-slate-500 absolute ${isAr ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2`} />
+                <Search className={`w-4 h-4 text-muted-foreground absolute ${isAr ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2`} />
                 <input
                   type="text"
                   value={logSearch}
                   onChange={(e) => setLogSearch(e.target.value)}
                   placeholder={isAr ? 'مثال: profile' : 'e.g. profile'}
-                  className={`w-full bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl ${isAr ? 'pr-10 pl-3' : 'pl-10 pr-3'} py-2 text-sm text-slate-100 placeholder-slate-655 outline-none transition-all`}
+                  className={`w-full bg-background/80 border border-border focus:border-indigo-500 rounded-xl ${isAr ? 'pr-10 pl-3' : 'pl-10 pr-3'} py-2 text-sm text-foreground placeholder-slate-655 outline-none transition-all`}
                 />
               </div>
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs text-slate-400 font-medium">{isAr ? 'حسب الشركة' : 'By Company'}</label>
+              <label className="text-xs text-muted-foreground font-medium">{isAr ? 'حسب الشركة' : 'By Company'}</label>
               <select
                 value={logTenantId}
                 onChange={(e) => { setLogTenantId(e.target.value); setLogPage(1); }}
-                className="w-full bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-3 py-2 text-sm text-slate-100 outline-none transition-all cursor-pointer"
+                className="w-full bg-background/80 border border-border focus:border-indigo-500 rounded-xl px-3 py-2 text-sm text-foreground outline-none transition-all cursor-pointer"
               >
                 <option value="">{isAr ? 'الكل' : 'All'}</option>
                 <option value="system_logs">{isAr ? 'الأنظمة الخلفية (مسؤولين)' : 'System Core Services (Admin)'}</option>
@@ -208,11 +208,11 @@ export default function AdminLogsPage() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs text-slate-400 font-medium">{isAr ? 'طريقة الطلب' : 'Request Method'}</label>
+              <label className="text-xs text-muted-foreground font-medium">{isAr ? 'طريقة الطلب' : 'Request Method'}</label>
               <select
                 value={logMethod}
                 onChange={(e) => { setLogMethod(e.target.value); setLogPage(1); }}
-                className="w-full bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-3 py-2 text-sm text-slate-100 outline-none transition-all cursor-pointer"
+                className="w-full bg-background/80 border border-border focus:border-indigo-500 rounded-xl px-3 py-2 text-sm text-foreground outline-none transition-all cursor-pointer"
               >
                 <option value="">{isAr ? 'الكل' : 'All'}</option>
                 <option value="GET">GET</option>
@@ -223,11 +223,11 @@ export default function AdminLogsPage() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs text-slate-400 font-medium">{isAr ? 'الاستجابة' : 'Response Status'}</label>
+              <label className="text-xs text-muted-foreground font-medium">{isAr ? 'الاستجابة' : 'Response Status'}</label>
               <select
                 value={logStatusCode}
                 onChange={(e) => { setLogStatusCode(e.target.value); setLogPage(1); }}
-                className="w-full bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-3 py-2 text-sm text-slate-100 outline-none transition-all cursor-pointer"
+                className="w-full bg-background/80 border border-border focus:border-indigo-500 rounded-xl px-3 py-2 text-sm text-foreground outline-none transition-all cursor-pointer"
               >
                 <option value="">{isAr ? 'الكل' : 'All'}</option>
                 <option value="success">{isAr ? 'ناجح (2xx)' : 'Success (2xx)'}</option>
@@ -237,19 +237,19 @@ export default function AdminLogsPage() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs text-slate-400 font-medium">{isAr ? 'نطاق التاريخ' : 'Date Range'}</label>
+              <label className="text-xs text-muted-foreground font-medium">{isAr ? 'نطاق التاريخ' : 'Date Range'}</label>
               <div className="flex gap-1.5">
                 <input
                   type="date"
                   value={logDateFrom}
                   onChange={(e) => { setLogDateFrom(e.target.value); setLogPage(1); }}
-                  className="w-1/2 bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-2 py-1.5 text-xs text-slate-200 outline-none [color-scheme:dark]"
+                  className="w-1/2 bg-background/80 border border-border focus:border-indigo-500 rounded-xl px-2 py-1.5 text-xs text-slate-200 outline-none [color-scheme:dark]"
                 />
                 <input
                   type="date"
                   value={logDateTo}
                   onChange={(e) => { setLogDateTo(e.target.value); setLogPage(1); }}
-                  className="w-1/2 bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-2 py-1.5 text-xs text-slate-200 outline-none [color-scheme:dark]"
+                  className="w-1/2 bg-background/80 border border-border focus:border-indigo-500 rounded-xl px-2 py-1.5 text-xs text-slate-200 outline-none [color-scheme:dark]"
                 />
               </div>
             </div>
@@ -257,7 +257,7 @@ export default function AdminLogsPage() {
 
           {/* Reset Filters */}
           {(logSearch || logMethod || logStatusCode || logTenantId || logDateFrom || logDateTo) && (
-            <div className="flex justify-end pt-2 border-t border-slate-800/40">
+            <div className="flex justify-end pt-2 border-t border-border">
               <Button
                 onClick={() => {
                   setLogSearch('');
@@ -280,11 +280,11 @@ export default function AdminLogsPage() {
       </Card>
 
       {/* Logs Table Card */}
-      <Card className="border-slate-800 bg-slate-900/40 backdrop-blur text-white overflow-hidden">
+      <Card className="border-border bg-card backdrop-blur text-foreground overflow-hidden">
         <div className="overflow-x-auto min-h-[350px]">
           <table className={`w-full ${isAr ? 'text-right' : 'text-left'} border-collapse`}>
             <thead>
-              <tr className="border-b border-slate-800 bg-slate-900/60 text-slate-400 text-xs font-semibold">
+              <tr className="border-b border-border bg-card text-muted-foreground text-xs font-semibold">
                 <th className="px-6 py-4">{isAr ? 'التاريخ والوقت' : 'Timestamp'}</th>
                 <th className="px-6 py-4">{isAr ? 'الشركة' : 'Company'}</th>
                 <th className="px-6 py-4">{isAr ? 'المستخدم' : 'Executing User'}</th>
@@ -299,33 +299,33 @@ export default function AdminLogsPage() {
               {logsLoading ? (
                 Array.from({ length: 6 }).map((_, idx) => (
                   <tr key={idx} className="animate-pulse">
-                    <td className="px-6 py-4"><div className="h-4 bg-slate-800 rounded w-36" /></td>
-                    <td className="px-6 py-4"><div className="h-4 bg-slate-800 rounded w-28" /></td>
+                    <td className="px-6 py-4"><div className="h-4 bg-muted rounded w-36" /></td>
+                    <td className="px-6 py-4"><div className="h-4 bg-muted rounded w-28" /></td>
                     <td className="px-6 py-4">
-                      <div className="h-4 bg-slate-800 rounded w-24" />
-                      <div className="h-3 bg-slate-800/60 rounded w-16 mt-1" />
+                      <div className="h-4 bg-muted rounded w-24" />
+                      <div className="h-3 bg-muted rounded w-16 mt-1" />
                     </td>
-                    <td className="px-6 py-4"><div className="h-6 bg-slate-800 rounded w-14" /></td>
-                    <td className="px-6 py-4"><div className="h-4 bg-slate-800 rounded w-40" /></td>
-                    <td className="px-6 py-4"><div className="h-6 bg-slate-800 rounded w-10 mx-auto" /></td>
-                    <td className="px-6 py-4"><div className="h-4 bg-slate-800 rounded w-24" /></td>
-                    <td className="px-6 py-4"><div className="h-8 bg-slate-800 rounded w-20 mx-auto" /></td>
+                    <td className="px-6 py-4"><div className="h-6 bg-muted rounded w-14" /></td>
+                    <td className="px-6 py-4"><div className="h-4 bg-muted rounded w-40" /></td>
+                    <td className="px-6 py-4"><div className="h-6 bg-muted rounded w-10 mx-auto" /></td>
+                    <td className="px-6 py-4"><div className="h-4 bg-muted rounded w-24" /></td>
+                    <td className="px-6 py-4"><div className="h-8 bg-muted rounded w-20 mx-auto" /></td>
                   </tr>
                 ))
               ) : !logsData || logsData.data.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="text-center py-16 text-slate-500 space-y-3">
-                    <div className="w-12 h-12 bg-slate-800/50 text-slate-400 border border-slate-700/50 rounded-2xl flex items-center justify-center mx-auto shadow-md">
+                  <td colSpan={8} className="text-center py-16 text-muted-foreground space-y-3">
+                    <div className="w-12 h-12 bg-muted text-muted-foreground border border-border rounded-2xl flex items-center justify-center mx-auto shadow-md">
                       <ShieldAlert className="w-6 h-6" />
                     </div>
-                    <p className="font-semibold text-white">{isAr ? 'لا توجد سجلات مطابقة' : 'No matching logs found'}</p>
+                    <p className="font-semibold text-foreground">{isAr ? 'لا توجد سجلات مطابقة' : 'No matching logs found'}</p>
                   </td>
                 </tr>
               ) : (
                 logsData.data.map((log: SystemLogItem) => (
-                  <tr key={log.id} className="hover:bg-slate-800/20 transition-colors group">
-                    <td className="px-6 py-4 font-mono text-xs text-slate-400">{formatTime(log.created_at)}</td>
-                    <td className="px-6 py-4 font-semibold text-slate-300">
+                  <tr key={log.id} className="hover:bg-muted transition-colors group">
+                    <td className="px-6 py-4 font-mono text-xs text-muted-foreground">{formatTime(log.created_at)}</td>
+                    <td className="px-6 py-4 font-semibold text-foreground">
                       {log.tenant ? log.tenant.name : (
                         <span className="text-indigo-400 bg-indigo-500/10 border border-indigo-500/10 px-2 py-0.5 rounded text-xs font-semibold">
                           {isAr ? 'مسؤول النظام' : 'System Admin'}
@@ -335,13 +335,13 @@ export default function AdminLogsPage() {
                     <td className="px-6 py-4">
                       {log.user ? (
                         <div className="space-y-0.5">
-                          <span className="font-medium text-white block">
+                          <span className="font-medium text-foreground block">
                             {log.user.profile?.first_name} {log.user.profile?.last_name}
                           </span>
-                          <span className="text-xs text-slate-500 block font-mono">{log.user.email}</span>
+                          <span className="text-xs text-muted-foreground block font-mono">{log.user.email}</span>
                         </div>
                       ) : (
-                        <span className="text-slate-500 italic text-xs">{isAr ? 'طلب زائر / ضيف' : 'Guest / Visitor Request'}</span>
+                        <span className="text-muted-foreground italic text-xs">{isAr ? 'طلب زائر / ضيف' : 'Guest / Visitor Request'}</span>
                       )}
                     </td>
                     <td className="px-6 py-4">
@@ -357,7 +357,7 @@ export default function AdminLogsPage() {
                         {log.status_code}
                       </span>
                     </td>
-                    <td className="px-6 py-4 font-mono text-xs text-slate-400">{log.ip_address || '—'}</td>
+                    <td className="px-6 py-4 font-mono text-xs text-muted-foreground">{log.ip_address || '—'}</td>
                     <td className="px-6 py-4 text-center">
                       <Button
                         onClick={() => setSelectedLog(log)}
@@ -377,8 +377,8 @@ export default function AdminLogsPage() {
 
         {/* Logs Pagination */}
         {logsData && logsData.last_page > 1 && (
-          <div className="border-t border-slate-800 bg-slate-900/30 px-6 py-4 flex items-center justify-between">
-            <span className="text-xs text-slate-400">
+          <div className="border-t border-border bg-card px-6 py-4 flex items-center justify-between">
+            <span className="text-xs text-muted-foreground">
               {isAr ? (
                 <>عرض السجلات من <strong>{((logPage - 1) * 15) + 1}</strong> إلى <strong>{Math.min(logPage * 15, logsData.total)}</strong> من إجمالي <strong>{logsData.total}</strong> سجل</>
               ) : (
@@ -391,12 +391,12 @@ export default function AdminLogsPage() {
                 onClick={() => setLogPage((prev) => Math.max(prev - 1, 1))}
                 disabled={logPage === 1}
                 variant="outline"
-                className="border-slate-800 hover:bg-slate-800 text-slate-300 p-2 h-9 w-9 rounded-xl transition-all disabled:opacity-30 cursor-pointer"
+                className="border-border hover:bg-muted text-foreground p-2 h-9 w-9 rounded-xl transition-all disabled:opacity-30 cursor-pointer"
               >
                 {isAr ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
               </Button>
               
-              <span className="text-xs text-slate-300 font-bold">
+              <span className="text-xs text-foreground font-bold">
                 {isAr ? `صفحة ${logPage} من ${logsData.last_page}` : `Page ${logPage} of ${logsData.last_page}`}
               </span>
 
@@ -404,7 +404,7 @@ export default function AdminLogsPage() {
                 onClick={() => setLogPage((prev) => Math.min(prev + 1, logsData.last_page))}
                 disabled={logPage === logsData.last_page}
                 variant="outline"
-                className="border-slate-800 hover:bg-slate-800 text-slate-300 p-2 h-9 w-9 rounded-xl transition-all disabled:opacity-30 cursor-pointer"
+                className="border-border hover:bg-muted text-foreground p-2 h-9 w-9 rounded-xl transition-all disabled:opacity-30 cursor-pointer"
               >
                 {isAr ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
               </Button>
@@ -415,23 +415,23 @@ export default function AdminLogsPage() {
 
       {/* --- LOG DETAILS MODAL --- */}
       {selectedLog && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm transition-all animate-in fade-in duration-200">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-4xl shadow-2xl shadow-indigo-500/5 max-h-[85vh] flex flex-col overflow-hidden transform scale-100 transition-all">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/70 backdrop-blur-sm transition-all animate-in fade-in duration-200">
+          <div className="bg-card border border-border rounded-3xl w-full max-w-4xl shadow-2xl shadow-indigo-500/5 max-h-[85vh] flex flex-col overflow-hidden transform scale-100 transition-all">
             
-            <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/60 sticky top-0 z-10">
+            <div className="px-6 py-4 border-b border-border flex items-center justify-between bg-card sticky top-0 z-10">
               <div className="flex items-center gap-3">
                 <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold border ${getMethodBadgeClass(selectedLog.method)}`}>
                   {selectedLog.method}
                 </span>
                 <div className={isAr ? 'text-right' : 'text-left'}>
-                  <h3 className="text-sm font-bold text-white font-mono">{selectedLog.endpoint}</h3>
-                  <p className="text-xs text-slate-400 mt-0.5">{formatTime(selectedLog.created_at)}</p>
+                  <h3 className="text-sm font-bold text-foreground font-mono">{selectedLog.endpoint}</h3>
+                  <p className="text-xs text-muted-foreground mt-0.5">{formatTime(selectedLog.created_at)}</p>
                 </div>
               </div>
               <Button
                 onClick={() => setSelectedLog(null)}
                 variant="ghost"
-                className="hover:bg-slate-800 text-slate-400 hover:text-white p-2 rounded-xl h-8 w-8 cursor-pointer"
+                className="hover:bg-muted text-muted-foreground hover:text-foreground p-2 rounded-xl h-8 w-8 cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </Button>
@@ -439,29 +439,29 @@ export default function AdminLogsPage() {
 
             <div className={`p-6 overflow-y-auto space-y-6 flex-1 ${isAr ? 'text-right' : 'text-left'}`}>
               <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                <div className="bg-slate-950/40 border border-slate-800/60 p-4 rounded-2xl">
-                  <span className="text-xs text-slate-500 block mb-1">{isAr ? 'الشركة' : 'Company'}</span>
-                  <span className="font-bold text-white block text-sm">
+                <div className="bg-background/40 border border-border p-4 rounded-2xl">
+                  <span className="text-xs text-muted-foreground block mb-1">{isAr ? 'الشركة' : 'Company'}</span>
+                  <span className="font-bold text-foreground block text-sm">
                     {selectedLog.tenant ? selectedLog.tenant.name : (isAr ? 'مسؤول النظام' : 'System Admin')}
                   </span>
                 </div>
-                <div className="bg-slate-950/40 border border-slate-800/60 p-4 rounded-2xl">
-                  <span className="text-xs text-slate-500 block mb-1">{isAr ? 'المستخدم المنفذ' : 'Executing User'}</span>
-                  <span className="font-semibold text-white block text-sm">
+                <div className="bg-background/40 border border-border p-4 rounded-2xl">
+                  <span className="text-xs text-muted-foreground block mb-1">{isAr ? 'المستخدم المنفذ' : 'Executing User'}</span>
+                  <span className="font-semibold text-foreground block text-sm">
                     {selectedLog.user ? `${selectedLog.user.profile?.first_name} ${selectedLog.user.profile?.last_name}` : (isAr ? 'زائر غير مسجل' : 'Anonymous Guest')}
                   </span>
-                  <span className="text-xs text-slate-400 block font-mono mt-0.5">{selectedLog.user?.email || '—'}</span>
+                  <span className="text-xs text-muted-foreground block font-mono mt-0.5">{selectedLog.user?.email || '—'}</span>
                 </div>
-                <div className="bg-slate-950/40 border border-slate-800/60 p-4 rounded-2xl">
-                  <span className="text-xs text-slate-500 block mb-1">{isAr ? 'حالة الطلب' : 'Request Status'}</span>
+                <div className="bg-background/40 border border-border p-4 rounded-2xl">
+                  <span className="text-xs text-muted-foreground block mb-1">{isAr ? 'حالة الطلب' : 'Request Status'}</span>
                   <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-mono font-bold border mt-1 ${getStatusBadgeClass(selectedLog.status_code)}`}>
                     {selectedLog.status_code}
                   </span>
                 </div>
-                <div className="bg-slate-950/40 border border-slate-800/60 p-4 rounded-2xl">
-                  <span className="text-xs text-slate-500 block mb-1">{isAr ? 'بيانات الاتصال' : 'Connection Details'}</span>
-                  <span className="text-sm font-semibold text-white block font-mono">{selectedLog.ip_address || '—'}</span>
-                  <span className="text-xs text-slate-400 block truncate mt-0.5" title={selectedLog.user_agent || ''}>
+                <div className="bg-background/40 border border-border p-4 rounded-2xl">
+                  <span className="text-xs text-muted-foreground block mb-1">{isAr ? 'بيانات الاتصال' : 'Connection Details'}</span>
+                  <span className="text-sm font-semibold text-foreground block font-mono">{selectedLog.ip_address || '—'}</span>
+                  <span className="text-xs text-muted-foreground block truncate mt-0.5" title={selectedLog.user_agent || ''}>
                     {selectedLog.user_agent || '—'}
                   </span>
                 </div>
@@ -469,19 +469,19 @@ export default function AdminLogsPage() {
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-slate-400 font-semibold">{isAr ? 'بيانات الطلب المرسلة (Request Payload)' : 'Request Payload Data'}</span>
+                  <span className="text-xs text-muted-foreground font-semibold">{isAr ? 'بيانات الطلب المرسلة (Request Payload)' : 'Request Payload Data'}</span>
                   {selectedLog.payload && Object.keys(selectedLog.payload).length > 0 && (
                     <Button
                       onClick={() => handleCopy(selectedLog.payload, 'payload')}
                       variant="ghost"
-                      className="text-indigo-400 hover:text-indigo-300 hover:bg-slate-800/50 h-7 text-xs px-2.5 rounded-lg cursor-pointer"
+                      className="text-indigo-400 hover:text-indigo-300 hover:bg-muted h-7 text-xs px-2.5 rounded-lg cursor-pointer"
                     >
                       {copiedPayload ? <ClipboardCheck className="w-3.5 h-3.5" /> : <ClipboardCopy className="w-3.5 h-3.5" />}
                       <span className={`${isAr ? 'mr-1' : 'ml-1'}`}>{copiedPayload ? (isAr ? 'تم النسخ!' : 'Copied!') : (isAr ? 'نسخ JSON' : 'Copy JSON')}</span>
                     </Button>
                   )}
                 </div>
-                <pre className="bg-slate-950 p-4 rounded-2xl overflow-auto text-xs font-mono text-left max-h-56 border border-slate-800/70" dir="ltr">
+                <pre className="bg-background p-4 rounded-2xl overflow-auto text-xs font-mono text-left max-h-56 border border-border" dir="ltr">
                   {selectedLog.payload && Object.keys(selectedLog.payload).length > 0
                     ? JSON.stringify(selectedLog.payload, null, 2)
                     : (isAr ? '// لا توجد بيانات مرسلة' : '// Empty payload')}
@@ -490,19 +490,19 @@ export default function AdminLogsPage() {
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-slate-400 font-semibold">{isAr ? 'استجابة الخادم المستلمة (Response)' : 'Server Response (JSON)'}</span>
+                  <span className="text-xs text-muted-foreground font-semibold">{isAr ? 'استجابة الخادم المستلمة (Response)' : 'Server Response (JSON)'}</span>
                   {selectedLog.response && (
                     <Button
                       onClick={() => handleCopy(selectedLog.response, 'response')}
                       variant="ghost"
-                      className="text-indigo-400 hover:text-indigo-300 hover:bg-slate-800/50 h-7 text-xs px-2.5 rounded-lg cursor-pointer"
+                      className="text-indigo-400 hover:text-indigo-300 hover:bg-muted h-7 text-xs px-2.5 rounded-lg cursor-pointer"
                     >
                       {copiedResponse ? <ClipboardCheck className="w-3.5 h-3.5" /> : <ClipboardCopy className="w-3.5 h-3.5" />}
                       <span className={`${isAr ? 'mr-1' : 'ml-1'}`}>{copiedResponse ? (isAr ? 'تم النسخ!' : 'Copied!') : (isAr ? 'نسخ JSON' : 'Copy JSON')}</span>
                     </Button>
                   )}
                 </div>
-                <pre className="bg-slate-950 p-4 rounded-2xl overflow-auto text-xs font-mono text-left max-h-60 border border-slate-800/70" dir="ltr">
+                <pre className="bg-background p-4 rounded-2xl overflow-auto text-xs font-mono text-left max-h-60 border border-border" dir="ltr">
                   {selectedLog.response
                     ? JSON.stringify(selectedLog.response, null, 2)
                     : (isAr ? '// لا توجد استجابة' : '// Empty response')}
@@ -510,7 +510,7 @@ export default function AdminLogsPage() {
               </div>
             </div>
 
-            <div className="px-6 py-4 border-t border-slate-800 bg-slate-900/40 flex justify-end">
+            <div className="px-6 py-4 border-t border-border bg-card flex justify-end">
               <Button
                 onClick={() => setSelectedLog(null)}
                 className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl px-5 transition-all text-xs cursor-pointer"

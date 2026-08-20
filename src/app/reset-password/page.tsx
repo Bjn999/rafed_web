@@ -72,9 +72,9 @@ function ResetPasswordForm() {
   return (
     <CardContent>
       {success ? (
-        <div className="bg-green-50 text-green-700 p-4 rounded-md flex flex-col items-center gap-3 text-center">
-          <div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
-            <Lock className="h-5 w-5 text-green-600" />
+        <div className="bg-primary/10 text-primary p-4 rounded-md flex flex-col items-center gap-3 text-center">
+          <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center">
+            <Lock className="h-5 w-5 text-primary" />
           </div>
           <p className="font-medium">تم إعادة تعيين كلمة المرور بنجاح!</p>
           <p className="text-sm">جاري التوجيه إلى صفحة تسجيل الدخول...</p>
@@ -156,7 +156,7 @@ function ResetPasswordForm() {
 
 export default function ResetPasswordPage() {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <Card className="w-full max-w-md shadow-xl border-t-4 border-t-primary">
         <CardHeader className="space-y-2 text-center pb-6">
           <CardTitle className="text-2xl font-bold tracking-tight">إعادة تعيين كلمة المرور</CardTitle>

@@ -154,16 +154,16 @@ export default function SchedulePage() {
     <div className="space-y-6 pb-12 animate-in fade-in duration-300" dir={isAr ? 'rtl' : 'ltr'}>
       
       {/* Header Banner */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-slate-900/80 border border-slate-800 p-5 rounded-2xl backdrop-blur-xl shadow-xl">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-card border border-border p-5 rounded-2xl backdrop-blur-xl shadow-xl">
         <div className="flex items-center gap-3.5">
           <div className="w-12 h-12 bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 rounded-2xl flex items-center justify-center shrink-0 shadow-lg shadow-indigo-600/10">
             <Calendar className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-white tracking-wide">
+            <h1 className="text-xl font-bold text-foreground tracking-wide">
               {isAr ? 'الأنشطة والخطة الزمنية' : 'Activities & Schedule Workspace'}
             </h1>
-            <p className="text-xs text-slate-400 max-w-xl">
+            <p className="text-xs text-muted-foreground max-w-xl">
               {isAr ? 'عرض فسيح بكامل الشاشة لإدارة أنشطة الـ WBS، الاعتماديات والمعالم الرئيسية' : 'Full-screen workspace for WBS activities, dependencies, and milestones'}
             </p>
           </div>
@@ -173,18 +173,18 @@ export default function SchedulePage() {
         <div className="flex flex-wrap items-center gap-3">
           
           {/* Project Selector Dropdown */}
-          <div className="flex items-center gap-2 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 min-w-[220px]">
+          <div className="flex items-center gap-2 bg-background border border-border rounded-xl px-3 py-2 min-w-[220px]">
             <FolderKanban className="w-4 h-4 text-indigo-400 shrink-0" />
             <select
               value={selectedProjectId || ''}
               onChange={(e) => setSelectedProjectId(Number(e.target.value))}
-              className="bg-transparent text-xs font-bold text-white focus:outline-none w-full cursor-pointer"
+              className="bg-transparent text-xs font-bold text-foreground focus:outline-none w-full cursor-pointer"
             >
               {projects.length === 0 ? (
                 <option value="">{isAr ? 'لا توجد مشاريع مجهزة' : 'No projects available'}</option>
               ) : (
                 projects.map((p) => (
-                  <option key={p.id} value={p.id} className="bg-slate-900 text-white">
+                  <option key={p.id} value={p.id} className="bg-card text-foreground">
                     {p.name}
                   </option>
                 ))
@@ -195,7 +195,7 @@ export default function SchedulePage() {
           {selectedProjectId && (
             <Link
               href={`/dashboard/projects/${selectedProjectId}`}
-              className="p-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors"
+              className="p-2.5 bg-muted hover:bg-slate-700 border border-border text-foreground hover:text-foreground rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors"
               title={isAr ? 'الانتقال لتفاصيل المشروع' : 'Go to project details'}
             >
               <ExternalLink className="w-4 h-4" />
@@ -218,65 +218,65 @@ export default function SchedulePage() {
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         
         {/* Total Activities */}
-        <Card className="bg-slate-900/60 border-slate-800">
+        <Card className="bg-card border-border">
           <CardContent className="p-4 flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center shrink-0">
               <Layers className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-[11px] font-semibold text-slate-400">{isAr ? 'إجمالي الأنشطة' : 'Total Activities'}</p>
-              <p className="text-lg font-bold text-white font-mono">{summary.total_items}</p>
+              <p className="text-[11px] font-semibold text-muted-foreground">{isAr ? 'إجمالي الأنشطة' : 'Total Activities'}</p>
+              <p className="text-lg font-bold text-foreground font-mono">{summary.total_items}</p>
             </div>
           </CardContent>
         </Card>
 
         {/* Milestones Count */}
-        <Card className="bg-slate-900/60 border-slate-800">
+        <Card className="bg-card border-border">
           <CardContent className="p-4 flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
               <span className="text-xl font-bold">◆</span>
             </div>
             <div>
-              <p className="text-[11px] font-semibold text-slate-400">{isAr ? 'المعالم الرئيسية' : 'Milestones'}</p>
+              <p className="text-[11px] font-semibold text-muted-foreground">{isAr ? 'المعالم الرئيسية' : 'Milestones'}</p>
               <p className="text-lg font-bold text-amber-400 font-mono">{milestonesCount}</p>
             </div>
           </CardContent>
         </Card>
 
         {/* In Progress */}
-        <Card className="bg-slate-900/60 border-slate-800">
+        <Card className="bg-card border-border">
           <CardContent className="p-4 flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center shrink-0">
               <Clock className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-[11px] font-semibold text-slate-400">{isAr ? 'قيد التنفيذ' : 'In Progress'}</p>
+              <p className="text-[11px] font-semibold text-muted-foreground">{isAr ? 'قيد التنفيذ' : 'In Progress'}</p>
               <p className="text-lg font-bold text-blue-400 font-mono">{summary.in_progress_items}</p>
             </div>
           </CardContent>
         </Card>
 
         {/* Completed */}
-        <Card className="bg-slate-900/60 border-slate-800">
+        <Card className="bg-card border-border">
           <CardContent className="p-4 flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
               <CheckCircle2 className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-[11px] font-semibold text-slate-400">{isAr ? 'المكتملة' : 'Completed'}</p>
+              <p className="text-[11px] font-semibold text-muted-foreground">{isAr ? 'المكتملة' : 'Completed'}</p>
               <p className="text-lg font-bold text-emerald-400 font-mono">{summary.completed_items}</p>
             </div>
           </CardContent>
         </Card>
 
         {/* Progress Rate */}
-        <Card className="bg-slate-900/60 border-slate-800 col-span-2 sm:col-span-1">
+        <Card className="bg-card border-border col-span-2 sm:col-span-1">
           <CardContent className="p-4 flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/20 text-violet-400 flex items-center justify-center shrink-0">
               <BarChart3 className="w-5 h-5" />
             </div>
             <div className="w-full min-w-0">
-              <p className="text-[11px] font-semibold text-slate-400">{isAr ? 'نسبة الإنجاز الكلية' : 'Overall Progress'}</p>
+              <p className="text-[11px] font-semibold text-muted-foreground">{isAr ? 'نسبة الإنجاز الكلية' : 'Overall Progress'}</p>
               <div className="flex items-center justify-between mt-1">
                 <span className="text-lg font-bold text-violet-400 font-mono">{summary.overall_progress}%</span>
               </div>
@@ -287,28 +287,28 @@ export default function SchedulePage() {
       </div>
 
       {/* Toolbar & Filter Bar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 bg-slate-900/50 p-4 rounded-2xl border border-slate-800">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 bg-card p-4 rounded-2xl border border-border">
         
         {/* Search Input */}
         <div className="relative flex-1 max-w-md">
-          <Search className={`w-4 h-4 text-slate-400 absolute top-1/2 -translate-y-1/2 ${isAr ? 'right-3.5' : 'left-3.5'}`} />
+          <Search className={`w-4 h-4 text-muted-foreground absolute top-1/2 -translate-y-1/2 ${isAr ? 'right-3.5' : 'left-3.5'}`} />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder={isAr ? 'البحث عن نشاط، شفرة أو معلم...' : 'Search activity, code or milestone...'}
-            className={`w-full bg-slate-950 border border-slate-800 rounded-xl ${isAr ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-all`}
+            className={`w-full bg-background border border-border rounded-xl ${isAr ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-indigo-500 transition-all`}
           />
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
           
           {/* Quick Type Filter */}
-          <div className="flex items-center bg-slate-950 border border-slate-800 p-1 rounded-xl">
+          <div className="flex items-center bg-background border border-border p-1 rounded-xl">
             <button
               onClick={() => setFilterType('all')}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                filterType === 'all' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
+                filterType === 'all' ? 'bg-indigo-600 text-white' : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               {isAr ? 'الكل' : 'All'}
@@ -316,7 +316,7 @@ export default function SchedulePage() {
             <button
               onClick={() => setFilterType('milestones')}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer ${
-                filterType === 'milestones' ? 'bg-amber-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-amber-400'
+                filterType === 'milestones' ? 'bg-amber-500 text-slate-950 font-bold' : 'text-muted-foreground hover:text-amber-400'
               }`}
             >
               <span>◆</span>
@@ -325,7 +325,7 @@ export default function SchedulePage() {
             <button
               onClick={() => setFilterType('in_progress')}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                filterType === 'in_progress' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
+                filterType === 'in_progress' ? 'bg-indigo-600 text-white' : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               {isAr ? 'قيد التنفيذ' : 'In Progress'}
@@ -333,11 +333,11 @@ export default function SchedulePage() {
           </div>
 
           {/* View Mode Switches */}
-          <div className="flex items-center bg-slate-950 border border-slate-800 p-1 rounded-xl">
+          <div className="flex items-center bg-background border border-border p-1 rounded-xl">
             <button
               onClick={() => setViewMode('gantt')}
               className={`p-1.5 rounded-lg transition-all cursor-pointer ${
-                viewMode === 'gantt' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
+                viewMode === 'gantt' ? 'bg-indigo-600 text-white shadow-md' : 'text-muted-foreground hover:text-foreground'
               }`}
               title={isAr ? 'مخطط جانت الزمني' : 'Gantt View'}
             >
@@ -346,7 +346,7 @@ export default function SchedulePage() {
             <button
               onClick={() => setViewMode('table')}
               className={`p-1.5 rounded-lg transition-all cursor-pointer ${
-                viewMode === 'table' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
+                viewMode === 'table' ? 'bg-indigo-600 text-white shadow-md' : 'text-muted-foreground hover:text-foreground'
               }`}
               title={isAr ? 'جدول الأنشطة الهيكلي' : 'Table View'}
             >
@@ -355,7 +355,7 @@ export default function SchedulePage() {
             <button
               onClick={() => setViewMode('cards')}
               className={`p-1.5 rounded-lg transition-all cursor-pointer ${
-                viewMode === 'cards' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
+                viewMode === 'cards' ? 'bg-indigo-600 text-white shadow-md' : 'text-muted-foreground hover:text-foreground'
               }`}
               title={isAr ? 'عرض الكروت والتأطير' : 'Cards View'}
             >
@@ -365,7 +365,7 @@ export default function SchedulePage() {
 
           <button
             onClick={() => refetch()}
-            className="p-2 bg-slate-950 border border-slate-800 rounded-xl text-slate-400 hover:text-white hover:border-slate-700 transition-all cursor-pointer"
+            className="p-2 bg-background border border-border rounded-xl text-muted-foreground hover:text-foreground hover:border-border transition-all cursor-pointer"
             title={isAr ? 'تحديث' : 'Refresh'}
           >
             <RefreshCw className="w-4 h-4" />
@@ -377,7 +377,7 @@ export default function SchedulePage() {
       {loadingWbs ? (
         <div className="py-20 flex flex-col items-center justify-center gap-3">
           <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
-          <p className="text-xs text-slate-400">{isAr ? 'جاري تحميل الجدولة الهندسية...' : 'Loading schedule workspace...'}</p>
+          <p className="text-xs text-muted-foreground">{isAr ? 'جاري تحميل الجدولة الهندسية...' : 'Loading schedule workspace...'}</p>
         </div>
       ) : isError ? (
         <div className="p-8 bg-rose-500/10 border border-rose-500/20 rounded-2xl text-center text-rose-400 text-xs">

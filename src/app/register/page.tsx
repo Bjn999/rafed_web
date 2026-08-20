@@ -113,11 +113,11 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-slate-950 p-4 sm:p-6 overflow-hidden" dir={isAr ? 'rtl' : 'ltr'}>
+    <div className="relative min-h-screen flex items-center justify-center bg-background p-4 sm:p-6 overflow-hidden" dir={isAr ? 'rtl' : 'ltr'}>
       {/* Top Header */}
       <div className="absolute top-0 left-0 right-0 p-6 flex justify-between items-center z-50">
         <Link href="/">
-          <Button variant="ghost" className="text-slate-400 hover:text-white hover:bg-slate-900 rounded-xl px-4 h-10 gap-2 transition-colors cursor-pointer">
+          <Button variant="ghost" className="text-muted-foreground hover:text-foreground hover:bg-card rounded-xl px-4 h-10 gap-2 transition-colors cursor-pointer">
             {isAr ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
             {isAr ? 'العودة للرئيسية' : 'Back to Home'}
           </Button>
@@ -129,13 +129,13 @@ export default function RegisterPage() {
       <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-indigo-600/10 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full bg-violet-600/10 blur-[120px] pointer-events-none" />
 
-      <Card className="w-full max-w-2xl border-slate-800 bg-slate-900/60 backdrop-blur-xl text-slate-100 shadow-2xl relative z-10">
-        <CardHeader className="space-y-2 text-center pb-6 border-b border-slate-800">
+      <Card className="w-full max-w-2xl border-border bg-card backdrop-blur-xl text-foreground shadow-2xl relative z-10">
+        <CardHeader className="space-y-2 text-center pb-6 border-b border-border">
           <div className="mx-auto w-12 h-12 bg-indigo-600/20 text-indigo-400 rounded-2xl flex items-center justify-center mb-2 border border-indigo-500/30">
             <Building2 className="w-6 h-6" />
           </div>
-          <CardTitle className="text-3xl font-bold tracking-tight text-white font-sans">{isAr ? 'تسجيل شركة جديدة' : 'Register a New Company'}</CardTitle>
-          <CardDescription className="text-slate-400 text-sm">
+          <CardTitle className="text-3xl font-bold tracking-tight text-foreground font-sans">{isAr ? 'تسجيل شركة جديدة' : 'Register a New Company'}</CardTitle>
+          <CardDescription className="text-muted-foreground text-sm">
             {isAr ? 'قم بإنشاء حساب لشركتك وابدأ إدارة مشاريعك الهندسية والمقاولات اليوم' : 'Create an account for your company and start managing your construction projects today'}
           </CardDescription>
         </CardHeader>
@@ -145,10 +145,10 @@ export default function RegisterPage() {
             <div className="mx-auto w-16 h-16 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center mb-4 border border-green-500/30">
               <Mail className="w-8 h-8" />
             </div>
-            <h3 className="text-xl font-bold text-white mb-2">
+            <h3 className="text-xl font-bold text-foreground mb-2">
               {isAr ? 'تم إنشاء الحساب بنجاح!' : 'Account Created Successfully!'}
             </h3>
-            <p className="text-slate-300">
+            <p className="text-foreground">
               {isAr ? 'يرجى مراجعة بريدك الإلكتروني والنقر على رابط التفعيل للبدء باستخدام النظام.' : 'Please check your email and click the verification link to start using the system.'}
             </p>
             <div className="pt-6">
@@ -165,17 +165,17 @@ export default function RegisterPage() {
             
             {/* Section 1: Company Info */}
             <div className="space-y-3">
-              <h3 className={`text-md font-semibold text-indigo-400 flex items-center gap-2 pb-1 border-b border-slate-800/60 ${isAr ? 'text-right' : 'text-left'}`}>
+              <h3 className={`text-md font-semibold text-indigo-400 flex items-center gap-2 pb-1 border-b border-border ${isAr ? 'text-right' : 'text-left'}`}>
                 <Building2 className="w-4 h-4" />
                 {isAr ? 'بيانات الشركة' : 'Company Info'}
               </h3>
               <div className="space-y-1">
-                <Label htmlFor="company_name" className={`text-slate-300 flex ${isAr ? 'justify-start' : 'justify-start'}`}>{t('auth.companyNameLabel')}</Label>
+                <Label htmlFor="company_name" className={`text-foreground flex ${isAr ? 'justify-start' : 'justify-start'}`}>{t('auth.companyNameLabel')}</Label>
                 <div className="relative">
                   <Input
                     id="company_name"
                     placeholder={isAr ? 'مثال: شركة المقاولات الحديثة' : 'e.g. Modern Contracting Co.'}
-                    className="bg-slate-950/40 border-slate-800 focus:border-indigo-500 focus:ring-indigo-500/20 transition-all text-white font-sans"
+                    className="bg-background/40 border-border focus:border-indigo-500 focus:ring-indigo-500/20 transition-all text-foreground font-sans"
                     {...register('company_name')}
                   />
                 </div>
@@ -187,19 +187,19 @@ export default function RegisterPage() {
 
             {/* Section 2: Account details */}
             <div className="space-y-4">
-              <h3 className={`text-md font-semibold text-indigo-400 flex items-center gap-2 pb-1 border-b border-slate-800/60 ${isAr ? 'text-right' : 'text-left'}`}>
+              <h3 className={`text-md font-semibold text-indigo-400 flex items-center gap-2 pb-1 border-b border-border ${isAr ? 'text-right' : 'text-left'}`}>
                 <Mail className="w-4 h-4" />
                 {isAr ? 'بيانات الحساب (المالك)' : 'Account Details (Owner)'}
               </h3>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-1 md:col-span-3">
-                  <Label htmlFor="email" className={`text-slate-300 flex ${isAr ? 'justify-start' : 'justify-start'}`}>{t('auth.emailLabel')}</Label>
+                  <Label htmlFor="email" className={`text-foreground flex ${isAr ? 'justify-start' : 'justify-start'}`}>{t('auth.emailLabel')}</Label>
                   <Input
                     id="email"
                     type="email"
                     placeholder="owner@example.com"
-                    className="bg-slate-950/40 border-slate-800 focus:border-indigo-500 text-white font-sans"
+                    className="bg-background/40 border-border focus:border-indigo-500 text-foreground font-sans"
                     {...register('email')}
                   />
                   {errors.email && (
@@ -208,12 +208,12 @@ export default function RegisterPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <Label htmlFor="password" className={`text-slate-300 flex ${isAr ? 'justify-start' : 'justify-start'}`}>{t('auth.passwordLabel')}</Label>
+                  <Label htmlFor="password" className={`text-foreground flex ${isAr ? 'justify-start' : 'justify-start'}`}>{t('auth.passwordLabel')}</Label>
                   <Input
                     id="password"
                     type="password"
                     placeholder="••••••••"
-                    className="bg-slate-950/40 border-slate-800 focus:border-indigo-500 text-white font-sans"
+                    className="bg-background/40 border-border focus:border-indigo-500 text-foreground font-sans"
                     {...register('password')}
                   />
                   {errors.password && (
@@ -222,12 +222,12 @@ export default function RegisterPage() {
                 </div>
 
                 <div className="space-y-1 md:col-span-2">
-                  <Label htmlFor="password_confirmation" className={`text-slate-300 flex ${isAr ? 'justify-start' : 'justify-start'}`}>{t('auth.passwordConfirmLabel')}</Label>
+                  <Label htmlFor="password_confirmation" className={`text-foreground flex ${isAr ? 'justify-start' : 'justify-start'}`}>{t('auth.passwordConfirmLabel')}</Label>
                   <Input
                     id="password_confirmation"
                     type="password"
                     placeholder="••••••••"
-                    className="bg-slate-950/40 border-slate-800 focus:border-indigo-500 text-white font-sans"
+                    className="bg-background/40 border-border focus:border-indigo-500 text-foreground font-sans"
                     {...register('password_confirmation')}
                   />
                   {errors.password_confirmation && (
@@ -239,18 +239,18 @@ export default function RegisterPage() {
 
             {/* Section 3: Profile Details */}
             <div className="space-y-4">
-              <h3 className={`text-md font-semibold text-indigo-400 flex items-center gap-2 pb-1 border-b border-slate-800/60 ${isAr ? 'text-right' : 'text-left'}`}>
+              <h3 className={`text-md font-semibold text-indigo-400 flex items-center gap-2 pb-1 border-b border-border ${isAr ? 'text-right' : 'text-left'}`}>
                 <User className="w-4 h-4" />
                 {isAr ? 'بيانات البروفايل الشخصي' : 'Profile Details'}
               </h3>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <Label htmlFor="first_name" className={`text-slate-300 flex ${isAr ? 'justify-start' : 'justify-start'}`}>{t('auth.firstNameLabel')}</Label>
+                  <Label htmlFor="first_name" className={`text-foreground flex ${isAr ? 'justify-start' : 'justify-start'}`}>{t('auth.firstNameLabel')}</Label>
                   <Input
                     id="first_name"
                     placeholder={isAr ? 'مثال: خالد' : 'e.g. John'}
-                    className="bg-slate-950/40 border-slate-800 focus:border-indigo-500 text-white font-sans"
+                    className="bg-background/40 border-border focus:border-indigo-500 text-foreground font-sans"
                     {...register('first_name')}
                   />
                   {errors.first_name && (
@@ -259,11 +259,11 @@ export default function RegisterPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <Label htmlFor="last_name" className={`text-slate-300 flex ${isAr ? 'justify-start' : 'justify-start'}`}>{t('auth.lastNameLabel')}</Label>
+                  <Label htmlFor="last_name" className={`text-foreground flex ${isAr ? 'justify-start' : 'justify-start'}`}>{t('auth.lastNameLabel')}</Label>
                   <Input
                     id="last_name"
                     placeholder={isAr ? 'مثال: العمر' : 'e.g. Doe'}
-                    className="bg-slate-950/40 border-slate-800 focus:border-indigo-500 text-white font-sans"
+                    className="bg-background/40 border-border focus:border-indigo-500 text-foreground font-sans"
                     {...register('last_name')}
                   />
                   {errors.last_name && (
@@ -272,14 +272,14 @@ export default function RegisterPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <Label htmlFor="phone_number" className={`text-slate-300 flex items-center gap-1 ${isAr ? 'text-right' : 'text-left'}`}>
+                  <Label htmlFor="phone_number" className={`text-foreground flex items-center gap-1 ${isAr ? 'text-right' : 'text-left'}`}>
                     <Phone className="w-3.5 h-3.5 opacity-60" />
                     {t('auth.phoneNumberLabel')}
                   </Label>
                   <Input
                     id="phone_number"
                     placeholder="0566778899"
-                    className="bg-slate-950/40 border-slate-800 focus:border-indigo-500 text-white text-left font-sans"
+                    className="bg-background/40 border-border focus:border-indigo-500 text-foreground text-left font-sans"
                     dir="ltr"
                     {...register('phone_number')}
                   />
@@ -292,7 +292,7 @@ export default function RegisterPage() {
 
           </CardContent>
 
-          <CardFooter className="flex flex-col gap-4 border-t border-slate-800/80 pt-6 pb-6 bg-slate-900/80 rounded-b-xl">
+          <CardFooter className="flex flex-col gap-4 border-t border-border pt-6 pb-6 bg-card rounded-b-xl">
             <Button
               type="submit"
               disabled={isSubmitting}
@@ -308,7 +308,7 @@ export default function RegisterPage() {
               )}
             </Button>
             
-            <p className="text-center text-sm text-slate-400 w-full mt-2">
+            <p className="text-center text-sm text-muted-foreground w-full mt-2">
               {t('auth.alreadyHaveAccount')}{' '}
               <Link href="/login" className="text-indigo-400 hover:underline hover:text-indigo-300 font-medium">
                 {t('nav.login')}

@@ -50,10 +50,10 @@ export default function AdminDashboardPage() {
       {/* Welcome Section */}
       <div className="bg-gradient-to-r from-indigo-900/20 to-violet-900/20 border border-indigo-500/10 rounded-3xl p-6 sm:p-8 relative overflow-hidden backdrop-blur-xl">
         <div className="absolute top-0 left-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-[60px] pointer-events-none" />
-        <h1 className={`text-2xl sm:text-3xl font-extrabold text-white ${isAr ? 'text-right' : 'text-left'}`}>
+        <h1 className={`text-2xl sm:text-3xl font-extrabold text-foreground ${isAr ? 'text-right' : 'text-left'}`}>
           {isAr ? 'أهلاً بك في منصة الإشراف على رافد 🛡️' : 'Welcome to Rafed Admin Portal 🛡️'}
         </h1>
-        <p className={`text-slate-400 text-sm mt-2 max-w-3xl leading-relaxed ${isAr ? 'text-right' : 'text-left'}`}>
+        <p className={`text-muted-foreground text-sm mt-2 max-w-3xl leading-relaxed ${isAr ? 'text-right' : 'text-left'}`}>
           {isAr 
             ? 'تتيح لك بوابة مسؤول النظام إدارة الشركات المشتركة بالكامل، وتحديث حالاتها، ومراقبة العمليات بشكل مباشر، وتعديل أسعار وباقات الاشتراك.'
             : 'The admin portal allows you to manage subscribed companies, update statuses, monitor operations in real-time, and modify plans and subscription rates.'}
@@ -62,47 +62,47 @@ export default function AdminDashboardPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <Card className="border-slate-800 bg-slate-900/40 backdrop-blur text-white hover:border-slate-700 transition-all">
+        <Card className="border-border bg-card backdrop-blur text-foreground hover:border-border transition-all">
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-sm font-medium text-slate-400">{isAr ? 'إجمالي الشركات' : 'Total Companies'}</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">{isAr ? 'إجمالي الشركات' : 'Total Companies'}</CardTitle>
             <Building2 className="w-5 h-5 text-indigo-400" />
           </CardHeader>
           <CardContent className={isAr ? 'text-right' : 'text-left'}>
-            <div className="text-3xl font-bold text-white font-sans">{tenantsLoading ? '...' : totalTenants}</div>
-            <p className="text-xs text-slate-500 mt-1">{isAr ? 'كافة الحسابات المشتركة' : 'All registered tenants'}</p>
+            <div className="text-3xl font-bold text-foreground font-sans">{tenantsLoading ? '...' : totalTenants}</div>
+            <p className="text-xs text-muted-foreground mt-1">{isAr ? 'كافة الحسابات المشتركة' : 'All registered tenants'}</p>
           </CardContent>
         </Card>
 
-        <Card className="border-slate-800 bg-slate-900/40 backdrop-blur text-white hover:border-slate-700 transition-all">
+        <Card className="border-border bg-card backdrop-blur text-foreground hover:border-border transition-all">
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-sm font-medium text-slate-400">{isAr ? 'الشركات الفعالة' : 'Active Companies'}</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">{isAr ? 'الشركات الفعالة' : 'Active Companies'}</CardTitle>
             <CheckCircle className="w-5 h-5 text-emerald-400" />
           </CardHeader>
           <CardContent className={isAr ? 'text-right' : 'text-left'}>
             <div className="text-3xl font-bold text-emerald-400 font-sans">{tenantsLoading ? '...' : activeTenantsCount}</div>
-            <p className="text-xs text-slate-500 mt-1">{isAr ? 'نشطة ولها ولوج كامل' : 'Active with full access'}</p>
+            <p className="text-xs text-muted-foreground mt-1">{isAr ? 'نشطة ولها ولوج كامل' : 'Active with full access'}</p>
           </CardContent>
         </Card>
 
-        <Card className="border-slate-800 bg-slate-900/40 backdrop-blur text-white hover:border-slate-700 transition-all">
+        <Card className="border-border bg-card backdrop-blur text-foreground hover:border-border transition-all">
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-sm font-medium text-slate-400">{isAr ? 'الشركات الموقوفة' : 'Suspended Companies'}</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">{isAr ? 'الشركات الموقوفة' : 'Suspended Companies'}</CardTitle>
             <Ban className="w-5 h-5 text-rose-400" />
           </CardHeader>
           <CardContent className={isAr ? 'text-right' : 'text-left'}>
             <div className="text-3xl font-bold text-rose-400 font-sans">{tenantsLoading ? '...' : suspendedTenantsCount}</div>
-            <p className="text-xs text-slate-500 mt-1">{isAr ? 'تم تعطيلها إدارياً' : 'Suspended administratively'}</p>
+            <p className="text-xs text-muted-foreground mt-1">{isAr ? 'تم تعطيلها إدارياً' : 'Suspended administratively'}</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Informative alert */}
-      <div className={`bg-slate-900/30 border border-slate-800/80 rounded-2xl p-6 ${isAr ? 'text-right' : 'text-left'}`}>
-        <h3 className="font-bold text-white flex items-center gap-2 mb-3">
+      <div className={`bg-card border border-border rounded-2xl p-6 ${isAr ? 'text-right' : 'text-left'}`}>
+        <h3 className="font-bold text-foreground flex items-center gap-2 mb-3">
           <Info className="w-5 h-5 text-indigo-400" />
           {isAr ? 'التحكم وحماية الحسابات' : 'Control & Accounts Protection'}
         </h3>
-        <p className="text-sm text-slate-400 leading-relaxed font-sans">
+        <p className="text-sm text-muted-foreground leading-relaxed font-sans">
           {isAr 
             ? 'عند إيقاف أي شركة، سيتم حظر كافة العمليات والمستخدمين التابعين لتلك المساحة فورياً عن طريق البرمجيات الوسيطة للنظام. لمشاهدة تفاصيل الطلبات، يرجى تصفح قسم "سجلات النظام" من القائمة الجانبية.'
             : 'When a company is suspended, all operations and users belonging to that workspace are blocked instantly via middleware. To inspect requests, please browse the "System Logs" section in the sidebar.'}

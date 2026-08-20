@@ -70,20 +70,20 @@ export default function UploadDrawingDialog({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
-        <div className="flex items-center justify-between p-5 border-b border-slate-800 bg-slate-900/50">
+    <div className="fixed inset-0 z-50 bg-background/70 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="bg-card border border-border rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
+        <div className="flex items-center justify-between p-5 border-b border-border bg-card">
           <div className="flex items-center gap-2.5">
             <div className="p-2 bg-indigo-500/10 rounded-xl border border-indigo-500/20 text-indigo-400">
               <Upload className="w-5 h-5" />
             </div>
-            <h3 className="font-semibold text-white text-base">
+            <h3 className="font-semibold text-foreground text-base">
               {isAr ? 'رفع مخطط هندسي جديد' : 'Upload New Engineering Drawing'}
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+            className="text-muted-foreground hover:text-foreground p-1 rounded-lg hover:bg-muted transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -98,7 +98,7 @@ export default function UploadDrawingDialog({
           )}
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1.5">
+            <label className="block text-xs font-medium text-foreground mb-1.5">
               {isAr ? 'عنوان المخطط *' : 'Drawing Title *'}
             </label>
             <input
@@ -107,12 +107,12 @@ export default function UploadDrawingDialog({
               placeholder={isAr ? 'مثال: مخطط الدور الثالث المعماري' : 'e.g. 3rd Floor Architectural Plan'}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+              className="w-full bg-background border border-border rounded-xl px-3.5 py-2.5 text-sm text-foreground placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1.5">
+            <label className="block text-xs font-medium text-foreground mb-1.5">
               {isAr ? 'رقم المخطط الرسمي *' : 'Official Drawing Number *'}
             </label>
             <input
@@ -121,44 +121,44 @@ export default function UploadDrawingDialog({
               placeholder={isAr ? 'مثال: AR-301' : 'e.g. AR-301'}
               value={drawingNumber}
               onChange={(e) => setDrawingNumber(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+              className="w-full bg-background border border-border rounded-xl px-3.5 py-2.5 text-sm text-foreground placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              <label className="block text-xs font-medium text-foreground mb-1.5">
                 {isAr ? 'الإصدار' : 'Version'}
               </label>
               <input
                 type="text"
                 value={version}
                 onChange={(e) => setVersion(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                className="w-full bg-background border border-border rounded-xl px-3.5 py-2.5 text-sm text-foreground placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              <label className="block text-xs font-medium text-foreground mb-1.5">
                 {isAr ? 'رقم المراجعة' : 'Revision Number'}
               </label>
               <input
                 type="text"
                 value={revisionNumber}
                 onChange={(e) => setRevisionNumber(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                className="w-full bg-background border border-border rounded-xl px-3.5 py-2.5 text-sm text-foreground placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1.5">
+            <label className="block text-xs font-medium text-foreground mb-1.5">
               {isAr ? 'حالة الاعتماد' : 'Approval Status'}
             </label>
             <select
               value={approvalStatus}
               onChange={(e) => setApprovalStatus(e.target.value as any)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors"
+              className="w-full bg-background border border-border rounded-xl px-3.5 py-2.5 text-sm text-foreground focus:outline-none focus:border-indigo-500 transition-colors"
             >
               <option value="draft">{isAr ? 'مسودة (Draft)' : 'Draft'}</option>
               <option value="under_review">{isAr ? 'قيد المراجعة (Under Review)' : 'Under Review'}</option>
@@ -168,35 +168,35 @@ export default function UploadDrawingDialog({
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1.5">
+            <label className="block text-xs font-medium text-foreground mb-1.5">
               {isAr ? 'ملف المخطط (PDF, DWG, JPG, PNG) *' : 'Drawing File (PDF, DWG, JPG, PNG) *'}
             </label>
-            <div className="relative border-2 border-dashed border-slate-800 hover:border-indigo-500/50 rounded-xl p-4 text-center cursor-pointer transition-colors bg-slate-950/50">
+            <div className="relative border-2 border-dashed border-border hover:border-indigo-500/50 rounded-xl p-4 text-center cursor-pointer transition-colors bg-background/50">
               <input
                 type="file"
                 accept=".pdf,.dwg,.png,.jpg,.jpeg"
                 onChange={(e) => setFile(e.target.files?.[0] || null)}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               />
-              <FileText className="w-8 h-8 text-slate-500 mx-auto mb-2" />
+              <FileText className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
               {file ? (
                 <p className="text-xs font-medium text-indigo-400">{file.name}</p>
               ) : (
                 <div>
-                  <p className="text-xs font-medium text-slate-300">
+                  <p className="text-xs font-medium text-foreground">
                     {isAr ? 'انقر أو اسحب الملف هنا للرفع' : 'Click or drag file here to upload'}
                   </p>
-                  <p className="text-[11px] text-slate-500 mt-1">PNG, JPG, PDF, DWG (Max 50MB)</p>
+                  <p className="text-[11px] text-muted-foreground mt-1">PNG, JPG, PDF, DWG (Max 50MB)</p>
                 </div>
               )}
             </div>
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-slate-800">
+          <div className="flex justify-end gap-3 pt-4 border-t border-border">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-xs font-medium text-slate-300 hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
+              className="px-4 py-2 text-xs font-medium text-foreground hover:bg-muted rounded-xl transition-colors cursor-pointer"
             >
               {isAr ? 'إلغاء' : 'Cancel'}
             </button>

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useLanguage } from '@/context/LanguageContext';
 import { LanguageSelector } from '@/components/ui/LanguageSelector';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/button';
 import { featuresList } from '@/lib/features-config';
 import { api } from '@/lib/api';
@@ -152,7 +153,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-indigo-600 selection:text-white" dir={isAr ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans selection:bg-indigo-600 selection:text-white" dir={isAr ? 'rtl' : 'ltr'}>
       
       {/* Decorative Blur Backgrounds */}
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] rounded-full bg-indigo-600/10 blur-[120px] pointer-events-none -z-10" />
@@ -160,7 +161,7 @@ export default function HomePage() {
       <div className="absolute bottom-10 left-10 w-[400px] h-[400px] rounded-full bg-blue-600/5 blur-[100px] pointer-events-none -z-10" />
 
       {/* Header (Navbar) */}
-      <header className="border-b border-slate-800 bg-slate-950/70 backdrop-blur-md sticky top-0 z-40 transition-all duration-300">
+      <header className="border-b border-border bg-background/70 backdrop-blur-md sticky top-0 z-40 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           
           {/* Logo & Brand */}
@@ -169,10 +170,10 @@ export default function HomePage() {
               <Building2 className="w-6 h-6" />
             </div>
             <div className="flex flex-col">
-              <span className="text-xl font-bold text-white tracking-wide group-hover:text-indigo-400 transition-colors">
+              <span className="text-xl font-bold text-foreground tracking-wide group-hover:text-indigo-400 transition-colors">
                 {t('common.appName')}
               </span>
-              <span className="text-[10px] text-slate-400 font-medium">
+              <span className="text-[10px] text-muted-foreground font-medium">
                 {isAr ? 'منصة إدارة المشاريع الهندسية والإنشائية' : 'Engineering & Construction Projects Management Platform'}
               </span>
             </div>
@@ -180,29 +181,30 @@ export default function HomePage() {
 
           {/* Desktop Navigation Links */}
           <nav className="hidden md:flex items-center gap-8">
-            <Link href="#features" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
+            <Link href="#features" className="text-sm font-medium text-foreground hover:text-foreground transition-colors">
               {t('nav.features')}
             </Link>
-            <Link href="#about" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
+            <Link href="#about" className="text-sm font-medium text-foreground hover:text-foreground transition-colors">
               {t('nav.about')}
             </Link>
-            <Link href="#pricing" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
+            <Link href="#pricing" className="text-sm font-medium text-foreground hover:text-foreground transition-colors">
               {isAr ? 'الأسعار' : 'Pricing'}
             </Link>
-            <Link href="#statistics" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
+            <Link href="#statistics" className="text-sm font-medium text-foreground hover:text-foreground transition-colors">
               {t('nav.statistics')}
             </Link>
           </nav>
 
           {/* Authentication Actions */}
           <div className="hidden md:flex items-center gap-4">
+            <ThemeToggle />
             <LanguageSelector />
             
             {isLoading ? (
               <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
             ) : user ? (
               <div className="flex items-center gap-4">
-                <span className="text-xs text-slate-400 bg-slate-900 border border-slate-800 rounded-full px-3 py-1 font-medium">
+                <span className="text-xs text-muted-foreground bg-card border border-border rounded-full px-3 py-1 font-medium">
                   {t('nav.helloUser', { name: profile?.first_name || (isAr ? 'المستخدم' : 'User') })}
                 </span>
                 <Link href={dashboardUrl}>
@@ -214,7 +216,7 @@ export default function HomePage() {
                 <Button 
                   onClick={handleLogoutClick}
                   variant="ghost" 
-                  className="text-slate-400 hover:text-white hover:bg-slate-900 rounded-xl px-3 h-10 gap-1.5 transition-colors cursor-pointer"
+                  className="text-muted-foreground hover:text-foreground hover:bg-card rounded-xl px-3 h-10 gap-1.5 transition-colors cursor-pointer"
                 >
                   <LogOut className="w-4 h-4" />
                 </Button>
@@ -222,7 +224,7 @@ export default function HomePage() {
             ) : (
               <>
                 <Link href="/login">
-                  <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-900 rounded-xl px-4 h-10 font-semibold transition-all cursor-pointer">
+                  <Button variant="ghost" className="text-foreground hover:text-foreground hover:bg-card rounded-xl px-4 h-10 font-semibold transition-all cursor-pointer">
                     {t('nav.login')}
                   </Button>
                 </Link>
@@ -238,6 +240,7 @@ export default function HomePage() {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center gap-4">
+            <ThemeToggle />
             <LanguageSelector />
             
             {isLoading ? (
@@ -251,7 +254,7 @@ export default function HomePage() {
             )}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-slate-400 hover:text-white bg-slate-900/60 rounded-xl border border-slate-800 transition-colors"
+              className="p-2 text-muted-foreground hover:text-foreground bg-card rounded-xl border border-border transition-colors"
               aria-label="Toggle Menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -262,33 +265,33 @@ export default function HomePage() {
 
         {/* Mobile Navigation Drawer */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-slate-800 bg-slate-950 p-6 space-y-6 animate-in fade-in slide-in-from-top duration-200" dir={isAr ? 'rtl' : 'ltr'}>
+          <div className="md:hidden border-t border-border bg-background p-6 space-y-6 animate-in fade-in slide-in-from-top duration-200" dir={isAr ? 'rtl' : 'ltr'}>
             <nav className="flex flex-col gap-4">
               <Link 
                 href="#features" 
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-base font-semibold text-slate-300 hover:text-white py-2 border-b border-slate-900"
+                className="text-base font-semibold text-foreground hover:text-foreground py-2 border-b border-slate-900"
               >
                 {t('nav.features')}
               </Link>
               <Link 
                 href="#about" 
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-base font-semibold text-slate-300 hover:text-white py-2 border-b border-slate-900"
+                className="text-base font-semibold text-foreground hover:text-foreground py-2 border-b border-slate-900"
               >
                 {t('nav.about')}
               </Link>
               <Link 
                 href="#pricing" 
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-base font-semibold text-slate-300 hover:text-white py-2 border-b border-slate-900"
+                className="text-base font-semibold text-foreground hover:text-foreground py-2 border-b border-slate-900"
               >
                 {isAr ? 'الأسعار' : 'Pricing'}
               </Link>
               <Link 
                 href="#statistics" 
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-base font-semibold text-slate-300 hover:text-white py-2"
+                className="text-base font-semibold text-foreground hover:text-foreground py-2"
               >
                 {t('nav.statistics')}
               </Link>
@@ -297,7 +300,7 @@ export default function HomePage() {
             <div className="flex flex-col gap-3 pt-4 border-t border-slate-900">
               {isLoading ? null : user ? (
                 <div className="space-y-3">
-                  <div className="text-center text-sm text-slate-400 py-1 bg-slate-900 rounded-lg">
+                  <div className="text-center text-sm text-muted-foreground py-1 bg-card rounded-lg">
                     {t('nav.helloUser', { name: profile?.first_name || (isAr ? 'المستخدم' : 'User') })}
                   </div>
                   <Link href={dashboardUrl} className="w-full block" onClick={() => setMobileMenuOpen(false)}>
@@ -308,7 +311,7 @@ export default function HomePage() {
                   <Button 
                     onClick={() => { handleLogoutClick(); setMobileMenuOpen(false); }}
                     variant="outline" 
-                    className="w-full border-slate-800 text-slate-400 hover:text-white py-3 rounded-xl font-bold justify-center cursor-pointer"
+                    className="w-full border-border text-muted-foreground hover:text-foreground py-3 rounded-xl font-bold justify-center cursor-pointer"
                   >
                     {t('common.logout')}
                   </Button>
@@ -316,7 +319,7 @@ export default function HomePage() {
               ) : (
                 <>
                   <Link href="/login" className="w-full block" onClick={() => setMobileMenuOpen(false)}>
-                    <Button variant="outline" className="w-full border-slate-800 text-slate-300 py-3 rounded-xl font-bold justify-center cursor-pointer">
+                    <Button variant="outline" className="w-full border-border text-foreground py-3 rounded-xl font-bold justify-center cursor-pointer">
                       {t('nav.login')}
                     </Button>
                   </Link>
@@ -349,14 +352,14 @@ export default function HomePage() {
                   <span>{isAr ? 'المنصة الأولى لإدارة المشاريع الهندسية والإنشائية' : 'The Premier Engineering & Construction Platform'}</span>
                 </div>
 
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-foreground leading-tight">
                   {isAr ? 'أدر مشاريعك الهندسية' : 'Manage Your Projects'} <br />
                   <span className="bg-gradient-to-l from-indigo-400 via-violet-400 to-blue-400 bg-clip-text text-transparent">
                     {isAr ? 'بذكاء وسرعة فائقة' : 'Smartly and Fast'}
                   </span>
                 </h1>
 
-                <p className="text-slate-300 text-base sm:text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed font-normal">
+                <p className="text-foreground text-base sm:text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed font-normal">
                   {t('homepage.hero.desc')}
                 </p>
 
@@ -369,7 +372,7 @@ export default function HomePage() {
                     </Button>
                   </Link>
                   <Link href="#features" className="w-full sm:w-auto">
-                    <Button size="lg" variant="outline" className="w-full sm:w-auto border-slate-800 hover:bg-slate-900 text-slate-300 hover:text-white rounded-xl px-6 h-12 text-base font-semibold cursor-pointer">
+                    <Button size="lg" variant="outline" className="w-full sm:w-auto border-border hover:bg-card text-foreground hover:text-foreground rounded-xl px-6 h-12 text-base font-semibold cursor-pointer">
                       {isAr ? 'تصفح الميزات والخدمات' : 'Browse Features & Services'}
                     </Button>
                   </Link>
@@ -378,16 +381,16 @@ export default function HomePage() {
                 {/* Micro Stats */}
                 <div className="pt-6 border-t border-slate-900 grid grid-cols-3 gap-4 max-w-md mx-auto lg:mx-0">
                   <div className="text-center lg:text-right">
-                    <div className="text-2xl font-bold text-white">100%</div>
-                    <div className="text-xs text-slate-400">{isAr ? 'سحابي وموثوق' : 'Cloud & Reliable'}</div>
+                    <div className="text-2xl font-bold text-foreground">100%</div>
+                    <div className="text-xs text-muted-foreground">{isAr ? 'سحابي وموثوق' : 'Cloud & Reliable'}</div>
                   </div>
                   <div className={`text-center lg:text-right ${isAr ? 'border-r' : 'border-l'} border-slate-900 pr-4 pl-4`}>
                     <div className="text-2xl font-bold text-indigo-400">24/7</div>
-                    <div className="text-xs text-slate-400">{isAr ? 'متابعة مستمرة' : 'Continuous Tracking'}</div>
+                    <div className="text-xs text-muted-foreground">{isAr ? 'متابعة مستمرة' : 'Continuous Tracking'}</div>
                   </div>
                   <div className={`text-center lg:text-right ${isAr ? 'border-r' : 'border-l'} border-slate-900 pr-4 pl-4`}>
                     <div className="text-2xl font-bold text-violet-400">{isAr ? 'أمان' : 'Secure'}</div>
-                    <div className="text-xs text-slate-400">{isAr ? 'تشفير متكامل' : 'End-to-End Encryption'}</div>
+                    <div className="text-xs text-muted-foreground">{isAr ? 'تشفير متكامل' : 'End-to-End Encryption'}</div>
                   </div>
                 </div>
 
@@ -400,15 +403,15 @@ export default function HomePage() {
                 <div className="absolute inset-0 bg-indigo-600/20 rounded-3xl filter blur-3xl -z-10 transform scale-75" />
 
                 {/* Dashboard CSS Mockup */}
-                <div className="w-full max-w-lg border border-slate-800 bg-slate-900/60 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-xl transform hover:-translate-y-2 hover:shadow-indigo-500/10 transition-all duration-500">
+                <div className="w-full max-w-lg border border-border bg-card rounded-2xl shadow-2xl overflow-hidden backdrop-blur-xl transform hover:-translate-y-2 hover:shadow-indigo-500/10 transition-all duration-500">
                   {/* Browser top-bar */}
-                  <div className="bg-slate-950/80 px-4 py-3 flex items-center justify-between border-b border-slate-800">
+                  <div className="bg-background/80 px-4 py-3 flex items-center justify-between border-b border-border">
                     <div className="flex gap-1.5">
                       <div className="w-3 h-3 rounded-full bg-rose-500/80" />
                       <div className="w-3 h-3 rounded-full bg-amber-500/80" />
                       <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
                     </div>
-                    <div className="text-[10px] text-slate-500 font-mono select-none">
+                    <div className="text-[10px] text-muted-foreground font-mono select-none">
                       workspace.rafed.com/dashboard
                     </div>
                     <div className="w-4" />
@@ -430,32 +433,32 @@ export default function HomePage() {
 
                     {/* Mock Stats Cards */}
                     <div className="grid grid-cols-2 gap-4">
-                      <div className="p-3 border border-slate-800 bg-slate-900/80 rounded-xl space-y-2">
+                      <div className="p-3 border border-border bg-card rounded-xl space-y-2">
                         <div className="flex justify-between items-center">
                           <span className="w-16 h-2 bg-slate-700 rounded" />
                           <FolderKanban className="w-3.5 h-3.5 text-indigo-400" />
                         </div>
-                        <div className="text-base font-bold text-white">4 / 5</div>
-                        <div className="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
+                        <div className="text-base font-bold text-foreground">4 / 5</div>
+                        <div className="w-full h-1 bg-muted rounded-full overflow-hidden">
                           <div className="w-4/5 h-full bg-indigo-500" />
                         </div>
                       </div>
 
-                      <div className="p-3 border border-slate-800 bg-slate-900/80 rounded-xl space-y-2">
+                      <div className="p-3 border border-border bg-card rounded-xl space-y-2">
                         <div className="flex justify-between items-center">
                           <span className="w-16 h-2 bg-slate-700 rounded" />
                           <Users2 className="w-3.5 h-3.5 text-emerald-400" />
                         </div>
-                        <div className="text-base font-bold text-white">2 / 3</div>
-                        <div className="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
+                        <div className="text-base font-bold text-foreground">2 / 3</div>
+                        <div className="w-full h-1 bg-muted rounded-full overflow-hidden">
                           <div className="w-2/3 h-full bg-emerald-500" />
                         </div>
                       </div>
                     </div>
 
                     {/* Project Progress Mockup List */}
-                    <div className="border border-slate-800 bg-slate-900/80 rounded-xl p-4 space-y-3.5">
-                      <div className="flex justify-between items-center border-b border-slate-800 pb-2">
+                    <div className="border border-border bg-card rounded-xl p-4 space-y-3.5">
+                      <div className="flex justify-between items-center border-b border-border pb-2">
                         <div className="w-20 h-2 bg-slate-600 rounded" />
                         <div className="w-8 h-2 bg-slate-700 rounded" />
                       </div>
@@ -503,10 +506,10 @@ export default function HomePage() {
               <h2 className="text-xs font-bold tracking-wider text-indigo-400 uppercase">
                 {isAr ? 'خدماتنا ومميزات المنصة' : 'Our Services & Platform Features'}
               </h2>
-              <p className="text-3xl sm:text-4xl font-extrabold text-white">
+              <p className="text-3xl sm:text-4xl font-extrabold text-foreground">
                 {t('homepage.features.title')}
               </p>
-              <p className="text-slate-400 text-sm sm:text-base">
+              <p className="text-muted-foreground text-sm sm:text-base">
                 {t('homepage.features.desc')}
               </p>
             </div>
@@ -519,7 +522,7 @@ export default function HomePage() {
                 return (
                   <div 
                     key={feature.id}
-                    className="group border border-slate-800/80 bg-slate-900/30 hover:bg-slate-900/60 p-6 sm:p-8 rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:border-slate-700/80 flex flex-col justify-between"
+                    className="group border border-border bg-card hover:bg-card p-6 sm:p-8 rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:border-border flex flex-col justify-between"
                   >
                     <div className="space-y-4">
                       
@@ -537,10 +540,10 @@ export default function HomePage() {
 
                       {/* Title & Desc */}
                       <div className="space-y-2">
-                        <h3 className="text-lg font-bold text-white group-hover:text-indigo-400 transition-colors">
+                        <h3 className="text-lg font-bold text-foreground group-hover:text-indigo-400 transition-colors">
                           {isAr ? feature.title : (localizedFeature?.title || feature.title)}
                         </h3>
-                        <p className="text-slate-400 text-sm leading-relaxed">
+                        <p className="text-muted-foreground text-sm leading-relaxed">
                           {isAr ? feature.description : (localizedFeature?.desc || feature.description)}
                         </p>
                       </div>
@@ -563,28 +566,28 @@ export default function HomePage() {
 
 
         {/* Statistics section */}
-        <section id="statistics" className="py-16 md:py-24 border-t border-slate-900 bg-slate-950 relative">
+        <section id="statistics" className="py-16 md:py-24 border-t border-slate-900 bg-background relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
               
-              <div className="p-6 border border-slate-900 bg-slate-900/20 rounded-2xl">
-                <div className="text-4xl font-extrabold text-white tracking-tight">+500</div>
-                <p className="text-xs text-slate-400 mt-2 font-medium">{isAr ? 'مشاريع تتم إدارتها بنجاح' : 'Projects managed successfully'}</p>
+              <div className="p-6 border border-slate-900 bg-card rounded-2xl">
+                <div className="text-4xl font-extrabold text-foreground tracking-tight">+500</div>
+                <p className="text-xs text-muted-foreground mt-2 font-medium">{isAr ? 'مشاريع تتم إدارتها بنجاح' : 'Projects managed successfully'}</p>
               </div>
 
-              <div className="p-6 border border-slate-900 bg-slate-900/20 rounded-2xl">
+              <div className="p-6 border border-slate-900 bg-card rounded-2xl">
                 <div className="text-4xl font-extrabold text-indigo-400 tracking-tight">+120</div>
-                <p className="text-xs text-slate-400 mt-2 font-medium">{isAr ? 'شركة بناء ومقاولة مسجلة' : 'Registered contracting firms'}</p>
+                <p className="text-xs text-muted-foreground mt-2 font-medium">{isAr ? 'شركة بناء ومقاولة مسجلة' : 'Registered contracting firms'}</p>
               </div>
 
-              <div className="p-6 border border-slate-900 bg-slate-900/20 rounded-2xl">
+              <div className="p-6 border border-slate-900 bg-card rounded-2xl">
                 <div className="text-4xl font-extrabold text-violet-400 tracking-tight">99.9%</div>
-                <p className="text-xs text-slate-400 mt-2 font-medium">{isAr ? 'معدل تشغيل وضمان الخدمة' : 'Service uptime guarantee'}</p>
+                <p className="text-xs text-muted-foreground mt-2 font-medium">{isAr ? 'معدل تشغيل وضمان الخدمة' : 'Service uptime guarantee'}</p>
               </div>
 
-              <div className="p-6 border border-slate-900 bg-slate-900/20 rounded-2xl">
+              <div className="p-6 border border-slate-900 bg-card rounded-2xl">
                 <div className="text-4xl font-extrabold text-emerald-400 tracking-tight">4.9/5</div>
-                <p className="text-xs text-slate-400 mt-2 font-medium">{isAr ? 'تقييم رضا المهندسين والعملاء' : 'Client satisfaction rate'}</p>
+                <p className="text-xs text-muted-foreground mt-2 font-medium">{isAr ? 'تقييم رضا المهندسين والعملاء' : 'Client satisfaction rate'}</p>
               </div>
 
             </div>
@@ -592,7 +595,7 @@ export default function HomePage() {
         </section>
 
         {/* Pricing Section */}
-        <section id="pricing" className="py-20 md:py-28 border-t border-slate-900 bg-slate-950/40 relative">
+        <section id="pricing" className="py-20 md:py-28 border-t border-slate-900 bg-background/40 relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
             
             {/* Title and Intro */}
@@ -601,28 +604,28 @@ export default function HomePage() {
                 <Sparkles className="w-3.5 h-3.5" />
                 {isAr ? 'باقات مرنة تناسب جميع أحجام الشركات' : 'Flexible plans for all company sizes'}
               </div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight leading-tight">
                 {isAr ? 'باقات وأسعار المنصة' : 'Plans & Pricing'}
               </h2>
-              <p className="text-slate-400 text-lg">
+              <p className="text-muted-foreground text-lg">
                 {isAr ? 'اختر الباقة التي تناسب حجم شركتك وعدد مشاريعك السنوية.' : 'Choose the plan that suits your company size and annual projects.'}
               </p>
             </div>
 
             {/* Toggle Billing Cycle */}
             <div className="flex justify-center items-center gap-4">
-              <span className={`text-sm font-semibold transition-colors duration-200 ${!isYearly ? 'text-white' : 'text-slate-400'}`}>
+              <span className={`text-sm font-semibold transition-colors duration-200 ${!isYearly ? 'text-foreground' : 'text-muted-foreground'}`}>
                 {isAr ? 'الدفع الشهري' : 'Monthly'}
               </span>
               <button 
                 onClick={() => setIsYearly(!isYearly)}
-                className="w-16 h-9 bg-slate-800 hover:bg-slate-700 rounded-full p-1 transition-all relative flex items-center border border-slate-700 cursor-pointer"
+                className="w-16 h-9 bg-muted hover:bg-slate-700 rounded-full p-1 transition-all relative flex items-center border border-border cursor-pointer"
                 aria-label="Toggle billing cycle"
               >
                 <div className={`w-7 h-7 bg-indigo-500 rounded-full shadow-md transition-all duration-300 transform ${isYearly ? (isAr ? '-translate-x-8' : 'translate-x-8') : 'translate-x-0'}`} />
               </button>
               <div className="flex items-center gap-2">
-                <span className={`text-sm font-semibold transition-colors duration-200 ${isYearly ? 'text-white' : 'text-slate-400'}`}>
+                <span className={`text-sm font-semibold transition-colors duration-200 ${isYearly ? 'text-foreground' : 'text-muted-foreground'}`}>
                   {isAr ? 'الدفع السنوي' : 'Yearly'}
                 </span>
                 <span className="bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full">
@@ -634,7 +637,7 @@ export default function HomePage() {
             {plansLoading ? (
               <div className="flex flex-col items-center justify-center py-20 gap-3">
                 <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
-                <p className="text-slate-400">{isAr ? 'جاري تحميل الباقات المتوفرة...' : 'Loading available plans...'}</p>
+                <p className="text-muted-foreground">{isAr ? 'جاري تحميل الباقات المتوفرة...' : 'Loading available plans...'}</p>
               </div>
             ) : (
               <div className="space-y-8">
@@ -648,28 +651,28 @@ export default function HomePage() {
                       key={plan.id}
                       className={`flex flex-col rounded-3xl border transition-all duration-300 relative ${
                         isPopular 
-                          ? 'border-indigo-500 bg-slate-900 shadow-xl shadow-indigo-500/5 lg:scale-105 lg:-translate-y-2 z-10' 
-                          : 'border-slate-800 bg-slate-900/40 hover:border-slate-700'
+                          ? 'border-indigo-500 bg-card shadow-xl shadow-indigo-500/5 lg:scale-105 lg:-translate-y-2 z-10' 
+                          : 'border-border bg-card hover:border-border'
                       }`}
                     >
                       {isPopular && (
-                        <div className="absolute top-0 right-1/2 translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-indigo-500 to-violet-500 text-white text-[11px] font-bold py-1 px-3.5 rounded-full uppercase tracking-wider shadow-md whitespace-nowrap">
+                        <div className="absolute top-0 right-1/2 translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-indigo-500 to-violet-500 text-foreground text-[11px] font-bold py-1 px-3.5 rounded-full uppercase tracking-wider shadow-md whitespace-nowrap">
                           {isAr ? 'الأكثر شعبية' : 'Most Popular'}
                         </div>
                       )}
 
-                      <div className="p-6 border-b border-slate-800/80 space-y-4">
-                        <h3 className="text-lg font-bold text-white">{plan.name}</h3>
+                      <div className="p-6 border-b border-border space-y-4">
+                        <h3 className="text-lg font-bold text-foreground">{plan.name}</h3>
                         
                         <div className="space-y-1">
                           <div className="flex items-baseline gap-1">
-                            <span className="text-3xl font-extrabold text-white">
+                            <span className="text-3xl font-extrabold text-foreground">
                               {isYearly 
                                 ? (plan.price_yearly ? (plan.price_yearly / 12).toFixed(0) : '')
                                 : plan.price_monthly
                               }
                             </span>
-                            <span className="text-slate-400 text-xs font-semibold">{isAr ? 'ريال / شهرياً' : 'SAR / Month'}</span>
+                            <span className="text-muted-foreground text-xs font-semibold">{isAr ? 'ريال / شهرياً' : 'SAR / Month'}</span>
                           </div>
                           
                           {isYearly && plan.price_yearly && (
@@ -681,7 +684,7 @@ export default function HomePage() {
                           )}
                           
                           {(!isYearly && plan.price_monthly) && (
-                            <p className="text-[11px] text-slate-500 font-medium font-sans">
+                            <p className="text-[11px] text-muted-foreground font-medium font-sans">
                               {isAr 
                                 ? `يُدفع شهرياً بقيمة ${plan.price_monthly.toLocaleString('ar-SA')} ريال`
                                 : `Billed monthly at SAR ${plan.price_monthly.toLocaleString('en-US')}`}
@@ -690,21 +693,21 @@ export default function HomePage() {
                         </div>
                       </div>
 
-                      <div className="p-5 bg-slate-950/40 border-b border-slate-800/60 text-xs space-y-2 text-slate-300">
+                      <div className="p-5 bg-background/40 border-b border-border text-xs space-y-2 text-foreground">
                         <div className="flex justify-between items-center">
-                          <span className="text-slate-500">{isAr ? 'ميزانية المشروع الأقصى:' : 'Max Project Budget:'}</span>
-                          <span className="font-semibold text-white">{formatBudget(plan.max_project_budget)}</span>
+                          <span className="text-muted-foreground">{isAr ? 'ميزانية المشروع الأقصى:' : 'Max Project Budget:'}</span>
+                          <span className="font-semibold text-foreground">{formatBudget(plan.max_project_budget)}</span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span className="text-slate-500">{isAr ? 'أقصى عدد مستخدمين:' : 'Max users:'}</span>
-                          <span className="font-semibold text-white">
+                          <span className="text-muted-foreground">{isAr ? 'أقصى عدد مستخدمين:' : 'Max users:'}</span>
+                          <span className="font-semibold text-foreground">
                             {isAr 
                               ? `${plan.max_users.toLocaleString('ar-SA')} مستخدم` 
                               : `${plan.max_users.toLocaleString('en-US')} users`}
                           </span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span className="text-slate-500">{isAr ? 'المشاريع السنوية:' : 'Annual Projects:'}</span>
+                          <span className="text-muted-foreground">{isAr ? 'المشاريع السنوية:' : 'Annual Projects:'}</span>
                           <span className="font-semibold text-indigo-400">
                             {plan.project_credits_per_year > 0 
                               ? (isAr ? `${plan.project_credits_per_year} مشاريع` : `${plan.project_credits_per_year} projects`)
@@ -715,8 +718,8 @@ export default function HomePage() {
                       </div>
 
                       <div className="p-6 flex-1 space-y-4">
-                        <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{isAr ? 'ماذا تشمل هذه الباقة:' : 'What is included:'}</p>
-                        <ul className="space-y-3 text-sm text-slate-300">
+                        <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">{isAr ? 'ماذا تشمل هذه الباقة:' : 'What is included:'}</p>
+                        <ul className="space-y-3 text-sm text-foreground">
                           {plan.features.map((feature, idx) => (
                             <li key={idx} className="flex items-start gap-2">
                               <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
@@ -731,7 +734,7 @@ export default function HomePage() {
                           <Button className={`w-full rounded-xl py-3 text-xs font-semibold transition-all cursor-pointer ${
                             isPopular 
                               ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-600/20' 
-                              : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700'
+                              : 'bg-muted hover:bg-slate-700 text-slate-200 border border-border'
                           }`}>
                             {isAr ? 'اشترك الآن' : 'Subscribe Now'}
                           </Button>
@@ -743,18 +746,18 @@ export default function HomePage() {
                 </div>
 
                 {/* Custom Plan Horizontal Banner (Static) */}
-                <div className="mt-12 bg-gradient-to-br from-slate-900 to-indigo-950/40 border border-indigo-500/30 rounded-3xl p-8 lg:p-10 shadow-2xl relative overflow-hidden flex flex-col lg:flex-row items-center gap-8 justify-between">
+                <div className="mt-12 bg-gradient-to-br from-card to-primary/5 border border-border rounded-3xl p-8 lg:p-10 shadow-2xl relative overflow-hidden flex flex-col lg:flex-row items-center gap-8 justify-between">
                   {/* Decorative Background */}
-                  <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-indigo-500/10 blur-[100px] rounded-full pointer-events-none" />
-                  <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-violet-500/10 blur-[100px] rounded-full pointer-events-none" />
+                  <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/10 blur-[100px] rounded-full pointer-events-none" />
+                  <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-purple-500/10 blur-[100px] rounded-full pointer-events-none" />
                   
                   <div className="flex-1 space-y-4 text-center lg:text-right relative z-10">
-                    <div className="inline-flex items-center justify-center gap-2 bg-indigo-500/20 text-indigo-300 text-xs px-4 py-1.5 rounded-full font-bold uppercase tracking-wider border border-indigo-500/20 mb-2">
+                    <div className="inline-flex items-center justify-center gap-2 bg-primary/10 text-primary text-xs px-4 py-1.5 rounded-full font-bold uppercase tracking-wider border border-primary/20 mb-2">
                       <Award className="w-4 h-4" />
                       {isAr ? 'باقة مخصصة' : 'Custom Plan'}
                     </div>
-                    <h3 className="text-2xl sm:text-3xl font-extrabold text-white">{isAr ? 'الباقة المخصصة' : 'Custom Plan'}</h3>
-                    <p className="text-slate-300 max-w-2xl leading-relaxed mx-auto lg:mx-0">
+                    <h3 className="text-2xl sm:text-3xl font-extrabold text-foreground">{isAr ? 'الباقة المخصصة' : 'Custom Plan'}</h3>
+                    <p className="text-foreground max-w-2xl leading-relaxed mx-auto lg:mx-0">
                       {isAr ? 'احصل على حلول متكاملة تناسب متطلبات شركتك الخاصة مع خوادم مستقلة وإمكانيات مخصصة لإدارة مشاريعك الإنشائية.' : 'Get integrated solutions tailored to your specific company requirements with isolated servers and custom capabilities.'}
                     </p>
                     
@@ -765,8 +768,8 @@ export default function HomePage() {
                         isAr ? 'مساحة تخزين هائلة' : 'Massive Storage',
                         isAr ? 'أولوية الدعم الفني' : 'Priority Support'
                       ].map((feature, idx) => (
-                        <div key={idx} className="flex items-center gap-1.5 text-sm text-slate-200 font-medium bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800">
-                          <Check className="w-4 h-4 text-emerald-400" />
+                        <div key={idx} className="flex items-center gap-1.5 text-sm text-foreground font-medium bg-background px-3 py-1.5 rounded-lg border border-border">
+                          <Check className="w-4 h-4 text-emerald-500" />
                           <span>{feature}</span>
                         </div>
                       ))}
@@ -795,10 +798,10 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/10 via-violet-900/10 to-blue-900/10 opacity-60" />
           
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 space-y-8">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-foreground leading-tight">
               {isAr ? 'هل أنت جاهز لتنظيم وإدارة مشاريعك بشكل احترافي؟' : 'Ready to manage and organize your projects professionally?'}
             </h2>
-            <p className="text-slate-300 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+            <p className="text-foreground text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
               {isAr 
                 ? 'انضم إلى عشرات شركات المقاولات التي تتبع مشاريعها وأعمالها وتنسق مع موظفيها بكفاءة. لا يتطلب التسجيل سوى دقائق معدودة لتبدأ مساحة عملك الخاصة.' 
                 : 'Join dozens of contracting companies that track their projects and coordinate with their employees efficiently. Registration takes only a few minutes to get your workspace.'}
@@ -811,7 +814,7 @@ export default function HomePage() {
               </Link>
               {!user && (
                 <Link href="/login" className="w-full sm:w-auto">
-                  <Button size="lg" variant="outline" className="w-full sm:w-auto border-slate-800 hover:bg-slate-900 text-slate-300 hover:text-white rounded-xl px-6 h-12 text-base font-semibold cursor-pointer">
+                  <Button size="lg" variant="outline" className="w-full sm:w-auto border-border hover:bg-card text-foreground hover:text-foreground rounded-xl px-6 h-12 text-base font-semibold cursor-pointer">
                     {t('nav.login')}
                   </Button>
                 </Link>
@@ -823,7 +826,7 @@ export default function HomePage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-900 bg-slate-950 py-12">
+      <footer className="border-t border-slate-900 bg-background py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
             
@@ -833,9 +836,9 @@ export default function HomePage() {
                 <div className="w-8 h-8 bg-indigo-600/20 text-indigo-400 rounded-lg flex items-center justify-center border border-indigo-500/20">
                   <Building2 className="w-5 h-5" />
                 </div>
-                <span className="text-base font-bold text-white">{t('common.appName')}</span>
+                <span className="text-base font-bold text-foreground">{t('common.appName')}</span>
               </div>
-              <p className="text-xs text-slate-400 max-w-sm mx-auto md:mx-0">
+              <p className="text-xs text-muted-foreground max-w-sm mx-auto md:mx-0">
                 {isAr 
                   ? 'منصة متكاملة لتأسيس مساحات العمل الهندسية وتسهيل المتابعة للمشاريع الهندسية والإنشائية.' 
                   : 'An integrated platform to establish engineering workspaces and facilitate follow-up for construction and engineering projects.'}
@@ -843,11 +846,11 @@ export default function HomePage() {
             </div>
 
             {/* Right side navigation links */}
-            <div className={`md:col-span-6 flex flex-wrap justify-center md:justify-end gap-6 text-xs text-slate-400`}>
-              <Link href="#features" className="hover:text-white transition-colors">{t('nav.features')}</Link>
-              <Link href="#about" className="hover:text-white transition-colors">{t('nav.about')}</Link>
-              <Link href="#pricing" className="hover:text-white transition-colors">{isAr ? 'الأسعار' : 'Pricing'}</Link>
-              <Link href="#statistics" className="hover:text-white transition-colors">{t('nav.statistics')}</Link>
+            <div className={`md:col-span-6 flex flex-wrap justify-center md:justify-end gap-6 text-xs text-muted-foreground`}>
+              <Link href="#features" className="hover:text-foreground transition-colors">{t('nav.features')}</Link>
+              <Link href="#about" className="hover:text-foreground transition-colors">{t('nav.about')}</Link>
+              <Link href="#pricing" className="hover:text-foreground transition-colors">{isAr ? 'الأسعار' : 'Pricing'}</Link>
+              <Link href="#statistics" className="hover:text-foreground transition-colors">{t('nav.statistics')}</Link>
               <span className="text-slate-700">|</span>
               <span>© {new Date().getFullYear()} {isAr ? 'جميع الحقوق محفوظة لـ منصة رافد.' : 'All rights reserved for Rafed Platform.'}</span>
             </div>

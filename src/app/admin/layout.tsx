@@ -51,10 +51,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (authLoading || !authUser || authUser.role !== 'system_admin') {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white" dir={isAr ? 'rtl' : 'ltr'}>
+      <div className="min-h-screen bg-background flex items-center justify-center text-foreground" dir={isAr ? 'rtl' : 'ltr'}>
         <div className="flex flex-col items-center gap-3">
           <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
-          <p className="text-slate-400 font-medium">{isAr ? 'جاري التحقق من الصلاحيات والولوج...' : 'Verifying permissions and access...'}</p>
+          <p className="text-muted-foreground font-medium">{isAr ? 'جاري التحقق من الصلاحيات والولوج...' : 'Verifying permissions and access...'}</p>
         </div>
       </div>
     );
@@ -68,14 +68,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   };
 
   return (
-    <div className="h-screen bg-slate-950 text-slate-100 flex flex-row font-sans relative overflow-hidden" dir={isAr ? 'rtl' : 'ltr'}>
+    <div className="h-screen bg-background text-foreground flex flex-row font-sans relative overflow-hidden" dir={isAr ? 'rtl' : 'ltr'}>
       
       {/* Decorative Background Blur */}
       <div className="absolute top-0 right-1/4 w-[500px] h-[500px] rounded-full bg-indigo-600/5 blur-[120px] pointer-events-none -z-10" />
       <div className="absolute bottom-10 left-10 w-[400px] h-[400px] rounded-full bg-violet-600/5 blur-[100px] pointer-events-none -z-10" />
 
       {/* --- SIDEBAR LAYOUT --- */}
-      <aside className={`w-64 bg-slate-900/60 ${isAr ? 'border-l' : 'border-r'} border-slate-800 backdrop-blur-xl shrink-0 flex flex-col justify-between p-6 z-30 sticky top-0 h-screen`}>
+      <aside className={`w-64 bg-card ${isAr ? 'border-l' : 'border-r'} border-border backdrop-blur-xl shrink-0 flex flex-col justify-between p-6 z-30 sticky top-0 h-screen`}>
         <div className="space-y-8">
           
           {/* Logo Brand */}
@@ -84,7 +84,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <ShieldCheck className="w-6 h-6 animate-pulse" />
             </div>
             <div>
-              <span className="text-xl font-bold text-white tracking-wider block">{t('common.appName')}</span>
+              <span className="text-xl font-bold text-foreground tracking-wider block">{t('common.appName')}</span>
               <span className="text-[10px] text-indigo-400 block font-bold leading-none mt-0.5">{t('adminLayout.panelTitle')}</span>
             </div>
           </div>
@@ -96,7 +96,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
                 isLinkActive('/admin') && !pathname.startsWith('/admin/tenants') && !pathname.startsWith('/admin/logs') && !pathname.startsWith('/admin/settings')
                   ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/10'
-                  : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200'
+                  : 'text-muted-foreground hover:bg-muted hover:text-slate-200'
               }`}
             >
               <LayoutDashboard className="w-5 h-5" />
@@ -108,7 +108,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
                 isLinkActive('/admin/tenants')
                   ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/10'
-                  : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200'
+                  : 'text-muted-foreground hover:bg-muted hover:text-slate-200'
               }`}
             >
               <Building2 className="w-5 h-5" />
@@ -120,7 +120,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
                 isLinkActive('/admin/logs')
                   ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/10'
-                  : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200'
+                  : 'text-muted-foreground hover:bg-muted hover:text-slate-200'
               }`}
             >
               <Database className="w-5 h-5" />
@@ -132,7 +132,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
                 isLinkActive('/admin/settings')
                   ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/10'
-                  : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200'
+                  : 'text-muted-foreground hover:bg-muted hover:text-slate-200'
               }`}
             >
               <SettingsIcon className="w-5 h-5" />
@@ -142,23 +142,23 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
 
         {/* Sidebar Footer User Card */}
-        <div className="border-t border-slate-800/80 pt-4 space-y-4">
+        <div className="border-t border-border pt-4 space-y-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-indigo-600/10 text-indigo-400 border border-indigo-500/10 rounded-xl flex items-center justify-center shrink-0">
               <User className="w-5 h-5" />
             </div>
             <div className={`min-w-0 ${isAr ? 'text-right' : 'text-left'}`}>
-              <p className="text-xs font-bold text-white truncate">
+              <p className="text-xs font-bold text-foreground truncate">
                 {authUser.profile?.first_name || (isAr ? 'مسؤول' : 'System')} {authUser.profile?.last_name || (isAr ? 'النظام' : 'Admin')}
               </p>
-              <p className="text-[10px] text-slate-500 truncate font-mono">{authUser.email}</p>
+              <p className="text-[10px] text-muted-foreground truncate font-mono">{authUser.email}</p>
             </div>
           </div>
 
           <Button 
             onClick={handleLogoutClick}
             variant="outline" 
-            className="w-full border-slate-800 hover:bg-rose-500/10 hover:border-rose-500/20 hover:text-rose-400 text-slate-400 gap-2 px-4 rounded-xl transition-all h-10 text-xs cursor-pointer"
+            className="w-full border-border hover:bg-rose-500/10 hover:border-rose-500/20 hover:text-rose-400 text-muted-foreground gap-2 px-4 rounded-xl transition-all h-10 text-xs cursor-pointer"
           >
             <LogOut className={`w-4 h-4 ${isAr ? 'ml-1' : 'mr-1'}`} />
             {t('common.logout')}
@@ -170,9 +170,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
         
         {/* Top Header */}
-        <header className="border-b border-slate-900 bg-slate-950/40 backdrop-blur-md h-16 flex items-center justify-between px-8 shrink-0 z-20">
+        <header className="border-b border-slate-900 bg-background/40 backdrop-blur-md h-16 flex items-center justify-between px-8 shrink-0 z-20">
           <div className="flex items-center gap-3">
-            <h2 className="text-lg font-bold text-white tracking-wide">
+            <h2 className="text-lg font-bold text-foreground tracking-wide">
               {pathname === '/admin' && t('adminLayout.headerTitles.performance')}
               {pathname.startsWith('/admin/tenants') && t('adminLayout.headerTitles.tenants')}
               {pathname.startsWith('/admin/logs') && t('adminLayout.headerTitles.logs')}
@@ -180,7 +180,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </h2>
           </div>
 
-          <div className="flex items-center gap-4 text-xs text-slate-400 font-sans">
+          <div className="flex items-center gap-4 text-xs text-muted-foreground font-sans">
             <LanguageSelector />
             <span>
               {t('common.systemTime', {
@@ -196,7 +196,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </main>
 
         {/* Footer */}
-        <footer className="border-t border-slate-900 bg-slate-950 py-4 text-center text-xs text-slate-500 shrink-0">
+        <footer className="border-t border-slate-900 bg-background py-4 text-center text-xs text-muted-foreground shrink-0">
           <p>{t('common.adminCopyright')}</p>
         </footer>
       </div>

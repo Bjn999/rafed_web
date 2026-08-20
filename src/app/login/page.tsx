@@ -94,11 +94,11 @@ function LoginForm() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-slate-950 p-4 overflow-hidden" dir={isAr ? 'rtl' : 'ltr'}>
+    <div className="relative min-h-screen flex items-center justify-center bg-background p-4 overflow-hidden" dir={isAr ? 'rtl' : 'ltr'}>
       {/* Top Header */}
       <div className="absolute top-0 left-0 right-0 p-6 flex justify-between items-center z-50">
         <Link href="/">
-          <Button variant="ghost" className="text-slate-400 hover:text-white hover:bg-slate-900 rounded-xl px-4 h-10 gap-2 transition-colors cursor-pointer">
+          <Button variant="ghost" className="text-muted-foreground hover:text-foreground hover:bg-card rounded-xl px-4 h-10 gap-2 transition-colors cursor-pointer">
             {isAr ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
             {isAr ? 'العودة للرئيسية' : 'Back to Home'}
           </Button>
@@ -110,13 +110,13 @@ function LoginForm() {
       <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-indigo-600/10 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full bg-violet-600/10 blur-[120px] pointer-events-none" />
 
-      <Card className="w-full max-w-md border-slate-800 bg-slate-900/60 backdrop-blur-xl text-slate-100 shadow-2xl relative z-10">
-        <CardHeader className="space-y-2 text-center pb-6 border-b border-slate-800">
+      <Card className="w-full max-w-md border-border bg-card backdrop-blur-xl text-foreground shadow-2xl relative z-10">
+        <CardHeader className="space-y-2 text-center pb-6 border-b border-border">
           <div className="mx-auto w-12 h-12 bg-indigo-600/20 text-indigo-400 rounded-2xl flex items-center justify-center mb-2 border border-indigo-500/30">
             <LogIn className="w-6 h-6 animate-pulse" />
           </div>
-          <CardTitle className="text-3xl font-bold tracking-tight text-white font-sans">{t('auth.loginTitle')}</CardTitle>
-          <CardDescription className="text-slate-400 text-sm">
+          <CardTitle className="text-3xl font-bold tracking-tight text-foreground font-sans">{t('auth.loginTitle')}</CardTitle>
+          <CardDescription className="text-muted-foreground text-sm">
             {t('auth.loginDesc')}
           </CardDescription>
         </CardHeader>
@@ -125,7 +125,7 @@ function LoginForm() {
           <CardContent className="space-y-4 pt-6">
             
             <div className="space-y-1">
-              <Label htmlFor="email" className={`text-slate-300 flex items-center gap-1.5 mb-1 ${isAr ? 'text-right' : 'text-left'}`}>
+              <Label htmlFor="email" className={`text-foreground flex items-center gap-1.5 mb-1 ${isAr ? 'text-right' : 'text-left'}`}>
                 <Mail className="w-4 h-4 text-indigo-400" />
                 {t('auth.emailLabel')}
               </Label>
@@ -133,7 +133,7 @@ function LoginForm() {
                 id="email"
                 type="email"
                 placeholder="owner@example.com"
-                className="bg-slate-950/40 border-slate-800 focus:border-indigo-500 focus:ring-indigo-500/20 transition-all text-white font-sans"
+                className="bg-background/40 border-border focus:border-indigo-500 focus:ring-indigo-500/20 transition-all text-foreground font-sans"
                 {...register('email')}
               />
               {errors.email && (
@@ -143,7 +143,7 @@ function LoginForm() {
 
             <div className="space-y-1">
               <div className="flex items-center justify-between mb-1">
-                <Label htmlFor="password" className={`text-slate-300 flex items-center gap-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
+                <Label htmlFor="password" className={`text-foreground flex items-center gap-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
                   <Lock className="w-4 h-4 text-indigo-400" />
                   {t('auth.passwordLabel')}
                 </Label>
@@ -155,7 +155,7 @@ function LoginForm() {
                 id="password"
                 type="password"
                 placeholder="••••••••"
-                className="bg-slate-950/40 border-slate-800 focus:border-indigo-500 focus:ring-indigo-500/20 transition-all text-white font-sans"
+                className="bg-background/40 border-border focus:border-indigo-500 focus:ring-indigo-500/20 transition-all text-foreground font-sans"
                 {...register('password')}
               />
               {errors.password && (
@@ -165,7 +165,7 @@ function LoginForm() {
 
           </CardContent>
 
-          <CardFooter className="flex flex-col gap-4 border-t border-slate-800/80 pt-6 pb-6 bg-slate-900/80 rounded-b-xl">
+          <CardFooter className="flex flex-col gap-4 border-t border-border pt-6 pb-6 bg-card rounded-b-xl">
             <Button
               type="submit"
               disabled={isSubmitting}
@@ -181,7 +181,7 @@ function LoginForm() {
               )}
             </Button>
             
-            <p className="text-center text-sm text-slate-400 w-full mt-2">
+            <p className="text-center text-sm text-muted-foreground w-full mt-2">
               {t('auth.noAccount')}{' '}
               <Link href="/register" className="text-indigo-400 hover:underline hover:text-indigo-300 font-medium">
                 {t('auth.registerLink')}
@@ -197,7 +197,7 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="relative min-h-screen flex items-center justify-center bg-slate-950 text-white">
+      <div className="relative min-h-screen flex items-center justify-center bg-background text-foreground">
         <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
       </div>
     }>

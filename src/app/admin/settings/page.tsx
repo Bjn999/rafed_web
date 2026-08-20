@@ -232,13 +232,13 @@ export default function AdminSettingsPage() {
     <div className="space-y-6 animate-in fade-in duration-300" dir={isAr ? 'rtl' : 'ltr'}>
       
       {/* Inner Navigation Tabs */}
-      <div className="flex border-b border-slate-800">
+      <div className="flex border-b border-border">
         <button
           onClick={() => setSettingsTab('profile')}
           className={`flex items-center gap-2 px-6 py-3 border-b-2 text-sm font-semibold transition-all cursor-pointer ${
             settingsTab === 'profile'
               ? 'border-indigo-500 text-indigo-400'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              : 'border-transparent text-muted-foreground hover:text-slate-200'
           }`}
         >
           <User className={`w-4 h-4 ${isAr ? 'ml-1' : 'mr-1'}`} />
@@ -250,7 +250,7 @@ export default function AdminSettingsPage() {
           className={`flex items-center gap-2 px-6 py-3 border-b-2 text-sm font-semibold transition-all cursor-pointer ${
             settingsTab === 'security'
               ? 'border-indigo-500 text-indigo-400'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              : 'border-transparent text-muted-foreground hover:text-slate-200'
           }`}
         >
           <Lock className={`w-4 h-4 ${isAr ? 'ml-1' : 'mr-1'}`} />
@@ -262,7 +262,7 @@ export default function AdminSettingsPage() {
           className={`flex items-center gap-2 px-6 py-3 border-b-2 text-sm font-semibold transition-all cursor-pointer ${
             settingsTab === 'plans'
               ? 'border-indigo-500 text-indigo-400'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              : 'border-transparent text-muted-foreground hover:text-slate-200'
           }`}
         >
           <CreditCard className={`w-4 h-4 ${isAr ? 'ml-1' : 'mr-1'}`} />
@@ -272,55 +272,55 @@ export default function AdminSettingsPage() {
 
       {/* --- PROFILE SETTINGS TAB --- */}
       {settingsTab === 'profile' && (
-        <Card className="border-slate-800 bg-slate-900/40 backdrop-blur text-white">
+        <Card className="border-border bg-card backdrop-blur text-foreground">
           <CardHeader className={isAr ? 'text-right' : 'text-left'}>
             <CardTitle className="text-lg">{isAr ? 'تحديث الملف الشخصي' : 'Update Profile'}</CardTitle>
-            <CardDescription className="text-slate-400 text-xs">{isAr ? 'تعديل معلوماتك الشخصية كمسؤول للنظام.' : 'Update your personal credentials as a system administrator.'}</CardDescription>
+            <CardDescription className="text-muted-foreground text-xs">{isAr ? 'تعديل معلوماتك الشخصية كمسؤول للنظام.' : 'Update your personal credentials as a system administrator.'}</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleUpdateProfile} className="space-y-4 max-w-xl" dir={isAr ? 'rtl' : 'ltr'}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                  <label className="text-xs text-slate-400 font-semibold">{isAr ? 'الاسم الأول' : 'First Name'}</label>
+                  <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'الاسم الأول' : 'First Name'}</label>
                   <input
                     type="text"
                     required
                     value={profileFirstName}
                     onChange={(e) => setProfileFirstName(e.target.value)}
-                    className="w-full bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-100 outline-none transition-all"
+                    className="w-full bg-background/80 border border-border focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-foreground outline-none transition-all"
                   />
                 </div>
                 <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                  <label className="text-xs text-slate-400 font-semibold">{isAr ? 'اسم العائلة' : 'Last Name'}</label>
+                  <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'اسم العائلة' : 'Last Name'}</label>
                   <input
                     type="text"
                     required
                     value={profileLastName}
                     onChange={(e) => setProfileLastName(e.target.value)}
-                    className="w-full bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-100 outline-none transition-all"
+                    className="w-full bg-background/80 border border-border focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-foreground outline-none transition-all"
                   />
                 </div>
               </div>
 
               <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                <label className="text-xs text-slate-400 font-semibold">{isAr ? 'رقم الهاتف' : 'Phone Number'}</label>
+                <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'رقم الهاتف' : 'Phone Number'}</label>
                 <input
                   type="text"
                   value={profilePhone}
                   onChange={(e) => setProfilePhone(e.target.value)}
-                  className="w-full bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-100 outline-none transition-all font-mono"
+                  className="w-full bg-background/80 border border-border focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-foreground outline-none transition-all font-mono"
                   dir="ltr"
                 />
               </div>
 
               <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                <label className="text-xs text-slate-400 font-semibold">{isAr ? 'المسمى الوظيفي' : 'Job Title'}</label>
+                <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'المسمى الوظيفي' : 'Job Title'}</label>
                 <input
                   type="text"
                   required
                   value={profileJobTitle}
                   onChange={(e) => setProfileJobTitle(e.target.value)}
-                  className="w-full bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-100 outline-none transition-all"
+                  className="w-full bg-background/80 border border-border focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-foreground outline-none transition-all"
                 />
               </div>
 
@@ -340,43 +340,43 @@ export default function AdminSettingsPage() {
 
       {/* --- SECURITY SETTINGS TAB --- */}
       {settingsTab === 'security' && (
-        <Card className="border-slate-800 bg-slate-900/40 backdrop-blur text-white">
+        <Card className="border-border bg-card backdrop-blur text-foreground">
           <CardHeader className={isAr ? 'text-right' : 'text-left'}>
             <CardTitle className="text-lg">{isAr ? 'تغيير كلمة المرور' : 'Change Password'}</CardTitle>
-            <CardDescription className="text-slate-400 text-xs">{isAr ? 'تحديث كلمة المرور الخاصة بحساب الإشراف الخاص بك.' : 'Update the security password for your system administrator account.'}</CardDescription>
+            <CardDescription className="text-muted-foreground text-xs">{isAr ? 'تحديث كلمة المرور الخاصة بحساب الإشراف الخاص بك.' : 'Update the security password for your system administrator account.'}</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleChangePassword} className="space-y-4 max-w-xl" dir={isAr ? 'rtl' : 'ltr'}>
               <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                <label className="text-xs text-slate-400 font-semibold">{isAr ? 'كلمة المرور الحالية' : 'Current Password'}</label>
+                <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'كلمة المرور الحالية' : 'Current Password'}</label>
                 <input
                   type="password"
                   required
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
-                  className="w-full bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-100 outline-none transition-all font-mono"
+                  className="w-full bg-background/80 border border-border focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-foreground outline-none transition-all font-mono"
                 />
               </div>
 
               <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                <label className="text-xs text-slate-400 font-semibold">{isAr ? 'كلمة المرور الجديدة' : 'New Password'}</label>
+                <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'كلمة المرور الجديدة' : 'New Password'}</label>
                 <input
                   type="password"
                   required
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-100 outline-none transition-all font-mono"
+                  className="w-full bg-background/80 border border-border focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-foreground outline-none transition-all font-mono"
                 />
               </div>
 
               <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                <label className="text-xs text-slate-400 font-semibold">{isAr ? 'تأكيد كلمة المرور الجديدة' : 'Confirm New Password'}</label>
+                <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'تأكيد كلمة المرور الجديدة' : 'Confirm New Password'}</label>
                 <input
                   type="password"
                   required
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-100 outline-none transition-all font-mono"
+                  className="w-full bg-background/80 border border-border focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-foreground outline-none transition-all font-mono"
                 />
               </div>
 
@@ -397,10 +397,10 @@ export default function AdminSettingsPage() {
       {/* --- PLANS SETTINGS TAB --- */}
       {settingsTab === 'plans' && (
         <div className="space-y-6">
-          <Card className="border-slate-800 bg-slate-900/40 backdrop-blur text-white">
+          <Card className="border-border bg-card backdrop-blur text-foreground">
             <CardHeader className={isAr ? 'text-right' : 'text-left'}>
               <CardTitle className="text-lg">{isAr ? 'أسعار وباقات النظام القياسية' : 'Standard Pricing Subscription Plans'}</CardTitle>
-              <CardDescription className="text-slate-400 text-xs">
+              <CardDescription className="text-muted-foreground text-xs">
                 {isAr 
                   ? 'تعديل وتحديد الأسعار والحدود الافتراضية للباقات العامة في النظام.'
                   : 'Edit and manage default plan values, prices, limits and bounds for global users.'}
@@ -409,7 +409,7 @@ export default function AdminSettingsPage() {
             <div className="overflow-x-auto">
               <table className={`w-full ${isAr ? 'text-right' : 'text-left'} border-collapse text-xs`}>
                 <thead>
-                  <tr className="border-b border-slate-800 bg-slate-900/60 text-slate-400 font-semibold">
+                  <tr className="border-b border-border bg-card text-muted-foreground font-semibold">
                     <th className="px-6 py-3.5">{isAr ? 'اسم الباقة' : 'Plan Name'}</th>
                     <th className="px-6 py-3.5">{isAr ? 'السعر الشهري (ريال)' : 'Monthly Price (SAR)'}</th>
                     <th className="px-6 py-3.5">{isAr ? 'السعر السنوي (ريال)' : 'Annual Price (SAR)'}</th>
@@ -422,16 +422,16 @@ export default function AdminSettingsPage() {
                 <tbody className="divide-y divide-slate-800/60 text-slate-200">
                   {plansLoading ? (
                     <tr>
-                      <td colSpan={7} className="text-center py-8 text-slate-500">{isAr ? 'جاري تحميل الباقات...' : 'Loading plans list...'}</td>
+                      <td colSpan={7} className="text-center py-8 text-muted-foreground">{isAr ? 'جاري تحميل الباقات...' : 'Loading plans list...'}</td>
                     </tr>
                   ) : plansData?.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className="text-center py-8 text-slate-500">{isAr ? 'لا توجد باقات قياسية معرفة في النظام.' : 'No standard plans defined.'}</td>
+                      <td colSpan={7} className="text-center py-8 text-muted-foreground">{isAr ? 'لا توجد باقات قياسية معرفة في النظام.' : 'No standard plans defined.'}</td>
                     </tr>
                   ) : (
                     plansData?.map((plan) => (
-                      <tr key={plan.id} className="hover:bg-slate-800/10 transition-colors">
-                        <td className="px-6 py-3.5 font-bold text-white">
+                      <tr key={plan.id} className="hover:bg-muted transition-colors">
+                        <td className="px-6 py-3.5 font-bold text-foreground">
                           {isAr 
                             ? (plan.slug === 'basic' ? 'الأساسية' :
                                plan.slug === 'professional' ? 'الاحترافية' :
@@ -452,7 +452,7 @@ export default function AdminSettingsPage() {
                         <td className="px-6 py-3.5 text-center font-bold font-mono">
                           {plan.project_credits_per_year === -1 ? (isAr ? 'غير محدود' : 'Unlimited') : plan.project_credits_per_year}
                         </td>
-                        <td className="px-6 py-3.5 font-semibold text-slate-300">
+                        <td className="px-6 py-3.5 font-semibold text-foreground">
                           {formatBudget(plan.max_project_budget)}
                         </td>
                         <td className="px-6 py-3.5 text-center">
@@ -477,17 +477,17 @@ export default function AdminSettingsPage() {
 
       {/* --- STANDARD PLAN EDIT MODAL --- */}
       {selectedPlan && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm transition-all animate-in fade-in duration-200">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-2xl shadow-2xl max-h-[90vh] flex flex-col overflow-hidden text-right" dir={isAr ? 'rtl' : 'ltr'}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/70 backdrop-blur-sm transition-all animate-in fade-in duration-200">
+          <div className="bg-card border border-border rounded-3xl w-full max-w-2xl shadow-2xl max-h-[90vh] flex flex-col overflow-hidden text-right" dir={isAr ? 'rtl' : 'ltr'}>
             
-            <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/60 sticky top-0 z-10">
-              <h3 className="text-base font-bold text-white">
+            <div className="px-6 py-4 border-b border-border flex items-center justify-between bg-card sticky top-0 z-10">
+              <h3 className="text-base font-bold text-foreground">
                 {isAr ? 'تعديل باقة:' : 'Edit Plan:'} {isAr ? (selectedPlan.slug === 'basic' ? 'الأساسية' : selectedPlan.slug === 'professional' ? 'الاحترافية' : selectedPlan.slug === 'business' ? 'الأعمال' : selectedPlan.slug === 'enterprise' ? 'المؤسسات' : selectedPlan.name) : selectedPlan.name}
               </h3>
               <Button
                 onClick={() => setSelectedPlan(null)}
                 variant="ghost"
-                className="hover:bg-slate-800 text-slate-400 hover:text-white p-2 rounded-xl h-8 w-8 cursor-pointer"
+                className="hover:bg-muted text-muted-foreground hover:text-foreground p-2 rounded-xl h-8 w-8 cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </Button>
@@ -496,93 +496,93 @@ export default function AdminSettingsPage() {
             <form onSubmit={handleUpdatePlan} className="overflow-y-auto p-6 space-y-4 flex-1">
               
               <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                <label className="text-xs text-slate-400 font-semibold">{isAr ? 'اسم الباقة' : 'Plan Name'}</label>
+                <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'اسم الباقة' : 'Plan Name'}</label>
                 <input
                   type="text"
                   required
                   value={planName}
                   onChange={(e) => setPlanName(e.target.value)}
-                  className="w-full bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-100 outline-none transition-all"
+                  className="w-full bg-background/80 border border-border focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-foreground outline-none transition-all"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                  <label className="text-xs text-slate-400 font-semibold">{isAr ? 'السعر الشهري (ريال)' : 'Monthly Price (SAR)'}</label>
+                  <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'السعر الشهري (ريال)' : 'Monthly Price (SAR)'}</label>
                   <input
                     type="number"
                     step="0.01"
                     required
                     value={planPriceMonthly}
                     onChange={(e) => setPlanPriceMonthly(parseFloat(e.target.value) || 0)}
-                    className="w-full bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-100 outline-none transition-all font-mono"
+                    className="w-full bg-background/80 border border-border focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-foreground outline-none transition-all font-mono"
                   />
                 </div>
                 <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                  <label className="text-xs text-slate-400 font-semibold">{isAr ? 'السعر السنوي (ريال)' : 'Annual Price (SAR)'}</label>
+                  <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'السعر السنوي (ريال)' : 'Annual Price (SAR)'}</label>
                   <input
                     type="number"
                     step="0.01"
                     required
                     value={planPriceYearly}
                     onChange={(e) => setPlanPriceYearly(parseFloat(e.target.value) || 0)}
-                    className="w-full bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-100 outline-none transition-all font-mono"
+                    className="w-full bg-background/80 border border-border focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-foreground outline-none transition-all font-mono"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                  <label className="text-xs text-slate-400 font-semibold flex flex-col font-sans">
+                  <label className="text-xs text-muted-foreground font-semibold flex flex-col font-sans">
                     <span>{isAr ? 'الحد الأقصى للمستخدمين' : 'Max Users Limit'}</span>
-                    <span className="text-[9px] text-slate-500">{isAr ? '(-1 تعني غير محدود)' : '(-1 means unlimited)'}</span>
+                    <span className="text-[9px] text-muted-foreground">{isAr ? '(-1 تعني غير محدود)' : '(-1 means unlimited)'}</span>
                   </label>
                   <input
                     type="number"
                     required
                     value={planMaxUsers}
                     onChange={(e) => setPlanMaxUsers(parseInt(e.target.value) || 0)}
-                    className="w-full bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-100 outline-none transition-all font-mono"
+                    className="w-full bg-background/80 border border-border focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-foreground outline-none transition-all font-mono"
                   />
                 </div>
                 <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                  <label className="text-xs text-slate-400 font-semibold flex flex-col font-sans">
+                  <label className="text-xs text-muted-foreground font-semibold flex flex-col font-sans">
                     <span>{isAr ? 'رصيد المشاريع سنوياً' : 'Annual Project Credits'}</span>
-                    <span className="text-[9px] text-slate-500">{isAr ? '(-1 تعني غير محدود)' : '(-1 means unlimited)'}</span>
+                    <span className="text-[9px] text-muted-foreground">{isAr ? '(-1 تعني غير محدود)' : '(-1 means unlimited)'}</span>
                   </label>
                   <input
                     type="number"
                     required
                     value={planCredits}
                     onChange={(e) => setPlanCredits(parseInt(e.target.value) || 0)}
-                    className="w-full bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-100 outline-none transition-all font-mono"
+                    className="w-full bg-background/80 border border-border focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-foreground outline-none transition-all font-mono"
                   />
                 </div>
                 <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                  <label className="text-xs text-slate-400 font-semibold flex flex-col font-sans">
+                  <label className="text-xs text-muted-foreground font-semibold flex flex-col font-sans">
                     <span>{isAr ? 'أقصى ميزانية للمشروع الواحد' : 'Max Project Budget'}</span>
-                    <span className="text-[9px] text-slate-500">{isAr ? '(0 تعني غير محدود)' : '(0 means unlimited)'}</span>
+                    <span className="text-[9px] text-muted-foreground">{isAr ? '(0 تعني غير محدود)' : '(0 means unlimited)'}</span>
                   </label>
                   <input
                     type="number"
                     required
                     value={planMaxBudget}
                     onChange={(e) => setPlanMaxBudget(parseFloat(e.target.value) || 0)}
-                    className="w-full bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-100 outline-none transition-all font-mono"
+                    className="w-full bg-background/80 border border-border focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-foreground outline-none transition-all font-mono"
                   />
                 </div>
               </div>
 
               {/* Custom Features Manager */}
               <div className="space-y-2 pt-2">
-                <label className="text-xs text-slate-400 font-semibold">{isAr ? 'ميزات الباقة' : 'Plan Features'}</label>
+                <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'ميزات الباقة' : 'Plan Features'}</label>
                 <div className="flex gap-2">
                   <input
                     type="text"
                     value={newFeatureText}
                     onChange={(e) => setNewFeatureText(e.target.value)}
                     placeholder={isAr ? 'أضف ميزة جديدة لهذه الباقة...' : 'Add a new feature list...'}
-                    className="flex-1 bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder-slate-650 outline-none transition-all"
+                    className="flex-1 bg-background/80 border border-border focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-foreground placeholder-slate-650 outline-none transition-all"
                   />
                   <Button
                     type="button"
@@ -593,12 +593,12 @@ export default function AdminSettingsPage() {
                   </Button>
                 </div>
 
-                <div className="space-y-1.5 max-h-36 overflow-y-auto border border-slate-800/80 rounded-xl p-3 bg-slate-950/40">
+                <div className="space-y-1.5 max-h-36 overflow-y-auto border border-border rounded-xl p-3 bg-background/40">
                   {planFeatures.length === 0 ? (
-                    <p className="text-xs text-slate-500 italic text-center py-1">{isAr ? 'لا توجد ميزات لهذه الباقة.' : 'No features defined.'}</p>
+                    <p className="text-xs text-muted-foreground italic text-center py-1">{isAr ? 'لا توجد ميزات لهذه الباقة.' : 'No features defined.'}</p>
                   ) : (
                     planFeatures.map((feature, idx) => (
-                      <div key={idx} className="flex justify-between items-center bg-slate-900 border border-slate-800/60 rounded-lg px-3 py-1.5 text-xs">
+                      <div key={idx} className="flex justify-between items-center bg-card border border-border rounded-lg px-3 py-1.5 text-xs">
                         <span className="text-slate-200">{feature}</span>
                         <button
                           type="button"
@@ -613,12 +613,12 @@ export default function AdminSettingsPage() {
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-slate-800 flex justify-end gap-2">
+              <div className="pt-4 border-t border-border flex justify-end gap-2">
                 <Button
                   type="button"
                   onClick={() => setSelectedPlan(null)}
                   variant="ghost"
-                  className="hover:bg-slate-800 text-slate-400 hover:text-white rounded-xl px-5 transition-all text-xs cursor-pointer"
+                  className="hover:bg-muted text-muted-foreground hover:text-foreground rounded-xl px-5 transition-all text-xs cursor-pointer"
                 >
                   {isAr ? 'إلغاء' : 'Cancel'}
                 </Button>

@@ -143,19 +143,19 @@ export default function CreateIssueDialog({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
-        <div className="flex items-center justify-between p-5 border-b border-slate-800 bg-slate-900/50">
+    <div className="fixed inset-0 z-50 bg-background/70 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="bg-card border border-border rounded-2xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
+        <div className="flex items-center justify-between p-5 border-b border-border bg-card">
           <div className="flex items-center gap-2.5">
             <div className="p-2 bg-rose-500/10 rounded-xl border border-rose-500/20 text-rose-400">
               <MapPin className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-semibold text-white text-base">
+              <h3 className="font-semibold text-foreground text-base">
                 {isAr ? 'تسجيل ملاحظة ميدانية جديدة (Issue)' : 'New Field Punch List Issue'}
               </h3>
               {pinX !== undefined && pinY !== undefined && (
-                <p className="text-[11px] text-slate-400 font-mono">
+                <p className="text-[11px] text-muted-foreground font-mono">
                   {isAr ? `إحداثيات النقطة: X: ${pinX?.toFixed(1)}%, Y: ${pinY?.toFixed(1)}%` : `Pin Coordinates: X: ${pinX?.toFixed(1)}%, Y: ${pinY?.toFixed(1)}%`}
                 </p>
               )}
@@ -163,7 +163,7 @@ export default function CreateIssueDialog({
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+            className="text-muted-foreground hover:text-foreground p-1 rounded-lg hover:bg-muted transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -178,7 +178,7 @@ export default function CreateIssueDialog({
           )}
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1.5">
+            <label className="block text-xs font-medium text-foreground mb-1.5">
               {isAr ? 'عنوان الملاحظة / الملاحظة الهندسية *' : 'Issue Title *'}
             </label>
             <input
@@ -187,12 +187,12 @@ export default function CreateIssueDialog({
               placeholder={isAr ? 'مثال: تشقق بلاط الدور الثالث' : 'e.g. Floor Tile Crack 3rd Floor'}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+              className="w-full bg-background border border-border rounded-xl px-3.5 py-2.5 text-sm text-foreground placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1.5">
+            <label className="block text-xs font-medium text-foreground mb-1.5">
               {isAr ? 'الوصف التفصيلي' : 'Detailed Description'}
             </label>
             <textarea
@@ -200,19 +200,19 @@ export default function CreateIssueDialog({
               placeholder={isAr ? 'اكتب تفاصيل الملاحظة وسياق الرصد الميداني...' : 'Provide details regarding this issue...'}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+              className="w-full bg-background border border-border rounded-xl px-3.5 py-2.5 text-sm text-foreground placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              <label className="block text-xs font-medium text-foreground mb-1.5">
                 {isAr ? 'درجة الأولوية' : 'Priority'}
               </label>
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value as any)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors"
+                className="w-full bg-background border border-border rounded-xl px-3.5 py-2.5 text-sm text-foreground focus:outline-none focus:border-indigo-500 transition-colors"
               >
                 <option value="low">{isAr ? 'منخفضة (Low)' : 'Low'}</option>
                 <option value="medium">{isAr ? 'متوسطة (Medium)' : 'Medium'}</option>
@@ -222,13 +222,13 @@ export default function CreateIssueDialog({
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              <label className="block text-xs font-medium text-foreground mb-1.5">
                 {isAr ? 'المهندس المسؤول' : 'Assigned Engineer'}
               </label>
               <select
                 value={assignedToUserId}
                 onChange={(e) => setAssignedToUserId(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors"
+                className="w-full bg-background border border-border rounded-xl px-3.5 py-2.5 text-sm text-foreground focus:outline-none focus:border-indigo-500 transition-colors"
               >
                 <option value="">{isAr ? '-- غير محدد --' : '-- Unassigned --'}</option>
                 {users.map((u) => (
@@ -242,7 +242,7 @@ export default function CreateIssueDialog({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              <label className="block text-xs font-medium text-foreground mb-1.5">
                 {isAr ? 'جهة التنفيذ / المقاول' : 'Contractor / Company'}
               </label>
               <input
@@ -250,25 +250,25 @@ export default function CreateIssueDialog({
                 placeholder={isAr ? 'مثال: شركة التشطيبات' : 'e.g. Contracting Co'}
                 value={contractorName}
                 onChange={(e) => setContractorName(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                className="w-full bg-background border border-border rounded-xl px-3.5 py-2.5 text-sm text-foreground placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              <label className="block text-xs font-medium text-foreground mb-1.5">
                 {isAr ? 'تاريخ الاستحقاق (Due Date)' : 'Due Date'}
               </label>
               <input
                 type="date"
                 value={dueDate}
                 onChange={(e) => setDueDate(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors"
+                className="w-full bg-background border border-border rounded-xl px-3.5 py-2.5 text-sm text-foreground focus:outline-none focus:border-indigo-500 transition-colors"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1.5">
+            <label className="block text-xs font-medium text-foreground mb-1.5">
               {isAr ? 'وصف الموقع الميداني' : 'Location Description'}
             </label>
             <input
@@ -276,12 +276,12 @@ export default function CreateIssueDialog({
               placeholder={isAr ? 'مثال: بجوار المصعد الشمالي' : 'e.g. Next to north elevator'}
               value={locationDescription}
               onChange={(e) => setLocationDescription(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+              className="w-full bg-background border border-border rounded-xl px-3.5 py-2.5 text-sm text-foreground placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
             />
           </div>
 
           {/* GPS Location & Field Camera Attachment */}
-          <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-3.5 space-y-3">
+          <div className="bg-background/70 border border-border rounded-xl p-3.5 space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-emerald-400" />
@@ -298,7 +298,7 @@ export default function CreateIssueDialog({
               </button>
             </div>
             {geoStatus && (
-              <p className="text-[11px] text-slate-400">
+              <p className="text-[11px] text-muted-foreground">
                 {geoStatus}
                 {latitude && longitude && (
                   <span className="font-mono text-emerald-400 ml-2">
@@ -309,12 +309,12 @@ export default function CreateIssueDialog({
             )}
 
             {/* Direct Camera Capture */}
-            <div className="pt-2 border-t border-slate-800/80">
-              <label className="block text-xs font-medium text-slate-300 mb-2 flex items-center gap-2">
+            <div className="pt-2 border-t border-border">
+              <label className="block text-xs font-medium text-foreground mb-2 flex items-center gap-2">
                 <Camera className="w-4 h-4 text-sky-400" />
                 <span>{isAr ? 'إرفاق صورة ميدانية قبل التنفيذ (Before)' : 'Attach Field Photo (Before)'}</span>
               </label>
-              <div className="relative border border-dashed border-slate-800 hover:border-sky-500/50 rounded-xl p-3 text-center cursor-pointer bg-slate-900/50">
+              <div className="relative border border-dashed border-border hover:border-sky-500/50 rounded-xl p-3 text-center cursor-pointer bg-card">
                 <input
                   type="file"
                   accept="image/*"
@@ -325,7 +325,7 @@ export default function CreateIssueDialog({
                 {photo ? (
                   <p className="text-xs text-sky-400 font-medium">{photo.name}</p>
                 ) : (
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-muted-foreground">
                     {isAr ? 'انقر لالتقاط صورة مباشرة بالكاميرا أو اختيار صورة' : 'Tap to take photo with camera or choose image'}
                   </p>
                 )}
@@ -333,11 +333,11 @@ export default function CreateIssueDialog({
             </div>
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-slate-800">
+          <div className="flex justify-end gap-3 pt-4 border-t border-border">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-xs font-medium text-slate-300 hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
+              className="px-4 py-2 text-xs font-medium text-foreground hover:bg-muted rounded-xl transition-colors cursor-pointer"
             >
               {isAr ? 'إلغاء' : 'Cancel'}
             </button>

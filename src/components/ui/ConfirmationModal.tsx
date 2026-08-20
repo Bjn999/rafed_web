@@ -73,7 +73,7 @@ export default function ConfirmationModal({
     <div className="fixed inset-0 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 z-[999] animate-in fade-in duration-200" dir={isAr ? 'rtl' : 'ltr'}>
       {/* Modal Container */}
       <div 
-        className="bg-slate-900 border border-slate-800 rounded-2xl p-6 w-full max-w-md shadow-2xl relative animate-in zoom-in-95 duration-200 focus:outline-none"
+        className="bg-card border border-border rounded-2xl p-6 w-full max-w-md shadow-2xl relative animate-in zoom-in-95 duration-200 focus:outline-none"
         role="dialog"
         aria-modal="true"
       >
@@ -81,7 +81,7 @@ export default function ConfirmationModal({
         <button
           onClick={onClose}
           disabled={isLoading}
-          className={`absolute ${isAr ? 'left-4' : 'right-4'} top-4 p-2 text-slate-500 hover:text-slate-350 hover:bg-slate-800/50 rounded-xl transition-all cursor-pointer disabled:opacity-50`}
+          className={`absolute ${isAr ? 'left-4' : 'right-4'} top-4 p-2 text-muted-foreground hover:text-slate-350 hover:bg-muted rounded-xl transition-all cursor-pointer disabled:opacity-50`}
         >
           <X className="w-4 h-4" />
         </button>
@@ -94,12 +94,12 @@ export default function ConfirmationModal({
           </div>
 
           {/* Title */}
-          <h3 className="text-lg font-bold text-white mb-2 leading-tight">
+          <h3 className="text-lg font-bold text-foreground mb-2 leading-tight">
             {title}
           </h3>
 
           {/* Description Message */}
-          <p className="text-slate-400 text-sm leading-relaxed mb-6">
+          <p className="text-muted-foreground text-sm leading-relaxed mb-6">
             {message}
           </p>
         </div>
@@ -110,7 +110,7 @@ export default function ConfirmationModal({
             type="button"
             onClick={onClose}
             disabled={isLoading}
-            className="w-full bg-slate-800 hover:bg-slate-700/80 text-slate-200 rounded-xl py-3 px-5 text-sm font-semibold transition-all cursor-pointer disabled:opacity-50 border border-transparent hover:border-slate-700"
+            className="w-full bg-muted hover:bg-slate-700/80 text-slate-200 rounded-xl py-3 px-5 text-sm font-semibold transition-all cursor-pointer disabled:opacity-50 border border-transparent hover:border-border"
           >
             {defaultCancelText}
           </button>
@@ -123,7 +123,7 @@ export default function ConfirmationModal({
           >
             {isLoading ? (
               <>
-                <Loader2 className="w-4 h-4 text-white animate-spin" />
+                <Loader2 className="w-4 h-4 text-foreground animate-spin" />
                 {isAr ? 'جاري التحميل...' : 'Loading...'}
               </>
             ) : (

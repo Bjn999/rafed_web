@@ -110,29 +110,29 @@ export default function AdminTenantsPage() {
     <div className="space-y-6 animate-in fade-in duration-300">
       
       {/* Filters Card */}
-      <Card className="border-slate-800 bg-slate-900/40 backdrop-blur text-white">
+      <Card className="border-border bg-card backdrop-blur text-foreground">
         <CardContent className="pt-6 space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="space-y-1.5 col-span-2">
-              <label className="text-xs text-slate-400 font-medium">{isAr ? 'بحث باسم الشركة أو النطاق' : 'Search by company name or domain'}</label>
+              <label className="text-xs text-muted-foreground font-medium">{isAr ? 'بحث باسم الشركة أو النطاق' : 'Search by company name or domain'}</label>
               <div className="relative">
-                <Search className={`w-4 h-4 text-slate-500 absolute ${isAr ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2`} />
+                <Search className={`w-4 h-4 text-muted-foreground absolute ${isAr ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2`} />
                 <input
                   type="text"
                   value={tenantSearch}
                   onChange={(e) => setTenantSearch(e.target.value)}
                   placeholder={isAr ? 'مثال: شركة المقاولات الحديثة' : 'e.g. Modern Contracting Co.'}
-                  className={`w-full bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl ${isAr ? 'pr-10 pl-3' : 'pl-10 pr-3'} py-2 text-sm text-slate-100 placeholder-slate-650 outline-none transition-all`}
+                  className={`w-full bg-background/80 border border-border focus:border-indigo-500 rounded-xl ${isAr ? 'pr-10 pl-3' : 'pl-10 pr-3'} py-2 text-sm text-foreground placeholder-slate-650 outline-none transition-all`}
                 />
               </div>
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs text-slate-400 font-medium">{isAr ? 'الحالة' : 'Status'}</label>
+              <label className="text-xs text-muted-foreground font-medium">{isAr ? 'الحالة' : 'Status'}</label>
               <select
                 value={tenantStatus}
                 onChange={(e) => { setTenantStatus(e.target.value); setTenantPage(1); }}
-                className="w-full bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-3 py-2 text-sm text-slate-100 outline-none transition-all cursor-pointer"
+                className="w-full bg-background/80 border border-border focus:border-indigo-500 rounded-xl px-3 py-2 text-sm text-foreground outline-none transition-all cursor-pointer"
               >
                 <option value="">{isAr ? 'الكل' : 'All'}</option>
                 <option value="active">{isAr ? 'نشط' : 'Active'}</option>
@@ -145,11 +145,11 @@ export default function AdminTenantsPage() {
       </Card>
 
       {/* Tenants Table Card */}
-      <Card className="border-slate-800 bg-slate-900/40 backdrop-blur text-white overflow-hidden">
+      <Card className="border-border bg-card backdrop-blur text-foreground overflow-hidden">
         <div className="overflow-x-auto min-h-[300px]">
           <table className={`w-full ${isAr ? 'text-right' : 'text-left'} border-collapse`}>
             <thead>
-              <tr className="border-b border-slate-800 bg-slate-900/60 text-slate-400 text-xs font-semibold">
+              <tr className="border-b border-border bg-card text-muted-foreground text-xs font-semibold">
                 <th className="px-6 py-4">{isAr ? 'اسم الشركة' : 'Company Name'}</th>
                 <th className="px-6 py-4">{isAr ? 'النطاق (Domain)' : 'Domain Link'}</th>
                 <th className="px-6 py-4">{isAr ? 'الباقة' : 'Plan Package'}</th>
@@ -163,27 +163,27 @@ export default function AdminTenantsPage() {
               {tenantsLoading ? (
                 Array.from({ length: 4 }).map((_, idx) => (
                   <tr key={idx} className="animate-pulse">
-                    <td className="px-6 py-4"><div className="h-4 bg-slate-800 rounded w-44" /></td>
-                    <td className="px-6 py-4"><div className="h-4 bg-slate-800 rounded w-36" /></td>
-                    <td className="px-6 py-4"><div className="h-6 bg-slate-800 rounded w-20" /></td>
-                    <td className="px-6 py-4"><div className="h-4 bg-slate-800 rounded w-10 mx-auto" /></td>
-                    <td className="px-6 py-4"><div className="h-6 bg-slate-800 rounded w-16 mx-auto" /></td>
-                    <td className="px-6 py-4"><div className="h-4 bg-slate-800 rounded w-28" /></td>
-                    <td className="px-6 py-4"><div className="h-8 bg-slate-800 rounded w-24 mx-auto" /></td>
+                    <td className="px-6 py-4"><div className="h-4 bg-muted rounded w-44" /></td>
+                    <td className="px-6 py-4"><div className="h-4 bg-muted rounded w-36" /></td>
+                    <td className="px-6 py-4"><div className="h-6 bg-muted rounded w-20" /></td>
+                    <td className="px-6 py-4"><div className="h-4 bg-muted rounded w-10 mx-auto" /></td>
+                    <td className="px-6 py-4"><div className="h-6 bg-muted rounded w-16 mx-auto" /></td>
+                    <td className="px-6 py-4"><div className="h-4 bg-muted rounded w-28" /></td>
+                    <td className="px-6 py-4"><div className="h-8 bg-muted rounded w-24 mx-auto" /></td>
                   </tr>
                 ))
               ) : !tenantsData || tenantsData.data.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="text-center py-16 text-slate-500 space-y-2">
-                    <p className="font-semibold text-white">{isAr ? 'لا توجد شركات مطابقة' : 'No matching companies found'}</p>
-                    <p className="text-xs text-slate-500">{isAr ? 'جرب تعديل شروط البحث والتصفية.' : 'Try adjusting your search and filter criteria.'}</p>
+                  <td colSpan={7} className="text-center py-16 text-muted-foreground space-y-2">
+                    <p className="font-semibold text-foreground">{isAr ? 'لا توجد شركات مطابقة' : 'No matching companies found'}</p>
+                    <p className="text-xs text-muted-foreground">{isAr ? 'جرب تعديل شروط البحث والتصفية.' : 'Try adjusting your search and filter criteria.'}</p>
                   </td>
                 </tr>
               ) : (
                 tenantsData.data.map((tenant: TenantItem) => (
-                  <tr key={tenant.id} className="hover:bg-slate-800/10 transition-colors group">
-                    <td className="px-6 py-4 font-bold text-white">{tenant.name}</td>
-                    <td className="px-6 py-4 font-mono text-xs text-slate-300">{tenant.domain}</td>
+                  <tr key={tenant.id} className="hover:bg-muted transition-colors group">
+                    <td className="px-6 py-4 font-bold text-foreground">{tenant.name}</td>
+                    <td className="px-6 py-4 font-mono text-xs text-foreground">{tenant.domain}</td>
                     <td className="px-6 py-4">
                       {tenant.subscription?.plan ? (
                         <span className="bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 text-xs px-2.5 py-0.5 rounded-full font-semibold">
@@ -197,7 +197,7 @@ export default function AdminTenantsPage() {
                           }
                         </span>
                       ) : (
-                        <span className="text-slate-500 text-xs font-medium">{isAr ? 'بلا باقة' : 'No Plan'}</span>
+                        <span className="text-muted-foreground text-xs font-medium">{isAr ? 'بلا باقة' : 'No Plan'}</span>
                       )}
                     </td>
                     <td className="px-6 py-4 text-center font-bold font-mono">
@@ -208,7 +208,7 @@ export default function AdminTenantsPage() {
                         {getTenantStatusLabel(tenant.status)}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-slate-400 font-mono text-xs">
+                    <td className="px-6 py-4 text-muted-foreground font-mono text-xs">
                       {formatTime(tenant.created_at)}
                     </td>
                     <td className="px-6 py-4 text-center">
@@ -231,8 +231,8 @@ export default function AdminTenantsPage() {
 
         {/* Tenants Pagination */}
         {tenantsData && tenantsData.last_page > 1 && (
-          <div className="border-t border-slate-800 bg-slate-900/30 px-6 py-4 flex items-center justify-between">
-            <span className="text-xs text-slate-400">
+          <div className="border-t border-border bg-card px-6 py-4 flex items-center justify-between">
+            <span className="text-xs text-muted-foreground">
               {isAr ? (
                 <>عرض الشركات من <strong>{((tenantPage - 1) * 15) + 1}</strong> إلى <strong>{Math.min(tenantPage * 15, tenantsData.total)}</strong> من إجمالي <strong>{tenantsData.total}</strong> شركة</>
               ) : (
@@ -245,12 +245,12 @@ export default function AdminTenantsPage() {
                 onClick={() => setTenantPage((prev) => Math.max(prev - 1, 1))}
                 disabled={tenantPage === 1}
                 variant="outline"
-                className="border-slate-800 hover:bg-slate-800 text-slate-300 p-2 h-9 w-9 rounded-xl transition-all disabled:opacity-30 cursor-pointer"
+                className="border-border hover:bg-muted text-foreground p-2 h-9 w-9 rounded-xl transition-all disabled:opacity-30 cursor-pointer"
               >
                 {isAr ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
               </Button>
               
-              <span className="text-xs text-slate-300 font-bold">
+              <span className="text-xs text-foreground font-bold">
                 {isAr ? `صفحة ${tenantPage} من ${tenantsData.last_page}` : `Page ${tenantPage} of ${tenantsData.last_page}`}
               </span>
 
@@ -258,7 +258,7 @@ export default function AdminTenantsPage() {
                 onClick={() => setTenantPage((prev) => Math.min(prev + 1, tenantsData.last_page))}
                 disabled={tenantPage === tenantsData.last_page}
                 variant="outline"
-                className="border-slate-800 hover:bg-slate-800 text-slate-300 p-2 h-9 w-9 rounded-xl transition-all disabled:opacity-30 cursor-pointer"
+                className="border-border hover:bg-muted text-foreground p-2 h-9 w-9 rounded-xl transition-all disabled:opacity-30 cursor-pointer"
               >
                 {isAr ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
               </Button>

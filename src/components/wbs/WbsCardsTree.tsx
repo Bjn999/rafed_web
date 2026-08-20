@@ -121,7 +121,7 @@ export default function WbsCardsTree({
       default:
         return {
           label: isAr ? 'لم يبدأ' : 'Not Started',
-          color: 'text-slate-400',
+          color: 'text-muted-foreground',
           bg: 'bg-slate-500/10',
           border: 'border-slate-500/20',
           indicator: 'bg-slate-600',
@@ -138,7 +138,7 @@ export default function WbsCardsTree({
       case 'medium':
         return <span className="text-sky-400 bg-sky-500/10 border border-sky-500/20 px-2 py-0.5 rounded text-[10px] font-bold">{isAr ? 'متوسطة' : 'Medium'}</span>;
       default:
-        return <span className="text-slate-400 bg-slate-500/10 border border-slate-500/20 px-2 py-0.5 rounded text-[10px]">{isAr ? 'منخفضة' : 'Low'}</span>;
+        return <span className="text-muted-foreground bg-slate-500/10 border border-slate-500/20 px-2 py-0.5 rounded text-[10px]">{isAr ? 'منخفضة' : 'Low'}</span>;
     }
   };
 
@@ -165,8 +165,8 @@ export default function WbsCardsTree({
         <div
           className={`rounded-2xl transition-all duration-200 border ${
             isRoot
-              ? 'bg-gradient-to-r from-slate-900/90 to-slate-950/80 border-slate-800 shadow-lg shadow-black/20 hover:border-slate-700'
-              : 'bg-slate-900/60 border-slate-800/80 hover:border-indigo-500/40 hover:bg-slate-900/90'
+              ? 'bg-gradient-to-r from-slate-900/90 to-slate-950/80 border-border shadow-lg shadow-black/20 hover:border-border'
+              : 'bg-card border-border hover:border-indigo-500/40 hover:bg-card'
           }`}
         >
           {/* Card Header Content */}
@@ -179,7 +179,7 @@ export default function WbsCardsTree({
               {hasChildren ? (
                 <button
                   onClick={() => toggleExpand(node.id!)}
-                  className="w-7 h-7 rounded-xl bg-slate-800/80 border border-slate-700 hover:bg-indigo-600 hover:border-indigo-500 text-slate-300 hover:text-white flex items-center justify-center cursor-pointer shrink-0 transition-all shadow-sm"
+                  className="w-7 h-7 rounded-xl bg-muted border border-border hover:bg-indigo-600 hover:border-indigo-500 text-foreground hover:text-white flex items-center justify-center cursor-pointer shrink-0 transition-all shadow-sm"
                 >
                   {isExpanded ? <ChevronDown className="w-4 h-4" /> : isAr ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
                 </button>
@@ -197,7 +197,7 @@ export default function WbsCardsTree({
               {/* Name & Description */}
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h4 className={`font-bold text-white tracking-tight ${isRoot ? 'text-base sm:text-lg' : 'text-sm'}`}>
+                  <h4 className={`font-bold text-foreground tracking-tight ${isRoot ? 'text-base sm:text-lg' : 'text-sm'}`}>
                     {node.name}
                   </h4>
                   <span className={`${statusCfg.color} ${statusCfg.bg} ${statusCfg.border} border text-[10px] font-bold px-2.5 py-0.5 rounded-full`}>
@@ -206,7 +206,7 @@ export default function WbsCardsTree({
                   {getPriorityBadge(node.priority)}
                 </div>
                 {node.description && (
-                  <p className="text-xs text-slate-400 mt-1 line-clamp-1">
+                  <p className="text-xs text-muted-foreground mt-1 line-clamp-1">
                     {node.description}
                   </p>
                 )}
@@ -215,15 +215,15 @@ export default function WbsCardsTree({
             </div>
 
             {/* Metrics & Progress Section */}
-            <div className="flex items-center gap-4 sm:gap-6 flex-wrap md:flex-nowrap shrink-0 border-t md:border-t-0 pt-3 md:pt-0 border-slate-800">
+            <div className="flex items-center gap-4 sm:gap-6 flex-wrap md:flex-nowrap shrink-0 border-t md:border-t-0 pt-3 md:pt-0 border-border">
               
               {/* Progress Bar */}
               <div className="flex flex-col gap-1 min-w-[110px]">
                 <div className="flex justify-between text-[11px] font-bold">
-                  <span className="text-slate-400">{isAr ? 'الإنجاز' : 'Progress'}</span>
+                  <span className="text-muted-foreground">{isAr ? 'الإنجاز' : 'Progress'}</span>
                   <span className="text-indigo-400 font-mono">{node.progress}%</span>
                 </div>
-                <div className="w-full bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-800">
+                <div className="w-full bg-background rounded-full h-2 overflow-hidden border border-border">
                   <div
                     className={`h-full transition-all duration-500 ${
                       node.progress === 100 ? 'bg-emerald-500' : 'bg-gradient-to-r from-indigo-500 to-indigo-400'
@@ -237,7 +237,7 @@ export default function WbsCardsTree({
               {(node.estimated_cost || node.actual_cost) && (
                 <div className="flex flex-col text-left font-mono text-xs">
                   {node.estimated_cost ? (
-                    <span className="text-slate-300 text-[11px]">
+                    <span className="text-foreground text-[11px]">
                       {isAr ? 'مقدار:' : 'Est:'} {formatMoney(node.estimated_cost)}
                     </span>
                   ) : null}
@@ -251,8 +251,8 @@ export default function WbsCardsTree({
 
               {/* Dates */}
               {(node.start_date || node.end_date) && (
-                <div className="flex items-center gap-1.5 text-[11px] text-slate-400 bg-slate-950/60 px-2.5 py-1.5 rounded-xl border border-slate-800">
-                  <Calendar className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground bg-background/60 px-2.5 py-1.5 rounded-xl border border-border">
+                  <Calendar className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
                   <span>
                     {node.start_date ? new Date(node.start_date).toLocaleDateString(isAr ? 'ar-SA' : 'en-US') : ''}
                     {node.end_date ? ` - ${new Date(node.end_date).toLocaleDateString(isAr ? 'ar-SA' : 'en-US')}` : ''}
@@ -269,7 +269,7 @@ export default function WbsCardsTree({
               )}
 
               {/* Actions Quick Toolbar */}
-              <div className="flex items-center gap-1 bg-slate-950/80 border border-slate-800 p-1 rounded-xl">
+              <div className="flex items-center gap-1 bg-background/80 border border-border p-1 rounded-xl">
                 
                 {/* Add Child */}
                 <button
@@ -285,7 +285,7 @@ export default function WbsCardsTree({
                   onClick={() => handleMove(node.id!, 'indent')}
                   disabled={movingId === node.id}
                   title={isAr ? 'إزاحة للداخل (جعلها مهمة فرعية)' : 'Indent'}
-                  className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer disabled:opacity-30"
+                  className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer disabled:opacity-30"
                 >
                   {isAr ? <ArrowLeft className="w-3.5 h-3.5" /> : <ArrowRight className="w-3.5 h-3.5" />}
                 </button>
@@ -294,7 +294,7 @@ export default function WbsCardsTree({
                   onClick={() => handleMove(node.id!, 'outdent')}
                   disabled={movingId === node.id || !node.parent_id}
                   title={isAr ? 'إزاحة للخارج (ترقية مستوى)' : 'Outdent'}
-                  className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer disabled:opacity-30"
+                  className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer disabled:opacity-30"
                 >
                   {isAr ? <ArrowRight className="w-3.5 h-3.5" /> : <ArrowLeft className="w-3.5 h-3.5" />}
                 </button>
@@ -303,7 +303,7 @@ export default function WbsCardsTree({
                   onClick={() => handleMove(node.id!, 'up')}
                   disabled={movingId === node.id}
                   title={isAr ? 'تحريك للأعلى' : 'Move Up'}
-                  className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer disabled:opacity-30"
+                  className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer disabled:opacity-30"
                 >
                   <ArrowUp className="w-3.5 h-3.5" />
                 </button>
@@ -312,7 +312,7 @@ export default function WbsCardsTree({
                   onClick={() => handleMove(node.id!, 'down')}
                   disabled={movingId === node.id}
                   title={isAr ? 'تحريك للأسفل' : 'Move Down'}
-                  className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer disabled:opacity-30"
+                  className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer disabled:opacity-30"
                 >
                   <ArrowDown className="w-3.5 h-3.5" />
                 </button>
@@ -321,7 +321,7 @@ export default function WbsCardsTree({
                 <button
                   onClick={() => onEditItem(node)}
                   title={isAr ? 'تعديل' : 'Edit'}
-                  className="p-1.5 rounded-lg hover:bg-slate-800 text-amber-400 hover:text-amber-300 transition-colors cursor-pointer"
+                  className="p-1.5 rounded-lg hover:bg-muted text-amber-400 hover:text-amber-300 transition-colors cursor-pointer"
                 >
                   <Edit2 className="w-3.5 h-3.5" />
                 </button>
@@ -363,7 +363,7 @@ export default function WbsCardsTree({
       {treeData.length > 0 ? (
         treeData.map((node) => renderCardNode(node, 0))
       ) : (
-        <div className="p-12 text-center text-slate-500 bg-slate-900/30 border border-slate-800 rounded-2xl flex flex-col items-center gap-3">
+        <div className="p-12 text-center text-muted-foreground bg-card border border-border rounded-2xl flex flex-col items-center gap-3">
           <FolderTree className="w-12 h-12 text-slate-700" />
           <p className="text-xs font-semibold">
             {isAr ? 'لا يوجد أنشطة مضافة لهذا المشروع حتى الآن.' : 'No activities added to this project yet.'}

@@ -190,29 +190,29 @@ export default function DrawingCanvas({
   return (
     <div className="flex flex-col gap-4">
       {/* Controls Bar */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-3 flex flex-wrap items-center justify-between gap-3 shadow-lg">
+      <div className="bg-card border border-border rounded-2xl p-3 flex flex-wrap items-center justify-between gap-3 shadow-lg">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-indigo-500/10 rounded-xl border border-indigo-500/20 text-indigo-400">
             <Layers className="w-5 h-5" />
           </div>
           <div>
-            <h4 className="text-sm font-semibold text-white flex items-center gap-2">
+            <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
               <span>{drawing.title}</span>
-              <span className="text-xs font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+              <span className="text-xs font-mono px-2 py-0.5 rounded bg-muted text-foreground border border-border">
                 {drawing.drawing_number}
               </span>
             </h4>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-muted-foreground">
               {isAr ? 'انقر أو المس أي موقع في المخطط لإضافة ملاحظة دبابيس' : 'Tap anywhere on drawing to add issue pin'}
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800">
+        <div className="flex items-center gap-1.5 bg-background p-1.5 rounded-xl border border-border">
           <button
             onClick={handleZoomIn}
             title={isAr ? 'تكبير' : 'Zoom In'}
-            className="p-1.5 hover:bg-slate-800 text-slate-300 hover:text-white rounded-lg transition-colors cursor-pointer"
+            className="p-1.5 hover:bg-muted text-foreground hover:text-foreground rounded-lg transition-colors cursor-pointer"
           >
             <ZoomIn className="w-4 h-4" />
           </button>
@@ -222,15 +222,15 @@ export default function DrawingCanvas({
           <button
             onClick={handleZoomOut}
             title={isAr ? 'تصغير' : 'Zoom Out'}
-            className="p-1.5 hover:bg-slate-800 text-slate-300 hover:text-white rounded-lg transition-colors cursor-pointer"
+            className="p-1.5 hover:bg-muted text-foreground hover:text-foreground rounded-lg transition-colors cursor-pointer"
           >
             <ZoomOut className="w-4 h-4" />
           </button>
-          <div className="w-px h-4 bg-slate-800 mx-1" />
+          <div className="w-px h-4 bg-muted mx-1" />
           <button
             onClick={handleResetZoom}
             title={isAr ? 'إعادة ضبط' : 'Reset View'}
-            className="p-1.5 hover:bg-slate-800 text-slate-300 hover:text-white rounded-lg transition-colors cursor-pointer"
+            className="p-1.5 hover:bg-muted text-foreground hover:text-foreground rounded-lg transition-colors cursor-pointer"
           >
             <RotateCcw className="w-4 h-4" />
           </button>
@@ -247,15 +247,15 @@ export default function DrawingCanvas({
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className="relative w-full h-[420px] sm:h-[650px] bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden cursor-grab active:cursor-grabbing select-none flex items-center justify-center touch-none"
+        className="relative w-full h-[420px] sm:h-[650px] bg-background border border-border rounded-2xl overflow-hidden cursor-grab active:cursor-grabbing select-none flex items-center justify-center touch-none"
       >
         {!isImage ? (
           <div className="text-center py-20 px-6 max-w-md">
-            <Layers className="w-12 h-12 text-slate-500 mx-auto mb-3" />
-            <h4 className="text-base font-semibold text-white mb-1">
+            <Layers className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
+            <h4 className="text-base font-semibold text-foreground mb-1">
               {isAr ? 'معاينة هذا المخطط تتوفر عبر تنزيل الملف' : 'Preview for this document is available via file download'}
             </h4>
-            <p className="text-xs text-slate-400 mb-4">
+            <p className="text-xs text-muted-foreground mb-4">
               {isAr ? 'الملفات المرفوعة بنمط PDF / DWG تتيح إضافة الملاحظات الميدانية بمرونة.' : 'PDF / DWG formats support direct issue tracking.'}
             </p>
             <a
@@ -317,13 +317,13 @@ export default function DrawingCanvas({
                   }`}
                 >
                   <div className="relative group">
-                    <MapPin className={`w-7 h-7 drop-shadow-md text-white ${priorityInfo.pinBg}`} />
-                    <span className="absolute top-1 left-1/2 -translate-x-1/2 text-[10px] font-bold text-white">
+                    <MapPin className={`w-7 h-7 drop-shadow-md text-foreground ${priorityInfo.pinBg}`} />
+                    <span className="absolute top-1 left-1/2 -translate-x-1/2 text-[10px] font-bold text-foreground">
                       {issue.issue_number.replace('ISS-', '')}
                     </span>
 
                     {/* Tooltip on hover */}
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block bg-slate-900 text-white text-[11px] font-medium px-2.5 py-1 rounded-lg shadow-xl border border-slate-700 whitespace-nowrap">
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block bg-card text-foreground text-[11px] font-medium px-2.5 py-1 rounded-lg shadow-xl border border-border whitespace-nowrap">
                       {issue.issue_number}: {issue.title}
                     </div>
                   </div>
@@ -336,7 +336,7 @@ export default function DrawingCanvas({
 
       {/* Selected Pin Details Popover Card */}
       {selectedIssue && (
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-2xl animate-in fade-in slide-in-from-bottom-3 duration-200">
+        <div className="bg-card border border-border rounded-2xl p-5 shadow-2xl animate-in fade-in slide-in-from-bottom-3 duration-200">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="space-y-1 max-w-xl">
               <div className="flex items-center gap-2">
@@ -359,16 +359,16 @@ export default function DrawingCanvas({
                   {(STATUS_MAP[selectedIssue.status] || STATUS_MAP.new).label}
                 </span>
               </div>
-              <h4 className="text-base font-semibold text-white">{selectedIssue.title}</h4>
+              <h4 className="text-base font-semibold text-foreground">{selectedIssue.title}</h4>
               {selectedIssue.description && (
-                <p className="text-xs text-slate-300 leading-relaxed">{selectedIssue.description}</p>
+                <p className="text-xs text-foreground leading-relaxed">{selectedIssue.description}</p>
               )}
             </div>
 
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setCompareModalIssue(selectedIssue)}
-                className="bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl px-3.5 py-2 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+                className="bg-muted hover:bg-slate-700 text-slate-200 rounded-xl px-3.5 py-2 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
               >
                 <Camera className="w-4 h-4 text-sky-400" />
                 <span>{isAr ? 'مقارنة الصور (Before/After)' : 'Compare Field Photos'}</span>
@@ -376,16 +376,16 @@ export default function DrawingCanvas({
 
               <button
                 onClick={() => setSelectedIssue(null)}
-                className="text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-800 transition-colors"
+                className="text-muted-foreground hover:text-foreground p-2 rounded-xl hover:bg-muted transition-colors"
               >
                 &times;
               </button>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 mt-4 border-t border-slate-800/80 text-xs">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 mt-4 border-t border-border text-xs">
             <div>
-              <span className="text-slate-500 block mb-0.5">{isAr ? 'المسؤول' : 'Assigned To'}</span>
+              <span className="text-muted-foreground block mb-0.5">{isAr ? 'المسؤول' : 'Assigned To'}</span>
               <span className="text-slate-200 font-medium flex items-center gap-1">
                 <UserIcon className="w-3.5 h-3.5 text-indigo-400" />
                 {selectedIssue.assigned_user?.name || selectedIssue.assigned_user?.first_name || (isAr ? 'غير محدد' : 'Unassigned')}
@@ -393,7 +393,7 @@ export default function DrawingCanvas({
             </div>
 
             <div>
-              <span className="text-slate-500 block mb-0.5">{isAr ? 'جهة التنفيذ' : 'Contractor'}</span>
+              <span className="text-muted-foreground block mb-0.5">{isAr ? 'جهة التنفيذ' : 'Contractor'}</span>
               <span className="text-slate-200 font-medium flex items-center gap-1">
                 <HardHat className="w-3.5 h-3.5 text-amber-400" />
                 {selectedIssue.contractor_name || (isAr ? 'غير محدد' : 'N/A')}
@@ -401,7 +401,7 @@ export default function DrawingCanvas({
             </div>
 
             <div>
-              <span className="text-slate-500 block mb-0.5">{isAr ? 'تاريخ الاستحقاق' : 'Due Date'}</span>
+              <span className="text-muted-foreground block mb-0.5">{isAr ? 'تاريخ الاستحقاق' : 'Due Date'}</span>
               <span className="text-slate-200 font-medium flex items-center gap-1">
                 <Clock className="w-3.5 h-3.5 text-sky-400" />
                 {selectedIssue.due_date ? new Date(selectedIssue.due_date).toLocaleDateString() : (isAr ? 'غير محدد' : 'N/A')}
@@ -409,12 +409,12 @@ export default function DrawingCanvas({
             </div>
 
             <div>
-              <span className="text-slate-500 block mb-0.5">{isAr ? 'تغيير الحالة السريع' : 'Quick Change Status'}</span>
+              <span className="text-muted-foreground block mb-0.5">{isAr ? 'تغيير الحالة السريع' : 'Quick Change Status'}</span>
               <select
                 disabled={updatingStatus}
                 value={selectedIssue.status}
                 onChange={(e) => handleUpdateStatus(selectedIssue.id, e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs text-white focus:outline-none focus:border-indigo-500 transition-colors"
+                className="w-full bg-background border border-border rounded-lg px-2.5 py-1 text-xs text-foreground focus:outline-none focus:border-indigo-500 transition-colors"
               >
                 <option value="new">{isAr ? 'جديدة (New)' : 'New'}</option>
                 <option value="in_progress">{isAr ? 'قيد التنفيذ (In Progress)' : 'In Progress'}</option>

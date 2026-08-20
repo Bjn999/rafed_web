@@ -314,7 +314,7 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
       case 'POST': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
       case 'PUT': return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
       case 'DELETE': return 'bg-rose-500/10 text-rose-400 border-rose-500/20';
-      default: return 'bg-slate-500/10 text-slate-400 border-slate-500/20';
+      default: return 'bg-slate-500/10 text-muted-foreground border-slate-500/20';
     }
   };
 
@@ -322,7 +322,7 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
     if (code >= 200 && code < 300) return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
     if (code >= 400 && code < 500) return 'bg-orange-500/10 text-orange-400 border-orange-500/20';
     if (code >= 500) return 'bg-red-500/10 text-red-400 border-red-500/20';
-    return 'bg-slate-500/10 text-slate-400 border-slate-500/20';
+    return 'bg-slate-500/10 text-muted-foreground border-slate-500/20';
   };
 
   const getTenantStatusBadgeClass = (status: string) => {
@@ -353,15 +353,15 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
           <Link href="/admin/tenants">
             <Button
               variant="ghost"
-              className="text-slate-400 hover:text-white hover:bg-slate-800 gap-1.5 rounded-xl px-3 h-9 cursor-pointer transition-all"
+              className="text-muted-foreground hover:text-foreground hover:bg-muted gap-1.5 rounded-xl px-3 h-9 cursor-pointer transition-all"
             >
               <ArrowRight className={`w-4 h-4 ${isAr ? 'ml-1' : 'mr-1 rotate-180'}`} />
               {isAr ? 'العودة للشركات' : 'Back to Companies'}
             </Button>
           </Link>
-          <div className="h-4 w-px bg-slate-800" />
+          <div className="h-4 w-px bg-muted" />
           <div className={isAr ? 'text-right' : 'text-left'}>
-            <h1 className="text-xl font-bold text-white flex items-center gap-2">
+            <h1 className="text-xl font-bold text-foreground flex items-center gap-2">
               {tenantDetailsLoading ? (isAr ? 'جاري التحميل...' : 'Loading...') : tenantDetails?.tenant.name}
               {tenantDetails && (
                 <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold border ${getTenantStatusBadgeClass(tenantDetails.tenant.status)}`}>
@@ -370,7 +370,7 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
               )}
             </h1>
             {!tenantDetailsLoading && tenantDetails && (
-              <p className="text-xs text-slate-500 font-mono mt-0.5">{tenantDetails.tenant.domain}</p>
+              <p className="text-xs text-muted-foreground font-mono mt-0.5">{tenantDetails.tenant.domain}</p>
             )}
           </div>
         </div>
@@ -408,42 +408,42 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
           <RefreshCw className="w-8 h-8 text-indigo-500 animate-spin" />
         </div>
       ) : !tenantDetails ? (
-        <Card className="border-slate-800 bg-slate-900/40 p-6 text-center text-slate-400">
+        <Card className="border-border bg-card p-6 text-center text-muted-foreground">
           {isAr ? 'تعذر تحميل تفاصيل الشركة المطلوبة.' : 'Failed to load requested company details.'}
         </Card>
       ) : (
         <>
           {/* Stats summary cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="border-slate-800 bg-slate-900/40 text-white">
+            <Card className="border-border bg-card text-foreground">
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-sm font-medium text-slate-400">{isAr ? 'أعضاء الفريق' : 'Team Members'}</CardTitle>
+                <CardTitle className="text-sm font-medium text-muted-foreground">{isAr ? 'أعضاء الفريق' : 'Team Members'}</CardTitle>
                 <Building2 className="w-5 h-5 text-indigo-400" />
               </CardHeader>
               <CardContent className={isAr ? 'text-right' : 'text-left'}>
                 <div className="text-2xl font-bold font-sans">
                   {tenantDetails.stats.users_count} {isAr ? 'مستخدمين' : 'users'}
                 </div>
-                <p className="text-xs text-slate-500 mt-1">{isAr ? 'العدد الإجمالي للمستخدمين المسجلين' : 'Total registered personnel users'}</p>
+                <p className="text-xs text-muted-foreground mt-1">{isAr ? 'العدد الإجمالي للمستخدمين المسجلين' : 'Total registered personnel users'}</p>
               </CardContent>
             </Card>
 
-            <Card className="border-slate-800 bg-slate-900/40 text-white">
+            <Card className="border-border bg-card text-foreground">
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-sm font-medium text-slate-400">{isAr ? 'المشاريع المنشأة' : 'Created Projects'}</CardTitle>
+                <CardTitle className="text-sm font-medium text-muted-foreground">{isAr ? 'المشاريع المنشأة' : 'Created Projects'}</CardTitle>
                 <FileText className="w-5 h-5 text-emerald-400" />
               </CardHeader>
               <CardContent className={isAr ? 'text-right' : 'text-left'}>
                 <div className="text-2xl font-bold font-sans">
                   {tenantDetails.stats.projects_count} {isAr ? 'مشاريع' : 'projects'}
                 </div>
-                <p className="text-xs text-slate-500 mt-1">{isAr ? 'المشاريع المفعلة تحت مساحة العمل' : 'Active projects assigned in workspace'}</p>
+                <p className="text-xs text-muted-foreground mt-1">{isAr ? 'المشاريع المفعلة تحت مساحة العمل' : 'Active projects assigned in workspace'}</p>
               </CardContent>
             </Card>
 
-            <Card className="border-slate-800 bg-slate-900/40 text-white">
+            <Card className="border-border bg-card text-foreground">
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-sm font-medium text-slate-400">{isAr ? 'الباقة الحالية' : 'Current Plan'}</CardTitle>
+                <CardTitle className="text-sm font-medium text-muted-foreground">{isAr ? 'الباقة الحالية' : 'Current Plan'}</CardTitle>
                 <CreditCard className="w-5 h-5 text-indigo-400" />
               </CardHeader>
               <CardContent className={isAr ? 'text-right' : 'text-left'}>
@@ -460,7 +460,7 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
                     isAr ? 'بدون باقة مفعلة' : 'No active plan subscription'
                   )}
                 </div>
-                <p className="text-xs text-slate-500 mt-1.5 font-mono">
+                <p className="text-xs text-muted-foreground mt-1.5 font-mono">
                   {tenantDetails.tenant.subscription ? (
                     isAr 
                       ? <>الدورة: {tenantDetails.tenant.subscription.billing_cycle === 'monthly' ? 'شهري' : 'سنوي'} | الحالة: {tenantDetails.tenant.subscription.status}</>
@@ -474,13 +474,13 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
           </div>
 
           {/* Customize Plan Editor */}
-          <Card className="border-slate-800 bg-slate-900/40 text-white">
+          <Card className="border-border bg-card text-foreground">
             <CardHeader className={isAr ? 'text-right' : 'text-left'}>
               <CardTitle className="text-lg flex items-center gap-2">
                 <SlidersHorizontal className={`w-5 h-5 text-indigo-400 ${isAr ? 'ml-1' : 'mr-1'}`} />
                 {isAr ? 'باقة التخصيص والميزات للشركة' : 'Plan Customization & Boundaries'}
               </CardTitle>
-              <CardDescription className="text-slate-400 text-xs">
+              <CardDescription className="text-muted-foreground text-xs">
                 {isAr 
                   ? 'تعديل أسعار وحدود الباقة أو تفعيل باقة مخصصة للشركة (Enterprise Plus) بحدود معينة'
                   : 'Modify plan pricing and boundaries or switch workspace to a custom (Enterprise Plus) plan.'}
@@ -491,7 +491,7 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
                 <form onSubmit={handleUpdateDetailPlan} className="space-y-4" dir={isAr ? 'rtl' : 'ltr'}>
                   <div className="bg-indigo-600/10 border border-indigo-500/20 p-4 rounded-2xl mb-4 flex items-center gap-3">
                     <Info className={`w-5 h-5 text-indigo-400 shrink-0 ${isAr ? 'ml-1' : 'mr-1'}`} />
-                    <p className={`text-xs text-slate-300 leading-relaxed ${isAr ? 'text-right' : 'text-left'}`}>
+                    <p className={`text-xs text-foreground leading-relaxed ${isAr ? 'text-right' : 'text-left'}`}>
                       {isAr 
                         ? <>هذه الشركة تعمل حالياً بموجب <strong>باقة مخصصة (Enterprise Plus)</strong>. أي تعديل في الحقول أدناه سيطبق فورياً وبشكل حصري على هذه الشركة فقط.</>
                         : <>This company is currently running under a <strong>Customized Plan (Enterprise Plus)</strong>. Edits below apply instantly and exclusively to this workspace only.</>}
@@ -499,93 +499,93 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
                   </div>
 
                   <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                    <label className="text-xs text-slate-400 font-semibold">{isAr ? 'اسم الباقة المخصصة' : 'Custom Plan Name'}</label>
+                    <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'اسم الباقة المخصصة' : 'Custom Plan Name'}</label>
                     <input
                       type="text"
                       required
                       value={detailPlanName}
                       onChange={(e) => setDetailPlanName(e.target.value)}
-                      className="w-full bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-100 outline-none transition-all"
+                      className="w-full bg-background/80 border border-border focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-foreground outline-none transition-all"
                     />
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                      <label className="text-xs text-slate-400 font-semibold">{isAr ? 'السعر الشهري المخصص (ريال)' : 'Custom Monthly Price (SAR)'}</label>
+                      <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'السعر الشهري المخصص (ريال)' : 'Custom Monthly Price (SAR)'}</label>
                       <input
                         type="number"
                         step="0.01"
                         required
                         value={detailPlanPriceMonthly}
                         onChange={(e) => setDetailPlanPriceMonthly(parseFloat(e.target.value) || 0)}
-                        className="w-full bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-100 outline-none transition-all font-mono"
+                        className="w-full bg-background/80 border border-border focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-foreground outline-none transition-all font-mono"
                       />
                     </div>
                     <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                      <label className="text-xs text-slate-400 font-semibold">{isAr ? 'السعر السنوي المخصص (ريال)' : 'Custom Annual Price (SAR)'}</label>
+                      <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'السعر السنوي المخصص (ريال)' : 'Custom Annual Price (SAR)'}</label>
                       <input
                         type="number"
                         step="0.01"
                         required
                         value={detailPlanPriceYearly}
                         onChange={(e) => setDetailPlanPriceYearly(parseFloat(e.target.value) || 0)}
-                        className="w-full bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-100 outline-none transition-all font-mono"
+                        className="w-full bg-background/80 border border-border focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-foreground outline-none transition-all font-mono"
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                      <label className="text-xs text-slate-400 font-semibold flex flex-col">
+                      <label className="text-xs text-muted-foreground font-semibold flex flex-col">
                         <span>{isAr ? 'الحد الأقصى للمستخدمين' : 'Max Team Users'}</span>
-                        <span className="text-[9px] text-slate-500">{isAr ? '(-1 تعني غير محدود)' : '(-1 means unlimited)'}</span>
+                        <span className="text-[9px] text-muted-foreground">{isAr ? '(-1 تعني غير محدود)' : '(-1 means unlimited)'}</span>
                       </label>
                       <input
                         type="number"
                         required
                         value={detailPlanMaxUsers}
                         onChange={(e) => setDetailPlanMaxUsers(parseInt(e.target.value) || 0)}
-                        className="w-full bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-100 outline-none transition-all font-mono"
+                        className="w-full bg-background/80 border border-border focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-foreground outline-none transition-all font-mono"
                       />
                     </div>
                     <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                      <label className="text-xs text-slate-400 font-semibold flex flex-col">
+                      <label className="text-xs text-muted-foreground font-semibold flex flex-col">
                         <span>{isAr ? 'رصيد المشاريع سنوياً' : 'Annual Project Credits'}</span>
-                        <span className="text-[9px] text-slate-500">{isAr ? '(-1 تعني غير محدود)' : '(-1 means unlimited)'}</span>
+                        <span className="text-[9px] text-muted-foreground">{isAr ? '(-1 تعني غير محدود)' : '(-1 means unlimited)'}</span>
                       </label>
                       <input
                         type="number"
                         required
                         value={detailPlanCredits}
                         onChange={(e) => setDetailPlanCredits(parseInt(e.target.value) || 0)}
-                        className="w-full bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-100 outline-none transition-all font-mono"
+                        className="w-full bg-background/80 border border-border focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-foreground outline-none transition-all font-mono"
                       />
                     </div>
                     <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
-                      <label className="text-xs text-slate-400 font-semibold flex flex-col">
+                      <label className="text-xs text-muted-foreground font-semibold flex flex-col">
                         <span>{isAr ? 'أقصى ميزانية للمشروع الواحد' : 'Max Budget Per Project'}</span>
-                        <span className="text-[9px] text-slate-500">{isAr ? '(0 تعني غير محدود)' : '(0 means unlimited)'}</span>
+                        <span className="text-[9px] text-muted-foreground">{isAr ? '(0 تعني غير محدود)' : '(0 means unlimited)'}</span>
                       </label>
                       <input
                         type="number"
                         required
                         value={detailPlanMaxBudget}
                         onChange={(e) => setDetailPlanMaxBudget(parseFloat(e.target.value) || 0)}
-                        className="w-full bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-100 outline-none transition-all font-mono"
+                        className="w-full bg-background/80 border border-border focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-foreground outline-none transition-all font-mono"
                       />
                     </div>
                   </div>
 
                   {/* Custom Features Manager */}
                   <div className="space-y-2 pt-2">
-                    <label className="text-xs text-slate-400 font-semibold">{isAr ? 'ميزات الباقة المخصصة' : 'Custom Feature Lists'}</label>
+                    <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'ميزات الباقة المخصصة' : 'Custom Feature Lists'}</label>
                     <div className="flex gap-2">
                       <input
                         type="text"
                         value={detailNewFeatureText}
                         onChange={(e) => setDetailNewFeatureText(e.target.value)}
                         placeholder={isAr ? 'أضف ميزة جديدة مخصصة لهذه الشركة...' : 'Add a custom feature flag...'}
-                        className="flex-1 bg-slate-950/80 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder-slate-650 outline-none transition-all"
+                        className="flex-1 bg-background/80 border border-border focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-foreground placeholder-slate-650 outline-none transition-all"
                       />
                       <Button
                         type="button"
@@ -596,12 +596,12 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
                       </Button>
                     </div>
 
-                    <div className="space-y-1.5 max-h-36 overflow-y-auto border border-slate-800/80 rounded-xl p-3 bg-slate-950/40">
+                    <div className="space-y-1.5 max-h-36 overflow-y-auto border border-border rounded-xl p-3 bg-background/40">
                       {detailPlanFeatures.length === 0 ? (
-                        <p className="text-xs text-slate-500 italic text-center py-1">{isAr ? 'لا توجد ميزات مخصصة حالياً.' : 'No custom features added yet.'}</p>
+                        <p className="text-xs text-muted-foreground italic text-center py-1">{isAr ? 'لا توجد ميزات مخصصة حالياً.' : 'No custom features added yet.'}</p>
                       ) : (
                         detailPlanFeatures.map((feature, idx) => (
-                          <div key={idx} className="flex justify-between items-center bg-slate-900 border border-slate-800/60 rounded-lg px-3 py-1.5 text-xs">
+                          <div key={idx} className="flex justify-between items-center bg-card border border-border rounded-lg px-3 py-1.5 text-xs">
                             <span className="text-slate-200">{feature}</span>
                             <button
                               type="button"
@@ -634,8 +634,8 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
                     <SlidersHorizontal className="w-6 h-6" />
                   </div>
                   <div className="space-y-1.5">
-                    <h3 className="font-bold text-white text-base">{isAr ? 'تحويل مساحة العمل لباقة مخصصة (Enterprise Plus)' : 'Convert Workspace to Custom Plan (Enterprise Plus)'}</h3>
-                    <p className="text-xs text-slate-400 leading-relaxed">
+                    <h3 className="font-bold text-foreground text-base">{isAr ? 'تحويل مساحة العمل لباقة مخصصة (Enterprise Plus)' : 'Convert Workspace to Custom Plan (Enterprise Plus)'}</h3>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
                       {isAr 
                         ? 'الشركة حالياً تعمل بباقة قياسية مشتركة. يمكنك فصلها وإنشاء باقة مخصصة بالكامل لها بأسعار وحدود وعدد مستخدمين مخصص يتم التحكم فيه بشكل منفصل.'
                         : 'This workspace is currently running on a standard subscription plan. You can isolate it and provision custom user boundaries and parameters exclusively.'}
@@ -661,18 +661,18 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
           </Card>
 
           {/* Subscription History Section */}
-          <Card className="border-slate-800 bg-slate-900/40 text-white overflow-hidden">
-            <CardHeader className={`border-b border-slate-800/60 ${isAr ? 'text-right' : 'text-left'}`}>
+          <Card className="border-border bg-card text-foreground overflow-hidden">
+            <CardHeader className={`border-b border-border ${isAr ? 'text-right' : 'text-left'}`}>
               <CardTitle className="text-base flex items-center gap-2">
                 <CreditCard className={`w-4 h-4 text-indigo-400 ${isAr ? 'ml-1' : 'mr-1'}`} />
                 {isAr ? 'سجل اشتراكات الشركة' : 'Company Subscriptions Ledger'}
               </CardTitle>
-              <CardDescription className="text-slate-400 text-xs">{isAr ? 'كافة الاشتراكات التاريخية والنشطة وحالتها في النظام' : 'Audit logs of active and past plan subscriptions'}</CardDescription>
+              <CardDescription className="text-muted-foreground text-xs">{isAr ? 'كافة الاشتراكات التاريخية والنشطة وحالتها في النظام' : 'Audit logs of active and past plan subscriptions'}</CardDescription>
             </CardHeader>
             <div className="overflow-x-auto">
               <table className={`w-full ${isAr ? 'text-right' : 'text-left'} border-collapse`}>
                 <thead>
-                  <tr className="border-b border-slate-800 bg-slate-900/60 text-slate-400 text-xs font-semibold font-sans">
+                  <tr className="border-b border-border bg-card text-muted-foreground text-xs font-semibold font-sans">
                     <th className="px-6 py-3">{isAr ? 'الباقة' : 'Plan Name'}</th>
                     <th className="px-6 py-3 text-center">{isAr ? 'دورة الدفع' : 'Billing Cycle'}</th>
                     <th className="px-6 py-3">{isAr ? 'تاريخ البدء' : 'Start Date'}</th>
@@ -683,14 +683,14 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
                 <tbody className="divide-y divide-slate-800/40 text-xs">
                   {!tenantDetails.tenant.subscriptions || tenantDetails.tenant.subscriptions.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="text-center py-8 text-slate-500 italic">
+                      <td colSpan={5} className="text-center py-8 text-muted-foreground italic">
                         {isAr ? 'لا يوجد سجل اشتراكات لهذه الشركة.' : 'No plan records found.'}
                       </td>
                     </tr>
                   ) : (
                     tenantDetails.tenant.subscriptions.map((sub: any) => (
-                      <tr key={sub.id} className="hover:bg-slate-800/10 transition-colors">
-                        <td className="px-6 py-3 font-semibold text-white">
+                      <tr key={sub.id} className="hover:bg-muted transition-colors">
+                        <td className="px-6 py-3 font-semibold text-foreground">
                           {sub.plan ? (
                             isAr 
                               ? (sub.plan.slug === 'basic' ? 'الأساسية' :
@@ -711,10 +711,10 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
                         <td className="px-6 py-3 text-center">
                           {sub.billing_cycle === 'monthly' ? (isAr ? 'شهري' : 'Monthly') : (isAr ? 'سنوي' : 'Annual')}
                         </td>
-                        <td className="px-6 py-3 font-mono text-slate-400">
+                        <td className="px-6 py-3 font-mono text-muted-foreground">
                           {sub.starts_at ? formatTime(sub.starts_at) : '—'}
                         </td>
-                        <td className="px-6 py-3 font-mono text-slate-400">
+                        <td className="px-6 py-3 font-mono text-muted-foreground">
                           {sub.ends_at ? formatTime(sub.ends_at) : '—'}
                         </td>
                         <td className="px-6 py-3 text-center">
@@ -740,18 +740,18 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
           </Card>
 
           {/* Company Logs Table */}
-          <Card className="border-slate-800 bg-slate-900/40 text-white overflow-hidden">
-            <CardHeader className={`border-b border-slate-800/60 ${isAr ? 'text-right' : 'text-left'}`}>
+          <Card className="border-border bg-card text-foreground overflow-hidden">
+            <CardHeader className={`border-b border-border ${isAr ? 'text-right' : 'text-left'}`}>
               <CardTitle className="text-base flex items-center gap-2">
                 <Database className={`w-4 h-4 text-indigo-400 ${isAr ? 'ml-1' : 'mr-1'}`} />
                 {isAr ? 'سجل العمليات للشركة (Activity Log)' : 'Workspace Activity Log'}
               </CardTitle>
-              <CardDescription className="text-slate-400 text-xs">{isAr ? 'تتبع حركات ومسارات مستخدمي هذه الشركة فقط' : 'Track and audit actions performed by users inside this workspace only'}</CardDescription>
+              <CardDescription className="text-muted-foreground text-xs">{isAr ? 'تتبع حركات ومسارات مستخدمي هذه الشركة فقط' : 'Track and audit actions performed by users inside this workspace only'}</CardDescription>
             </CardHeader>
             <div className="overflow-x-auto min-h-[200px]">
               <table className={`w-full ${isAr ? 'text-right' : 'text-left'} border-collapse`}>
                 <thead>
-                  <tr className="border-b border-slate-800 bg-slate-900/60 text-slate-400 text-xs font-semibold">
+                  <tr className="border-b border-border bg-card text-muted-foreground text-xs font-semibold">
                     <th className="px-6 py-3">{isAr ? 'التاريخ والوقت' : 'Timestamp'}</th>
                     <th className="px-6 py-3">{isAr ? 'المستخدم' : 'Executing User'}</th>
                     <th className="px-6 py-3">{isAr ? 'الميثود' : 'Method'}</th>
@@ -764,29 +764,29 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
                   {tenantLogsLoading ? (
                     Array.from({ length: 3 }).map((_, idx) => (
                       <tr key={idx} className="animate-pulse">
-                        <td className="px-6 py-3"><div className="h-4 bg-slate-800 rounded w-28" /></td>
-                        <td className="px-6 py-3"><div className="h-4 bg-slate-800 rounded w-24" /></td>
-                        <td className="px-6 py-3"><div className="h-4 bg-slate-800 rounded w-10" /></td>
-                        <td className="px-6 py-3"><div className="h-4 bg-slate-800 rounded w-32" /></td>
-                        <td className="px-6 py-3"><div className="h-4 bg-slate-800 rounded w-8 mx-auto" /></td>
-                        <td className="px-6 py-3"><div className="h-8 bg-slate-800 rounded w-16 mx-auto" /></td>
+                        <td className="px-6 py-3"><div className="h-4 bg-muted rounded w-28" /></td>
+                        <td className="px-6 py-3"><div className="h-4 bg-muted rounded w-24" /></td>
+                        <td className="px-6 py-3"><div className="h-4 bg-muted rounded w-10" /></td>
+                        <td className="px-6 py-3"><div className="h-4 bg-muted rounded w-32" /></td>
+                        <td className="px-6 py-3"><div className="h-4 bg-muted rounded w-8 mx-auto" /></td>
+                        <td className="px-6 py-3"><div className="h-8 bg-muted rounded w-16 mx-auto" /></td>
                       </tr>
                     ))
                   ) : !tenantLogsData || tenantLogsData.data.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="text-center py-8 text-slate-500 italic font-medium">
+                      <td colSpan={6} className="text-center py-8 text-muted-foreground italic font-medium">
                         {isAr ? 'لا توجد عمليات مسجلة لهذه الشركة.' : 'No activity logs found.'}
                       </td>
                     </tr>
                   ) : (
                     tenantLogsData.data.map((log: SystemLogItem) => (
-                      <tr key={log.id} className="hover:bg-slate-800/10 transition-colors">
-                        <td className="px-6 py-3 font-mono text-slate-400">{formatTime(log.created_at)}</td>
+                      <tr key={log.id} className="hover:bg-muted transition-colors">
+                        <td className="px-6 py-3 font-mono text-muted-foreground">{formatTime(log.created_at)}</td>
                         <td className="px-6 py-3">
                           {log.user ? (
                             <div className={isAr ? 'text-right' : 'text-left'}>
-                              <span className="font-semibold text-white block">{log.user.profile?.first_name} {log.user.profile?.last_name}</span>
-                              <span className="text-[10px] text-slate-500 font-mono block mt-0.5">{log.user.email}</span>
+                              <span className="font-semibold text-foreground block">{log.user.profile?.first_name} {log.user.profile?.last_name}</span>
+                              <span className="text-[10px] text-muted-foreground font-mono block mt-0.5">{log.user.email}</span>
                             </div>
                           ) : (
                             <span className="text-slate-550 italic">{isAr ? 'زائر' : 'Guest'}</span>
@@ -824,8 +824,8 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
 
             {/* Tenant Logs Pagination */}
             {tenantLogsData && tenantLogsData.last_page > 1 && (
-              <div className="border-t border-slate-800 bg-slate-900/30 px-6 py-3 flex items-center justify-between">
-                <span className="text-[11px] text-slate-400">
+              <div className="border-t border-border bg-card px-6 py-3 flex items-center justify-between">
+                <span className="text-[11px] text-muted-foreground">
                   {isAr 
                     ? `صفحة ${tenantLogPage} من ${tenantLogsData.last_page} (إجمالي ${tenantLogsData.total} سجل)`
                     : `Page ${tenantLogPage} of ${tenantLogsData.last_page} (Total ${tenantLogsData.total} logs)`}
@@ -835,7 +835,7 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
                     onClick={() => setTenantLogPage((prev) => Math.max(prev - 1, 1))}
                     disabled={tenantLogPage === 1}
                     variant="outline"
-                    className="border-slate-800 hover:bg-slate-800 text-slate-300 p-1.5 h-7 w-7 rounded-lg transition-all disabled:opacity-30 cursor-pointer"
+                    className="border-border hover:bg-muted text-foreground p-1.5 h-7 w-7 rounded-lg transition-all disabled:opacity-30 cursor-pointer"
                   >
                     {isAr ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
                   </Button>
@@ -843,7 +843,7 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
                     onClick={() => setTenantLogPage((prev) => Math.min(prev + 1, tenantLogsData.last_page))}
                     disabled={tenantLogPage === tenantLogsData.last_page}
                     variant="outline"
-                    className="border-slate-800 hover:bg-slate-800 text-slate-300 p-1.5 h-7 w-7 rounded-lg transition-all disabled:opacity-30 cursor-pointer"
+                    className="border-border hover:bg-muted text-foreground p-1.5 h-7 w-7 rounded-lg transition-all disabled:opacity-30 cursor-pointer"
                   >
                     {isAr ? <ChevronLeft className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
                   </Button>
@@ -856,23 +856,23 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
 
       {/* --- LOG DETAILS MODAL --- */}
       {selectedLog && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm transition-all animate-in fade-in duration-200">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-4xl shadow-2xl shadow-indigo-500/5 max-h-[85vh] flex flex-col overflow-hidden transform scale-100 transition-all">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/70 backdrop-blur-sm transition-all animate-in fade-in duration-200">
+          <div className="bg-card border border-border rounded-3xl w-full max-w-4xl shadow-2xl shadow-indigo-500/5 max-h-[85vh] flex flex-col overflow-hidden transform scale-100 transition-all">
             
-            <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/60 sticky top-0 z-10">
+            <div className="px-6 py-4 border-b border-border flex items-center justify-between bg-card sticky top-0 z-10">
               <div className="flex items-center gap-3">
                 <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold border ${getMethodBadgeClass(selectedLog.method)}`}>
                   {selectedLog.method}
                 </span>
                 <div className={isAr ? 'text-right' : 'text-left'}>
-                  <h3 className="text-sm font-bold text-white font-mono">{selectedLog.endpoint}</h3>
-                  <p className="text-xs text-slate-400 mt-0.5">{formatTime(selectedLog.created_at)}</p>
+                  <h3 className="text-sm font-bold text-foreground font-mono">{selectedLog.endpoint}</h3>
+                  <p className="text-xs text-muted-foreground mt-0.5">{formatTime(selectedLog.created_at)}</p>
                 </div>
               </div>
               <Button
                 onClick={() => setSelectedLog(null)}
                 variant="ghost"
-                className="hover:bg-slate-800 text-slate-400 hover:text-white p-2 rounded-xl h-8 w-8"
+                className="hover:bg-muted text-muted-foreground hover:text-foreground p-2 rounded-xl h-8 w-8"
               >
                 <X className="w-4 h-4" />
               </Button>
@@ -880,29 +880,29 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
 
             <div className={`p-6 overflow-y-auto space-y-6 flex-1 ${isAr ? 'text-right' : 'text-left'}`}>
               <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                <div className="bg-slate-950/40 border border-slate-800/60 p-4 rounded-2xl">
-                  <span className="text-xs text-slate-500 block mb-1">{isAr ? 'الشركة' : 'Company / Scope'}</span>
-                  <span className="font-bold text-white block text-sm">
+                <div className="bg-background/40 border border-border p-4 rounded-2xl">
+                  <span className="text-xs text-muted-foreground block mb-1">{isAr ? 'الشركة' : 'Company / Scope'}</span>
+                  <span className="font-bold text-foreground block text-sm">
                     {selectedLog.tenant ? selectedLog.tenant.name : (isAr ? 'مسؤول النظام' : 'System Administrator')}
                   </span>
                 </div>
-                <div className="bg-slate-950/40 border border-slate-800/60 p-4 rounded-2xl">
-                  <span className="text-xs text-slate-500 block mb-1">{isAr ? 'المستخدم المنفذ' : 'Executed User'}</span>
-                  <span className="font-semibold text-white block text-sm">
+                <div className="bg-background/40 border border-border p-4 rounded-2xl">
+                  <span className="text-xs text-muted-foreground block mb-1">{isAr ? 'المستخدم المنفذ' : 'Executed User'}</span>
+                  <span className="font-semibold text-foreground block text-sm">
                     {selectedLog.user ? `${selectedLog.user.profile?.first_name} ${selectedLog.user.profile?.last_name}` : (isAr ? 'زائر غير مسجل' : 'Anonymous Guest')}
                   </span>
-                  <span className="text-xs text-slate-400 block font-mono mt-0.5">{selectedLog.user?.email || '—'}</span>
+                  <span className="text-xs text-muted-foreground block font-mono mt-0.5">{selectedLog.user?.email || '—'}</span>
                 </div>
-                <div className="bg-slate-950/40 border border-slate-800/60 p-4 rounded-2xl">
-                  <span className="text-xs text-slate-500 block mb-1">{isAr ? 'حالة الطلب' : 'Response Status'}</span>
+                <div className="bg-background/40 border border-border p-4 rounded-2xl">
+                  <span className="text-xs text-muted-foreground block mb-1">{isAr ? 'حالة الطلب' : 'Response Status'}</span>
                   <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-mono font-bold border mt-1 ${getStatusBadgeClass(selectedLog.status_code)}`}>
                     {selectedLog.status_code}
                   </span>
                 </div>
-                <div className="bg-slate-950/40 border border-slate-800/60 p-4 rounded-2xl">
-                  <span className="text-xs text-slate-500 block mb-1">{isAr ? 'بيانات الاتصال' : 'Connection IP'}</span>
-                  <span className="text-sm font-semibold text-white block font-mono">{selectedLog.ip_address || '—'}</span>
-                  <span className="text-xs text-slate-400 block truncate mt-0.5" title={selectedLog.user_agent || ''}>
+                <div className="bg-background/40 border border-border p-4 rounded-2xl">
+                  <span className="text-xs text-muted-foreground block mb-1">{isAr ? 'بيانات الاتصال' : 'Connection IP'}</span>
+                  <span className="text-sm font-semibold text-foreground block font-mono">{selectedLog.ip_address || '—'}</span>
+                  <span className="text-xs text-muted-foreground block truncate mt-0.5" title={selectedLog.user_agent || ''}>
                     {selectedLog.user_agent || '—'}
                   </span>
                 </div>
@@ -910,19 +910,19 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-slate-400 font-semibold">{isAr ? 'بيانات الطلب المرسلة (Request Payload)' : 'Request Payload Data'}</span>
+                  <span className="text-xs text-muted-foreground font-semibold">{isAr ? 'بيانات الطلب المرسلة (Request Payload)' : 'Request Payload Data'}</span>
                   {selectedLog.payload && Object.keys(selectedLog.payload).length > 0 && (
                     <Button
                       onClick={() => handleCopy(selectedLog.payload, 'payload')}
                       variant="ghost"
-                      className="text-indigo-400 hover:text-indigo-300 hover:bg-slate-800/50 h-7 text-xs px-2.5 rounded-lg cursor-pointer"
+                      className="text-indigo-400 hover:text-indigo-300 hover:bg-muted h-7 text-xs px-2.5 rounded-lg cursor-pointer"
                     >
                       {copiedPayload ? <ClipboardCheck className="w-3.5 h-3.5" /> : <ClipboardCopy className="w-3.5 h-3.5" />}
                       <span className={`${isAr ? 'mr-1' : 'ml-1'}`}>{copiedPayload ? (isAr ? 'تم النسخ!' : 'Copied!') : (isAr ? 'نسخ JSON' : 'Copy JSON')}</span>
                     </Button>
                   )}
                 </div>
-                <pre className="bg-slate-950 p-4 rounded-2xl overflow-auto text-xs font-mono text-left max-h-56 border border-slate-800/70" dir="ltr">
+                <pre className="bg-background p-4 rounded-2xl overflow-auto text-xs font-mono text-left max-h-56 border border-border" dir="ltr">
                   {selectedLog.payload && Object.keys(selectedLog.payload).length > 0
                     ? JSON.stringify(selectedLog.payload, null, 2)
                     : (isAr ? '// لا توجد بيانات مرسلة' : '// Empty Payload')}
@@ -931,19 +931,19 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-slate-400 font-semibold">{isAr ? 'استجابة الخادم المستلمة (Response)' : 'Server Response (JSON)'}</span>
+                  <span className="text-xs text-muted-foreground font-semibold">{isAr ? 'استجابة الخادم المستلمة (Response)' : 'Server Response (JSON)'}</span>
                   {selectedLog.response && (
                     <Button
                       onClick={() => handleCopy(selectedLog.response, 'response')}
                       variant="ghost"
-                      className="text-indigo-400 hover:text-indigo-300 hover:bg-slate-800/50 h-7 text-xs px-2.5 rounded-lg cursor-pointer"
+                      className="text-indigo-400 hover:text-indigo-300 hover:bg-muted h-7 text-xs px-2.5 rounded-lg cursor-pointer"
                     >
                       {copiedResponse ? <ClipboardCheck className="w-3.5 h-3.5" /> : <ClipboardCopy className="w-3.5 h-3.5" />}
                       <span className={`${isAr ? 'mr-1' : 'ml-1'}`}>{copiedResponse ? (isAr ? 'تم النسخ!' : 'Copied!') : (isAr ? 'نسخ JSON' : 'Copy JSON')}</span>
                     </Button>
                   )}
                 </div>
-                <pre className="bg-slate-950 p-4 rounded-2xl overflow-auto text-xs font-mono text-left max-h-60 border border-slate-800/70" dir="ltr">
+                <pre className="bg-background p-4 rounded-2xl overflow-auto text-xs font-mono text-left max-h-60 border border-border" dir="ltr">
                   {selectedLog.response
                     ? JSON.stringify(selectedLog.response, null, 2)
                     : (isAr ? '// لا توجد استجابة' : '// No Response')}
@@ -951,7 +951,7 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
               </div>
             </div>
 
-            <div className="px-6 py-4 border-t border-slate-800 bg-slate-900/40 flex justify-end">
+            <div className="px-6 py-4 border-t border-border bg-card flex justify-end">
               <Button
                 onClick={() => setSelectedLog(null)}
                 className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl px-5 transition-all text-xs cursor-pointer"
@@ -965,10 +965,10 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
 
       {/* --- CONFIRM CUSTOMIZE PLAN MODAL --- */}
       {showConfirmCustomize && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm transition-all animate-in fade-in duration-200">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-md shadow-2xl p-6 text-right">
-            <h3 className="text-base font-bold text-white mb-2">{isAr ? 'تأكيد تخصيص الباقة' : 'Confirm Plan Customization'}</h3>
-            <p className="text-xs text-slate-400 mb-6 leading-relaxed">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/70 backdrop-blur-sm transition-all animate-in fade-in duration-200">
+          <div className="bg-card border border-border rounded-3xl w-full max-w-md shadow-2xl p-6 text-right">
+            <h3 className="text-base font-bold text-foreground mb-2">{isAr ? 'تأكيد تخصيص الباقة' : 'Confirm Plan Customization'}</h3>
+            <p className="text-xs text-muted-foreground mb-6 leading-relaxed">
               {isAr 
                 ? 'هل أنت متأكد من رغبتك في فصل هذه الشركة عن الباقة القياسية وإنشاء باقة مخصصة (Enterprise Plus) لها؟'
                 : 'Are you sure you want to isolate this company from standard plans and configure a dedicated (Enterprise Plus) plan for it?'}
@@ -978,7 +978,7 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
                 type="button"
                 onClick={() => setShowConfirmCustomize(false)}
                 variant="ghost"
-                className="hover:bg-slate-800 text-slate-400 hover:text-white rounded-xl px-4 text-xs cursor-pointer"
+                className="hover:bg-muted text-muted-foreground hover:text-foreground rounded-xl px-4 text-xs cursor-pointer"
               >
                 {isAr ? 'إلغاء' : 'Cancel'}
               </Button>
