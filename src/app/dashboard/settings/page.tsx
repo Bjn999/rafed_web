@@ -21,7 +21,8 @@ import {
   Phone,
   Briefcase,
   X,
-  FileText
+  FileText,
+  AlertCircle
 } from 'lucide-react';
 
 interface UsageStats {
@@ -81,6 +82,7 @@ export default function SettingsPage() {
   const [companyCr, setCompanyCr] = useState('');
   const [companyTax, setCompanyTax] = useState('');
   const [companyBilling, setCompanyBilling] = useState('');
+  const [companyTimezone, setCompanyTimezone] = useState('');
   const [isSavingCompany, setIsSavingCompany] = useState(false);
 
   // Sync query parameter with state & localStorage
@@ -125,6 +127,7 @@ export default function SettingsPage() {
       setCompanyCr(tenant.commercial_registration || '');
       setCompanyTax(tenant.tax_number || '');
       setCompanyBilling(tenant.billing_details || '');
+      setCompanyTimezone(tenant.timezone || 'UTC');
     }
   }, [authUser, tenant]);
 
@@ -237,6 +240,7 @@ export default function SettingsPage() {
           commercial_registration: companyCr,
           tax_number: companyTax,
           billing_details: companyBilling,
+          timezone: companyTimezone,
         }
       );
       if (response.success) {
@@ -600,6 +604,28 @@ export default function SettingsPage() {
               </div>
 
               <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
+                <label className="text-xs text-slate-400 font-semibold">{isAr ? 'المنطقة الزمنية للشركة' : 'Company Timezone'}</label>
+                <select
+                  value={companyTimezone}
+                  onChange={(e) => setCompanyTimezone(e.target.value)}
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none text-slate-200"
+                  dir="ltr"
+                >
+                  <option value="UTC">UTC (التوقيت العالمي)</option>
+                  <option value="Asia/Riyadh">Asia/Riyadh (توقيت السعودية)</option>
+                  <option value="Asia/Dubai">Asia/Dubai (توقيت الإمارات)</option>
+                  <option value="Africa/Cairo">Africa/Cairo (توقيت مصر)</option>
+                  <option value="Asia/Amman">Asia/Amman (توقيت الأردن)</option>
+                  <option value="Europe/London">Europe/London (توقيت لندن)</option>
+                </select>
+                <p className="text-[10px] text-slate-500 mt-1">
+                  {isAr 
+                    ? '* سيتم الاعتماد على هذا التوقيت في العمليات الحساسة كحساب أوقات انتهاء الاشتراك وأوقات الدوام.' 
+                    : '* This timezone will be used for critical backend operations like subscription expiry.'}
+                </p>
+              </div>
+
+              <div className={`space-y-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
                 <label className="text-xs text-slate-400 font-semibold">{isAr ? 'رابط النطاق (Domain) المشغل' : 'Workspace Domain Link'}</label>
                 <input
                   type="text"
@@ -640,6 +666,44 @@ export default function SettingsPage() {
           ) : usage ? (
             <div className="space-y-6">
               
+              {/* Subscription Alert Card */}
+              {authUser?.subscription_alert?.show_alert && (
+                <div className={`p-6 rounded-2xl border flex flex-col sm:flex-row items-start sm:items-center gap-4 relative overflow-hidden shadow-2xl ${
+                  authUser.subscription_alert.status === 'grace_period' 
+                    ? 'bg-gradient-to-r from-rose-950/40 to-rose-900/20 border-rose-500/30' 
+                    : 'bg-gradient-to-r from-amber-950/40 to-amber-900/20 border-amber-500/30'
+                }`}>
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 ${
+                    authUser.subscription_alert.status === 'grace_period' ? 'bg-rose-500/20 text-rose-400' : 'bg-amber-500/20 text-amber-400'
+                  }`}>
+                    <AlertCircle className="w-6 h-6" />
+                  </div>
+                  <div className="space-y-1.5 flex-1 text-right" dir={isAr ? 'rtl' : 'ltr'}>
+                    <h3 className="text-lg font-bold text-white">
+                      {authUser.subscription_alert.status === 'grace_period' 
+                        ? (isAr ? `انتهى اشتراكك ${authUser.subscription_alert.billing_cycle === 'monthly' ? 'الشهري' : 'السنوي'}!` : `Your ${authUser.subscription_alert.billing_cycle === 'monthly' ? 'monthly' : 'annual'} subscription expired!`)
+                        : (isAr ? 'اقترب موعد تجديد الاشتراك' : 'Subscription renewal is approaching')}
+                    </h3>
+                    <p className="text-sm text-slate-300 leading-relaxed">
+                      {authUser.subscription_alert.status === 'grace_period'
+                        ? (isAr 
+                          ? `أنت الآن في فترة السماح. يرجى مسارعة تجديد الاشتراك لتجنب إيقاف الحساب. متبقي ${authUser.subscription_alert.billing_cycle === 'monthly' ? Math.ceil(authUser.subscription_alert.days_left * 24) + ' ساعة' : Math.ceil(authUser.subscription_alert.days_left) + ' يوم'} فقط على إيقاف الخدمة.`
+                          : `You are in the grace period. Please hurry to renew your subscription. Only ${authUser.subscription_alert.billing_cycle === 'monthly' ? Math.ceil(authUser.subscription_alert.days_left * 24) + ' hours' : Math.ceil(authUser.subscription_alert.days_left) + ' days'} left.`)
+                        : (isAr 
+                          ? `يرجى العلم بأن اشتراكك ${authUser.subscription_alert.billing_cycle === 'monthly' ? 'الشهري' : 'السنوي'} سينتهي بعد ${Math.ceil(authUser.subscription_alert.days_left)} يوم. نرجو التجديد لضمان استمرار الخدمة بلا انقطاع.`
+                          : `Please be aware that your ${authUser.subscription_alert.billing_cycle === 'monthly' ? 'monthly' : 'annual'} subscription will expire in ${Math.ceil(authUser.subscription_alert.days_left)} days. Renew now to ensure uninterrupted service.`)}
+                    </p>
+                  </div>
+                  <div className="shrink-0 w-full sm:w-auto mt-4 sm:mt-0">
+                    <Link href="/pricing" className="block w-full">
+                      <Button className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl px-8 font-bold transition-all shadow-lg shadow-indigo-600/20 cursor-pointer">
+                        {isAr ? 'تجديد الآن' : 'Renew Now'}
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              )}
+
               {/* Main Usage panel (Moved from dashboard) */}
               <div className="bg-slate-900/50 border border-slate-800/80 rounded-2xl p-6 space-y-6 backdrop-blur-xl relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-[60px] pointer-events-none" />

@@ -9,12 +9,14 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 export interface Tenant {
   id: number;
   name: string;
-  name_en?: string | null;
-  commercial_registration?: string | null;
-  tax_number?: string | null;
-  billing_details?: string | null;
-  domain: string;
+  name_en?: string;
+  commercial_registration?: string;
+  tax_number?: string;
+  billing_details?: string;
+  domain?: string;
   status: string;
+  timezone?: string;
+  is_profile_completed?: boolean;
 }
 
 export interface UserProfile {
@@ -34,6 +36,12 @@ export interface User {
   role?: string;
   tenant?: Tenant;
   profile?: UserProfile;
+  subscription_alert?: {
+    show_alert: boolean;
+    status: 'warning' | 'grace_period';
+    days_left: number;
+    billing_cycle?: 'monthly' | 'yearly';
+  };
 }
 
 interface AuthContextType {

@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useLanguage } from '@/context/LanguageContext';
 import { LanguageSelector } from '@/components/ui/LanguageSelector';
 import { Button } from '@/components/ui/button';
 import { featuresList } from '@/lib/features-config';
+import { api } from '@/lib/api';
 import { 
   Building2, 
   LogOut, 
@@ -24,7 +25,10 @@ import {
   TrendingUp,
   Award,
   Layers,
-  ArrowRight
+  ArrowRight,
+  Check,
+  HelpCircle,
+  PhoneCall
 } from 'lucide-react';
 
 const iconMap = {
@@ -35,6 +39,19 @@ const iconMap = {
   Smartphone: Smartphone,
   Zap: Zap
 };
+
+interface Plan {
+  id: number;
+  name: string;
+  slug: string;
+  price_monthly: number | null;
+  price_yearly: number | null;
+  max_project_budget: number;
+  max_users: number;
+  project_credits_per_year: number;
+  is_custom: boolean;
+  features: string[];
+}
 
 const featureTranslations: Record<string, { title: string; desc: string; badge?: string }> = {
   'project-management': {
@@ -70,6 +87,61 @@ export default function HomePage() {
   const { t, isAr } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const dashboardUrl = user?.role === 'system_admin' ? '/admin' : '/dashboard';
+
+  // Pricing State
+  const [plans, setPlans] = useState<Plan[]>([]);
+  const [isYearly, setIsYearly] = useState<boolean>(true);
+  const [plansLoading, setPlansLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    async function fetchPlans() {
+      try {
+        const response = await api.get<{ success: boolean; data: Plan[] }>('/plans');
+        if (response.success && response.data) {
+          const order = ['basic', 'professional', 'business', 'enterprise', 'enterprise_plus'];
+          const sorted = [...response.data].sort((a, b) => order.indexOf(a.slug) - order.indexOf(b.slug));
+          
+          const localized = sorted.map(plan => {
+            if (isAr) return plan;
+            
+            let name = plan.name;
+            let features = plan.features;
+            
+            if (plan.slug === 'basic') {
+              name = 'Basic';
+              features = ['3 projects per year', 'Max project budget 10 Million SAR', '10 active users', 'Task management & tracking', 'Email support'];
+            } else if (plan.slug === 'professional') {
+              name = 'Professional';
+              features = ['10 projects per year', 'Max project budget 100 Million SAR', '25 active users', 'Advanced task management & cashflow scheduling', 'System audit logs & history', '24/7 priority support'];
+            } else if (plan.slug === 'business') {
+              name = 'Business';
+              features = ['20 projects per year', 'Max project budget 500 Million SAR', '50 active users', 'Accounting & financial reports integration', 'Analytical reports & KPIs', 'Dedicated account manager'];
+            } else if (plan.slug === 'enterprise') {
+              name = 'Enterprise';
+              features = ['50 projects per year', 'Unlimited project budget', '100 active users', 'Custom domain support', 'Direct priority phone support', 'Custom API integrations'];
+            }
+            
+            return { ...plan, name, features };
+          });
+          
+          setPlans(localized);
+        }
+      } catch (err) {
+        console.error('Error fetching plans', err);
+      } finally {
+        setPlansLoading(false);
+      }
+    }
+
+    fetchPlans();
+  }, [isAr]);
+
+  const formatBudget = (budget: number) => {
+    if (budget === 0) return isAr ? 'غير محدود' : 'Unlimited';
+    if (budget >= 1000000000) return isAr ? `${budget / 1000000000} مليار ريال` : `${budget / 1000000000} Billion SAR`;
+    if (budget >= 1000000) return isAr ? `${budget / 1000000} مليون ريال` : `${budget / 1000000} Million SAR`;
+    return isAr ? `${budget.toLocaleString('ar-SA')} ريال` : `${budget.toLocaleString('en-US')} SAR`;
+  };
 
   const handleLogoutClick = async () => {
     try {
@@ -113,6 +185,9 @@ export default function HomePage() {
             </Link>
             <Link href="#about" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
               {t('nav.about')}
+            </Link>
+            <Link href="#pricing" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
+              {isAr ? 'الأسعار' : 'Pricing'}
             </Link>
             <Link href="#statistics" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
               {t('nav.statistics')}
@@ -202,6 +277,13 @@ export default function HomePage() {
                 className="text-base font-semibold text-slate-300 hover:text-white py-2 border-b border-slate-900"
               >
                 {t('nav.about')}
+              </Link>
+              <Link 
+                href="#pricing" 
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-base font-semibold text-slate-300 hover:text-white py-2 border-b border-slate-900"
+              >
+                {isAr ? 'الأسعار' : 'Pricing'}
               </Link>
               <Link 
                 href="#statistics" 
@@ -479,119 +561,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* About System Section */}
-        <section id="about" className="py-20 md:py-28 border-t border-slate-900 bg-slate-950/40 relative">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-              
-              {/* Workspace Mockup Card (Left Side) */}
-              <div className="lg:col-span-6 order-2 lg:order-1 flex justify-center relative">
-                
-                {/* Decorative glowing gradient behind */}
-                <div className="absolute inset-0 bg-violet-600/15 rounded-3xl filter blur-3xl -z-10 transform scale-75" />
-
-                {/* Workspace visual display */}
-                <div className="w-full max-w-md border border-slate-800 bg-slate-950/80 rounded-2xl shadow-xl overflow-hidden p-6 space-y-6">
-                  
-                  {/* Workspace Title */}
-                  <div className={`flex items-center gap-3 pb-4 border-b border-slate-900 ${isAr ? 'text-right' : 'text-left'}`}>
-                    <div className="w-10 h-10 bg-violet-600/20 text-violet-400 rounded-lg flex items-center justify-center border border-violet-500/20">
-                      <Building2 className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <div className="text-sm font-bold text-white">{isAr ? 'مساحة عمل: شركة بناء العاصمة' : 'Workspace: Capital Construction Co.'}</div>
-                      <div className="text-[10px] text-indigo-400 font-mono">bena-capital.rafed.com</div>
-                    </div>
-                  </div>
-
-                  {/* Multi-Tenant Features breakdown */}
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between p-3 bg-slate-900/60 rounded-xl border border-slate-800/60 text-xs">
-                      <span className="text-slate-400 font-medium">{isAr ? 'حالة النطاق والمجال' : 'Domain & Subdomain Status'}</span>
-                      <span className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-bold">
-                        {isAr ? 'رابط مخصص ونشط' : 'Active Custom Domain'}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between p-3 bg-slate-900/60 rounded-xl border border-slate-800/60 text-xs">
-                      <span className="text-slate-400 font-medium">{isAr ? 'تشفير قاعدة البيانات' : 'Database Encryption'}</span>
-                      <span className="text-white flex items-center gap-1.5 font-bold">
-                        <ShieldCheck className="w-4 h-4 text-indigo-400" />
-                        {isAr ? 'AES-256 مشفر' : 'AES-256 Encrypted'}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between p-3 bg-slate-900/60 rounded-xl border border-slate-800/60 text-xs">
-                      <span className="text-slate-400 font-medium">{isAr ? 'عدد الموظفين الفعّالين' : 'Active Employees Count'}</span>
-                      <span className="text-indigo-400 font-bold">{isAr ? '8 مهندسين ومراقبين' : '8 Engineers & Supervisors'}</span>
-                    </div>
-                  </div>
-
-                  {/* Graphical organization map */}
-                  <div className={`pt-2 ${isAr ? 'text-right' : 'text-left'}`}>
-                    <div className="text-xs font-semibold text-slate-400 mb-2">{isAr ? 'أدوار الفريق الموزعة:' : 'Assigned Team Roles:'}</div>
-                    <div className="flex gap-2">
-                      <span className="text-[10px] bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 px-2 py-1 rounded-lg font-bold">{isAr ? 'المالك' : 'Owner'}</span>
-                      <span className="text-[10px] bg-violet-500/10 border border-violet-500/20 text-violet-400 px-2 py-1 rounded-lg font-bold">{isAr ? 'مدير مشاريع' : 'Project Manager'}</span>
-                      <span className="text-[10px] bg-slate-900 border border-slate-800 text-slate-400 px-2 py-1 rounded-lg font-bold">{isAr ? 'مراقب ميداني' : 'Site Inspector'}</span>
-                    </div>
-                  </div>
-
-                </div>
-
-              </div>
-
-              {/* About Text (Right Side) */}
-              <div className="lg:col-span-6 order-1 lg:order-2 space-y-6 text-center lg:text-right">
-                
-                <div className="inline-flex items-center gap-1.5 bg-violet-950/60 border border-violet-500/30 text-violet-300 text-xs px-3.5 py-1.5 rounded-full font-semibold">
-                  <Layers className="w-3.5 h-3.5 text-violet-400" />
-                  <span>{isAr ? 'تعددية المستأجرين والأمان' : 'Multi-Tenancy & Security'}</span>
-                </div>
-
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-                  {isAr ? 'معمارية سحابية مستقلة لكل مؤسسة' : 'Isolated Cloud Architecture for Every Firm'}
-                </h2>
-
-                <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-                  {t('homepage.about.desc')}
-                </p>
-
-                <div className={`space-y-4 pt-4 ${isAr ? 'text-right' : 'text-left'}`}>
-                  <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-indigo-600/10 border border-indigo-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                      <ShieldCheck className="w-4.5 h-4.5 text-indigo-400" />
-                    </div>
-                    <div>
-                      <h4 className="text-white font-bold text-sm">{isAr ? 'عزل تام للمستأجرين (Tenant Isolation)' : 'Complete Tenant Isolation'}</h4>
-                      <p className="text-xs text-slate-400 mt-0.5">
-                        {isAr 
-                          ? 'كل شركة تمتلك هويتها الرقمية المستقلة تماماً مما يمنع تداخل البيانات نهائياً.' 
-                          : 'Every firm has its own independent digital identity, completely preventing data overlap.'}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-indigo-600/10 border border-indigo-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                      <Building2 className="w-4.5 h-4.5 text-indigo-400" />
-                    </div>
-                    <div>
-                      <h4 className="text-white font-bold text-sm">{isAr ? 'إمكانية ربط نطاق مخصص (Custom Domains)' : 'Custom Domains Support'}</h4>
-                      <p className="text-xs text-slate-400 mt-0.5">
-                        {isAr 
-                          ? 'يمكنك تشغيل مساحة عملك تحت اسم نطاق خاص بشركتك لتعزيز الهوية والاحترافية.' 
-                          : 'You can operate your workspace under your own domain name to enhance brand authority.'}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-
-            </div>
-          </div>
-        </section>
 
         {/* Statistics section */}
         <section id="statistics" className="py-16 md:py-24 border-t border-slate-900 bg-slate-950 relative">
@@ -619,6 +588,203 @@ export default function HomePage() {
               </div>
 
             </div>
+          </div>
+        </section>
+
+        {/* Pricing Section */}
+        <section id="pricing" className="py-20 md:py-28 border-t border-slate-900 bg-slate-950/40 relative">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+            
+            {/* Title and Intro */}
+            <div className="text-center max-w-3xl mx-auto space-y-4">
+              <div className="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs px-3.5 py-1.5 rounded-full font-semibold mb-2">
+                <Sparkles className="w-3.5 h-3.5" />
+                {isAr ? 'باقات مرنة تناسب جميع أحجام الشركات' : 'Flexible plans for all company sizes'}
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+                {isAr ? 'باقات وأسعار المنصة' : 'Plans & Pricing'}
+              </h2>
+              <p className="text-slate-400 text-lg">
+                {isAr ? 'اختر الباقة التي تناسب حجم شركتك وعدد مشاريعك السنوية.' : 'Choose the plan that suits your company size and annual projects.'}
+              </p>
+            </div>
+
+            {/* Toggle Billing Cycle */}
+            <div className="flex justify-center items-center gap-4">
+              <span className={`text-sm font-semibold transition-colors duration-200 ${!isYearly ? 'text-white' : 'text-slate-400'}`}>
+                {isAr ? 'الدفع الشهري' : 'Monthly'}
+              </span>
+              <button 
+                onClick={() => setIsYearly(!isYearly)}
+                className="w-16 h-9 bg-slate-800 hover:bg-slate-700 rounded-full p-1 transition-all relative flex items-center border border-slate-700 cursor-pointer"
+                aria-label="Toggle billing cycle"
+              >
+                <div className={`w-7 h-7 bg-indigo-500 rounded-full shadow-md transition-all duration-300 transform ${isYearly ? (isAr ? '-translate-x-8' : 'translate-x-8') : 'translate-x-0'}`} />
+              </button>
+              <div className="flex items-center gap-2">
+                <span className={`text-sm font-semibold transition-colors duration-200 ${isYearly ? 'text-white' : 'text-slate-400'}`}>
+                  {isAr ? 'الدفع السنوي' : 'Yearly'}
+                </span>
+                <span className="bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full">
+                  {isAr ? 'توفير 17%' : 'Save 17%'}
+                </span>
+              </div>
+            </div>
+
+            {plansLoading ? (
+              <div className="flex flex-col items-center justify-center py-20 gap-3">
+                <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+                <p className="text-slate-400">{isAr ? 'جاري تحميل الباقات المتوفرة...' : 'Loading available plans...'}</p>
+              </div>
+            ) : (
+              <div className="space-y-8">
+                {/* Regular Plans Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+                  {plans.filter(p => !p.is_custom).map((plan) => {
+                    const isPopular = plan.slug === 'professional';
+
+                  return (
+                    <div 
+                      key={plan.id}
+                      className={`flex flex-col rounded-3xl border transition-all duration-300 relative ${
+                        isPopular 
+                          ? 'border-indigo-500 bg-slate-900 shadow-xl shadow-indigo-500/5 lg:scale-105 lg:-translate-y-2 z-10' 
+                          : 'border-slate-800 bg-slate-900/40 hover:border-slate-700'
+                      }`}
+                    >
+                      {isPopular && (
+                        <div className="absolute top-0 right-1/2 translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-indigo-500 to-violet-500 text-white text-[11px] font-bold py-1 px-3.5 rounded-full uppercase tracking-wider shadow-md whitespace-nowrap">
+                          {isAr ? 'الأكثر شعبية' : 'Most Popular'}
+                        </div>
+                      )}
+
+                      <div className="p-6 border-b border-slate-800/80 space-y-4">
+                        <h3 className="text-lg font-bold text-white">{plan.name}</h3>
+                        
+                        <div className="space-y-1">
+                          <div className="flex items-baseline gap-1">
+                            <span className="text-3xl font-extrabold text-white">
+                              {isYearly 
+                                ? (plan.price_yearly ? (plan.price_yearly / 12).toFixed(0) : '')
+                                : plan.price_monthly
+                              }
+                            </span>
+                            <span className="text-slate-400 text-xs font-semibold">{isAr ? 'ريال / شهرياً' : 'SAR / Month'}</span>
+                          </div>
+                          
+                          {isYearly && plan.price_yearly && (
+                            <p className="text-[11px] text-emerald-400 font-medium font-sans">
+                              {isAr 
+                                ? `يُدفع سنوياً بقيمة ${plan.price_yearly.toLocaleString('ar-SA')} ريال`
+                                : `Billed annually at SAR ${plan.price_yearly.toLocaleString('en-US')}`}
+                            </p>
+                          )}
+                          
+                          {(!isYearly && plan.price_monthly) && (
+                            <p className="text-[11px] text-slate-500 font-medium font-sans">
+                              {isAr 
+                                ? `يُدفع شهرياً بقيمة ${plan.price_monthly.toLocaleString('ar-SA')} ريال`
+                                : `Billed monthly at SAR ${plan.price_monthly.toLocaleString('en-US')}`}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="p-5 bg-slate-950/40 border-b border-slate-800/60 text-xs space-y-2 text-slate-300">
+                        <div className="flex justify-between items-center">
+                          <span className="text-slate-500">{isAr ? 'ميزانية المشروع الأقصى:' : 'Max Project Budget:'}</span>
+                          <span className="font-semibold text-white">{formatBudget(plan.max_project_budget)}</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-slate-500">{isAr ? 'أقصى عدد مستخدمين:' : 'Max users:'}</span>
+                          <span className="font-semibold text-white">
+                            {isAr 
+                              ? `${plan.max_users.toLocaleString('ar-SA')} مستخدم` 
+                              : `${plan.max_users.toLocaleString('en-US')} users`}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-slate-500">{isAr ? 'المشاريع السنوية:' : 'Annual Projects:'}</span>
+                          <span className="font-semibold text-indigo-400">
+                            {plan.project_credits_per_year > 0 
+                              ? (isAr ? `${plan.project_credits_per_year} مشاريع` : `${plan.project_credits_per_year} projects`)
+                              : (isAr ? 'حسب الطلب' : 'On Demand')
+                            }
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="p-6 flex-1 space-y-4">
+                        <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{isAr ? 'ماذا تشمل هذه الباقة:' : 'What is included:'}</p>
+                        <ul className="space-y-3 text-sm text-slate-300">
+                          {plan.features.map((feature, idx) => (
+                            <li key={idx} className="flex items-start gap-2">
+                              <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                              <span className="text-xs leading-relaxed">{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <div className="p-6 pt-0 mt-auto">
+                        <Link href={`/register?plan=${plan.slug}&cycle=${isYearly ? 'yearly' : 'monthly'}`} className="block w-full">
+                          <Button className={`w-full rounded-xl py-3 text-xs font-semibold transition-all cursor-pointer ${
+                            isPopular 
+                              ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-600/20' 
+                              : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700'
+                          }`}>
+                            {isAr ? 'اشترك الآن' : 'Subscribe Now'}
+                          </Button>
+                        </Link>
+                      </div>
+                    </div>
+                  );
+                })}
+                </div>
+
+                {/* Custom Plan Horizontal Banner (Static) */}
+                <div className="mt-12 bg-gradient-to-br from-slate-900 to-indigo-950/40 border border-indigo-500/30 rounded-3xl p-8 lg:p-10 shadow-2xl relative overflow-hidden flex flex-col lg:flex-row items-center gap-8 justify-between">
+                  {/* Decorative Background */}
+                  <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-indigo-500/10 blur-[100px] rounded-full pointer-events-none" />
+                  <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-violet-500/10 blur-[100px] rounded-full pointer-events-none" />
+                  
+                  <div className="flex-1 space-y-4 text-center lg:text-right relative z-10">
+                    <div className="inline-flex items-center justify-center gap-2 bg-indigo-500/20 text-indigo-300 text-xs px-4 py-1.5 rounded-full font-bold uppercase tracking-wider border border-indigo-500/20 mb-2">
+                      <Award className="w-4 h-4" />
+                      {isAr ? 'باقة مخصصة' : 'Custom Plan'}
+                    </div>
+                    <h3 className="text-2xl sm:text-3xl font-extrabold text-white">{isAr ? 'الباقة المخصصة' : 'Custom Plan'}</h3>
+                    <p className="text-slate-300 max-w-2xl leading-relaxed mx-auto lg:mx-0">
+                      {isAr ? 'احصل على حلول متكاملة تناسب متطلبات شركتك الخاصة مع خوادم مستقلة وإمكانيات مخصصة لإدارة مشاريعك الإنشائية.' : 'Get integrated solutions tailored to your specific company requirements with isolated servers and custom capabilities.'}
+                    </p>
+                    
+                    {/* Features Row */}
+                    <div className="flex flex-wrap justify-center lg:justify-start gap-4 pt-2">
+                      {[
+                        isAr ? 'مشاريع غير محدودة' : 'Unlimited Projects',
+                        isAr ? 'مساحة تخزين هائلة' : 'Massive Storage',
+                        isAr ? 'أولوية الدعم الفني' : 'Priority Support'
+                      ].map((feature, idx) => (
+                        <div key={idx} className="flex items-center gap-1.5 text-sm text-slate-200 font-medium bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800">
+                          <Check className="w-4 h-4 text-emerald-400" />
+                          <span>{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="shrink-0 relative z-10 w-full lg:w-auto">
+                    <Link href="mailto:sales@rafed.com?subject=طلب باقة مخصصة" className="block w-full">
+                      <Button className="w-full lg:w-auto bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl px-10 py-6 h-auto text-base font-bold shadow-lg shadow-indigo-600/30 transition-all cursor-pointer flex items-center justify-center gap-2">
+                        <PhoneCall className="w-5 h-5" />
+                        {isAr ? 'تواصل مع المبيعات' : 'Contact Sales'}
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+
+              </div>
+            )}
           </div>
         </section>
 
@@ -680,6 +846,7 @@ export default function HomePage() {
             <div className={`md:col-span-6 flex flex-wrap justify-center md:justify-end gap-6 text-xs text-slate-400`}>
               <Link href="#features" className="hover:text-white transition-colors">{t('nav.features')}</Link>
               <Link href="#about" className="hover:text-white transition-colors">{t('nav.about')}</Link>
+              <Link href="#pricing" className="hover:text-white transition-colors">{isAr ? 'الأسعار' : 'Pricing'}</Link>
               <Link href="#statistics" className="hover:text-white transition-colors">{t('nav.statistics')}</Link>
               <span className="text-slate-700">|</span>
               <span>© {new Date().getFullYear()} {isAr ? 'جميع الحقوق محفوظة لـ منصة رافد.' : 'All rights reserved for Rafed Platform.'}</span>

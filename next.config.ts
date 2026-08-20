@@ -1,9 +1,20 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '8000',
+        pathname: '/storage/**',
+      }
+    ]
+  },
   experimental: {
-    workerThreads: false,
-    cpus: 1
+    serverActions: {
+      allowedOrigins: ["lvh.me", "*.lvh.me", "localhost:3000"]
+    }
   }
 };
 

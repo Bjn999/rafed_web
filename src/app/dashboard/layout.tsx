@@ -23,6 +23,7 @@ import {
   Menu,
   Calendar,
   X,
+  AlertCircle,
 } from 'lucide-react';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -33,6 +34,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
+  const [showProfileIncompleteModal, setShowProfileIncompleteModal] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Close mobile drawer on route change
@@ -40,16 +43,44 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     setIsMobileOpen(false);
   }, [pathname]);
 
-  // Router Protection
+  // Handle Subscription Alert Modal (Once per day)
+  useEffect(() => {
+    if (authUser?.subscription_alert?.show_alert) {
+      const today = new Date().toISOString().split('T')[0];
+      const lastSeen = localStorage.getItem('last_subscription_alert_date');
+      if (lastSeen !== today) {
+        setShowSubscriptionModal(true);
+        localStorage.setItem('last_subscription_alert_date', today);
+      }
+    }
+  }, [authUser]);
+
+  // Handle Incomplete Profile Modal
+  useEffect(() => {
+    if (authUser && authUser.role === 'company_admin' && tenant?.is_profile_completed === false) {
+      setShowProfileIncompleteModal(true);
+    } else {
+      setShowProfileIncompleteModal(false);
+    }
+  }, [authUser, tenant]);
+
+  // Router Protection & Suspension Check
   useEffect(() => {
     if (!authLoading) {
       if (!authUser) {
         router.push('/login');
       } else if (authUser.role === 'system_admin') {
         router.push('/admin');
+      } else if (tenant?.status === 'suspended') {
+        toast.add({
+          title: isAr ? 'انتهى الاشتراك' : 'Subscription Expired',
+          description: isAr ? 'انتهت فترة السماح لاشتراكك وتم إيقاف الحساب. يرجى التواصل مع الدعم أو تجديد الاشتراك.' : 'Your subscription grace period has ended and the account is suspended.',
+          type: 'error',
+        });
+        logout().then(() => router.push('/login'));
       }
     }
-  }, [authUser, authLoading, router]);
+  }, [authUser, authLoading, router, tenant, logout, isAr, t]);
 
   // Click outside to close dropdown
   useEffect(() => {
@@ -266,9 +297,28 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </div>
           )}
 
-          {/* User Button */}
-          <button
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          {/* User Button Container */}
+          <div className="relative">
+            {/* Floating Alert Icon */}
+            {authUser?.subscription_alert?.show_alert && (
+              <div className="absolute -top-3 right-0 left-0 flex justify-center z-10">
+                <div className="group relative">
+                  <div className={`flex items-center justify-center w-6 h-6 rounded-full shadow-lg cursor-pointer animate-bounce ${authUser.subscription_alert.status === 'grace_period' ? 'bg-rose-500 text-white shadow-rose-500/40' : 'bg-amber-500 text-white shadow-amber-500/40'}`}>
+                    <AlertCircle className="w-3.5 h-3.5" />
+                  </div>
+                  {/* Tooltip */}
+                  <div className={`absolute bottom-full mb-2 ${isCollapsed && !isMobileOpen ? 'left-8' : (isAr ? 'right-0' : 'left-0')} w-48 bg-slate-800 text-white text-xs font-semibold p-2 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all pointer-events-none border ${authUser.subscription_alert.status === 'grace_period' ? 'border-rose-500/50' : 'border-amber-500/50'}`}>
+                    {authUser.subscription_alert.status === 'grace_period' 
+                      ? (isAr ? 'اشتراكك منتهي! في فترة السماح' : 'Subscription expired! Grace period')
+                      : (isAr ? 'تجديد الاشتراك قريب' : 'Renewal approaching')}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* User Button */}
+            <button
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             className={`w-full flex items-center hover:bg-slate-800/40 border border-transparent hover:border-slate-800/50 rounded-xl transition-all duration-200 cursor-pointer group ${
               isCollapsed && !isMobileOpen ? 'justify-center p-2' : 'justify-between p-2.5'
             }`}
@@ -289,7 +339,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             {(!isCollapsed || isMobileOpen) && (
               <ChevronDown className="w-4 h-4 text-slate-500 group-hover:text-slate-300 animate-in fade-in duration-300" />
             )}
-          </button>
+            </button>
+          </div>
         </div>
       </aside>
 
@@ -338,6 +389,90 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <p>{t('common.platformCopyright')}</p>
         </footer>
       </div>
+
+      {/* Subscription Alert Modal */}
+      {showSubscriptionModal && authUser?.subscription_alert && (
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4 animate-in fade-in duration-200" dir={isAr ? 'rtl' : 'ltr'}>
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden relative">
+            <div className={`p-6 ${authUser.subscription_alert.status === 'grace_period' ? 'bg-rose-500/10 border-b border-rose-500/20' : 'bg-amber-500/10 border-b border-amber-500/20'}`}>
+              <div className="flex justify-between items-start">
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center ${authUser.subscription_alert.status === 'grace_period' ? 'bg-rose-500/20 text-rose-400' : 'bg-amber-500/20 text-amber-400'}`}>
+                  <AlertCircle className="w-6 h-6" />
+                </div>
+                <button onClick={() => setShowSubscriptionModal(false)} className="text-slate-400 hover:text-white transition-colors cursor-pointer">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <h3 className="text-xl font-bold text-white mt-4">
+                {authUser.subscription_alert.status === 'grace_period' 
+                  ? (isAr ? `انتهى اشتراكك ${authUser.subscription_alert.billing_cycle === 'monthly' ? 'الشهري' : 'السنوي'}!` : `Your ${authUser.subscription_alert.billing_cycle === 'monthly' ? 'monthly' : 'annual'} subscription expired!`)
+                  : (isAr ? 'اقترب موعد تجديد الاشتراك' : 'Subscription renewal is approaching')}
+              </h3>
+            </div>
+            
+            <div className="p-6 space-y-6">
+              <p className="text-slate-300 text-sm leading-relaxed">
+                {authUser.subscription_alert.status === 'grace_period'
+                  ? (isAr 
+                    ? `أنت الآن في فترة السماح. يرجى مسارعة تجديد الاشتراك لتجنب إيقاف الحساب. متبقي ${authUser.subscription_alert.billing_cycle === 'monthly' ? Math.ceil(authUser.subscription_alert.days_left * 24) + ' ساعة' : Math.ceil(authUser.subscription_alert.days_left) + ' يوم'} فقط على إيقاف الخدمة.`
+                    : `You are in the grace period. Please hurry to renew your subscription to avoid account suspension. Only ${authUser.subscription_alert.billing_cycle === 'monthly' ? Math.ceil(authUser.subscription_alert.days_left * 24) + ' hours' : Math.ceil(authUser.subscription_alert.days_left) + ' days'} left.`)
+                  : (isAr 
+                    ? `يرجى العلم بأن اشتراكك ${authUser.subscription_alert.billing_cycle === 'monthly' ? 'الشهري' : 'السنوي'} سينتهي بعد ${Math.ceil(authUser.subscription_alert.days_left)} يوم. نرجو تجديد الاشتراك لضمان استمرار الخدمة بلا انقطاع.`
+                    : `Please be aware that your ${authUser.subscription_alert.billing_cycle === 'monthly' ? 'monthly' : 'annual'} subscription will expire in ${Math.ceil(authUser.subscription_alert.days_left)} days. Renew now to ensure uninterrupted service.`)}
+              </p>
+              
+              <div className="flex gap-3">
+                <Button onClick={() => setShowSubscriptionModal(false)} className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl cursor-pointer">
+                  {isAr ? 'تجديد الاشتراك الآن' : 'Renew Subscription Now'}
+                </Button>
+                <Button onClick={() => setShowSubscriptionModal(false)} variant="outline" className="flex-1 border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white rounded-xl cursor-pointer">
+                  {isAr ? 'تذكيري لاحقاً' : 'Remind me later'}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Incomplete Profile Alert Modal */}
+      {showProfileIncompleteModal && (
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4 animate-in fade-in duration-200" dir={isAr ? 'rtl' : 'ltr'}>
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden relative">
+            <div className="p-6 bg-indigo-500/10 border-b border-indigo-500/20">
+              <div className="flex justify-between items-start">
+                <div className="w-12 h-12 rounded-full flex items-center justify-center bg-indigo-500/20 text-indigo-400">
+                  <Building2 className="w-6 h-6" />
+                </div>
+                <button onClick={() => setShowProfileIncompleteModal(false)} className="text-slate-400 hover:text-white transition-colors cursor-pointer">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <h3 className="text-xl font-bold text-white mt-4">
+                {isAr ? 'أكمل بيانات شركتك الأساسية' : 'Complete Your Company Details'}
+              </h3>
+            </div>
+            
+            <div className="p-6 space-y-6">
+              <p className="text-slate-300 text-sm leading-relaxed">
+                {isAr 
+                  ? 'مرحباً بك! يرجى إكمال بيانات شركتك الهامة مثل (رقم السجل التجاري، الرقم الضريبي، وعنوان الفوترة) لضمان إصدار الفواتير بشكل صحيح ولتجنب توقف بعض الخدمات.'
+                  : 'Welcome! Please complete your important company details (CR Number, Tax Number, and Billing Address) to ensure correct invoicing and prevent service interruption.'}
+              </p>
+              
+              <div className="flex gap-3">
+                <Link href="/dashboard/settings?tab=company" className="flex-1 block">
+                  <Button onClick={() => setShowProfileIncompleteModal(false)} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl cursor-pointer">
+                    {isAr ? 'إكمال البيانات الآن' : 'Complete Details Now'}
+                  </Button>
+                </Link>
+                <Button onClick={() => setShowProfileIncompleteModal(false)} variant="outline" className="flex-1 border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white rounded-xl cursor-pointer">
+                  {isAr ? 'تذكيري لاحقاً' : 'Remind me later'}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );

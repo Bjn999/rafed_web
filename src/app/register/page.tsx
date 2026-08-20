@@ -13,12 +13,14 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Loader2, Building2, User, Mail, Lock, Phone, Briefcase } from 'lucide-react';
+import { Loader2, Building2, User, Mail, Lock, Phone, Briefcase, ArrowRight, ArrowLeft } from 'lucide-react';
+import { LanguageSelector } from '@/components/ui/LanguageSelector';
 
 export default function RegisterPage() {
   const { login } = useAuth();
   const { t, isAr } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
 
   const registerSchema = z.object({
     company_name: z.string().min(2, { message: t('auth.validation.companyNameRequired') }),
@@ -28,7 +30,6 @@ export default function RegisterPage() {
     first_name: z.string().min(2, { message: t('auth.validation.firstNameRequired') }),
     last_name: z.string().min(2, { message: t('auth.validation.lastNameRequired') }),
     phone_number: z.string().optional().or(z.literal('')),
-    job_title: z.string().optional().or(z.literal('')),
   }).refine((data) => data.password === data.password_confirmation, {
     message: t('auth.validation.passwordConfirmMatch'),
     path: ['password_confirmation'],
@@ -51,26 +52,30 @@ export default function RegisterPage() {
       first_name: '',
       last_name: '',
       phone_number: '',
-      job_title: '',
     },
   });
 
   const onSubmit = async (values: RegisterFormValues) => {
     setIsSubmitting(true);
     try {
+      const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const payload = { ...values, timezone: browserTimezone };
+
       const response = await api.post<{
         success: boolean;
         message: string;
         data: { token: string; user: any };
-      }>('/auth/register-tenant', values);
+      }>('/auth/register-tenant', payload);
 
       if (response.success && response.data) {
         toast.add({
-          title: t('auth.toast.registerSuccessTitle'),
-          description: t('auth.toast.registerSuccessDesc'),
+          title: isAr ? 'تم التسجيل بنجاح' : 'Registration Successful',
+          description: isAr ? 'تم إنشاء الحساب بنجاح. يرجى مراجعة بريدك الإلكتروني لتفعيل الحساب.' : 'Account created successfully. Please check your email to verify your account.',
           type: 'success',
         });
-        login(response.data.token, response.data.user);
+        setRegistrationSuccess(true);
+        // We do not call login() here because the user must verify their email first
+        // login(response.data.token, response.data.user);
       }
     } catch (error) {
       if (error instanceof ApiError) {
@@ -109,6 +114,17 @@ export default function RegisterPage() {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-slate-950 p-4 sm:p-6 overflow-hidden" dir={isAr ? 'rtl' : 'ltr'}>
+      {/* Top Header */}
+      <div className="absolute top-0 left-0 right-0 p-6 flex justify-between items-center z-50">
+        <Link href="/">
+          <Button variant="ghost" className="text-slate-400 hover:text-white hover:bg-slate-900 rounded-xl px-4 h-10 gap-2 transition-colors cursor-pointer">
+            {isAr ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
+            {isAr ? 'العودة للرئيسية' : 'Back to Home'}
+          </Button>
+        </Link>
+        <LanguageSelector />
+      </div>
+
       {/* Background gradients */}
       <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-indigo-600/10 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full bg-violet-600/10 blur-[120px] pointer-events-none" />
@@ -124,8 +140,28 @@ export default function RegisterPage() {
           </CardDescription>
         </CardHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <CardContent className="space-y-6 pt-6">
+        {registrationSuccess ? (
+          <CardContent className="space-y-6 pt-10 pb-10 text-center">
+            <div className="mx-auto w-16 h-16 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center mb-4 border border-green-500/30">
+              <Mail className="w-8 h-8" />
+            </div>
+            <h3 className="text-xl font-bold text-white mb-2">
+              {isAr ? 'تم إنشاء الحساب بنجاح!' : 'Account Created Successfully!'}
+            </h3>
+            <p className="text-slate-300">
+              {isAr ? 'يرجى مراجعة بريدك الإلكتروني والنقر على رابط التفعيل للبدء باستخدام النظام.' : 'Please check your email and click the verification link to start using the system.'}
+            </p>
+            <div className="pt-6">
+              <Link href="/login">
+                <Button className="bg-indigo-600 hover:bg-indigo-700 text-white px-8">
+                  {isAr ? 'الذهاب لتسجيل الدخول' : 'Go to Login'}
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        ) : (
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <CardContent className="space-y-6 pt-6">
             
             {/* Section 1: Company Info */}
             <div className="space-y-3">
@@ -251,28 +287,12 @@ export default function RegisterPage() {
                     <p className="text-rose-500 text-xs mt-1">{errors.phone_number.message}</p>
                   )}
                 </div>
-
-                <div className="space-y-1">
-                  <Label htmlFor="job_title" className={`text-slate-300 flex items-center gap-1 ${isAr ? 'text-right' : 'text-left'}`}>
-                    <Briefcase className="w-3.5 h-3.5 opacity-60" />
-                    {t('auth.jobTitleLabel')}
-                  </Label>
-                  <Input
-                    id="job_title"
-                    placeholder={isAr ? 'مثال: المدير العام' : 'e.g. General Manager'}
-                    className="bg-slate-950/40 border-slate-800 focus:border-indigo-500 text-white font-sans"
-                    {...register('job_title')}
-                  />
-                  {errors.job_title && (
-                    <p className="text-rose-500 text-xs mt-1">{errors.job_title.message}</p>
-                  )}
-                </div>
               </div>
             </div>
 
           </CardContent>
 
-          <CardFooter className="flex flex-col gap-4 border-t border-slate-800/80 pt-6 pb-6">
+          <CardFooter className="flex flex-col gap-4 border-t border-slate-800/80 pt-6 pb-6 bg-slate-900/80 rounded-b-xl">
             <Button
               type="submit"
               disabled={isSubmitting}
@@ -296,6 +316,7 @@ export default function RegisterPage() {
             </p>
           </CardFooter>
         </form>
+        )}
       </Card>
     </div>
   );

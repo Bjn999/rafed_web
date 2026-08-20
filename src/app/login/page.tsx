@@ -14,7 +14,8 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Loader2, Mail, Lock, LogIn } from 'lucide-react';
+import { Loader2, Mail, Lock, LogIn, ArrowRight, ArrowLeft } from 'lucide-react';
+import { LanguageSelector } from '@/components/ui/LanguageSelector';
 
 function LoginForm() {
   const { login } = useAuth();
@@ -94,6 +95,17 @@ function LoginForm() {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-slate-950 p-4 overflow-hidden" dir={isAr ? 'rtl' : 'ltr'}>
+      {/* Top Header */}
+      <div className="absolute top-0 left-0 right-0 p-6 flex justify-between items-center z-50">
+        <Link href="/">
+          <Button variant="ghost" className="text-slate-400 hover:text-white hover:bg-slate-900 rounded-xl px-4 h-10 gap-2 transition-colors cursor-pointer">
+            {isAr ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
+            {isAr ? 'العودة للرئيسية' : 'Back to Home'}
+          </Button>
+        </Link>
+        <LanguageSelector />
+      </div>
+
       {/* Background gradients */}
       <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-indigo-600/10 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full bg-violet-600/10 blur-[120px] pointer-events-none" />
@@ -135,6 +147,9 @@ function LoginForm() {
                   <Lock className="w-4 h-4 text-indigo-400" />
                   {t('auth.passwordLabel')}
                 </Label>
+                <Link href="/forgot-password" className="text-xs text-indigo-400 hover:text-indigo-300 hover:underline transition-colors font-medium">
+                  {isAr ? 'نسيت كلمة المرور؟' : 'Forgot password?'}
+                </Link>
               </div>
               <Input
                 id="password"
@@ -150,7 +165,7 @@ function LoginForm() {
 
           </CardContent>
 
-          <CardFooter className="flex flex-col gap-4 border-t border-slate-800/80 pt-6 pb-6">
+          <CardFooter className="flex flex-col gap-4 border-t border-slate-800/80 pt-6 pb-6 bg-slate-900/80 rounded-b-xl">
             <Button
               type="submit"
               disabled={isSubmitting}
