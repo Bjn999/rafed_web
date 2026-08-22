@@ -13,7 +13,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Loader2, Building2, User, Mail, Lock, Phone, Briefcase, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Loader2, Building2, User, Mail, Lock, Phone, Briefcase, ArrowRight, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { LanguageSelector } from '@/components/ui/LanguageSelector';
 
 export default function RegisterPage() {
@@ -21,6 +21,31 @@ export default function RegisterPage() {
   const { t, isAr } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
+
+  React.useEffect(() => {
+    const host = window.location.host;
+    const parts = host.split('.');
+    let isSubdomain = false;
+    
+    if (host.includes('localhost') && parts.length > 1) {
+      isSubdomain = true;
+    } else if (!host.includes('localhost') && parts.length > 2) {
+      isSubdomain = true;
+    }
+
+    if (isSubdomain) {
+      api.get('/auth/tenant/verify')
+        .then(() => {
+          // Valid tenant, but registration is not allowed on subdomains
+          window.location.href = '/login';
+        })
+        .catch(() => {
+          // If invalid, api interceptor redirects to /not-found-company
+        });
+    }
+  }, []);
 
   const registerSchema = z.object({
     company_name: z.string().min(2, { message: t('auth.validation.companyNameRequired') }),
@@ -111,6 +136,8 @@ export default function RegisterPage() {
       setIsSubmitting(false);
     }
   };
+
+
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-background p-4 sm:p-6 overflow-hidden" dir={isAr ? 'rtl' : 'ltr'}>
@@ -209,13 +236,23 @@ export default function RegisterPage() {
 
                 <div className="space-y-1">
                   <Label htmlFor="password" className={`text-foreground flex ${isAr ? 'justify-start' : 'justify-start'}`}>{t('auth.passwordLabel')}</Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="••••••••"
-                    className="bg-background/40 border-border focus:border-indigo-500 text-foreground font-sans"
-                    {...register('password')}
-                  />
+                  <div className="relative">
+                    <Input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="••••••••"
+                      className={`bg-background/40 border-border focus:border-indigo-500 text-foreground font-sans ${isAr ? 'pl-10' : 'pr-10'}`}
+                      {...register('password')}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className={`absolute top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors ${isAr ? 'left-3' : 'right-3'}`}
+                      aria-label={showPassword ? t('auth.hidePassword') : t('auth.showPassword')}
+                    >
+                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
                   {errors.password && (
                     <p className="text-rose-500 text-xs mt-1">{errors.password.message}</p>
                   )}
@@ -223,13 +260,23 @@ export default function RegisterPage() {
 
                 <div className="space-y-1 md:col-span-2">
                   <Label htmlFor="password_confirmation" className={`text-foreground flex ${isAr ? 'justify-start' : 'justify-start'}`}>{t('auth.passwordConfirmLabel')}</Label>
-                  <Input
-                    id="password_confirmation"
-                    type="password"
-                    placeholder="••••••••"
-                    className="bg-background/40 border-border focus:border-indigo-500 text-foreground font-sans"
-                    {...register('password_confirmation')}
-                  />
+                  <div className="relative">
+                    <Input
+                      id="password_confirmation"
+                      type={showPasswordConfirmation ? "text" : "password"}
+                      placeholder="••••••••"
+                      className={`bg-background/40 border-border focus:border-indigo-500 text-foreground font-sans ${isAr ? 'pl-10' : 'pr-10'}`}
+                      {...register('password_confirmation')}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)}
+                      className={`absolute top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors ${isAr ? 'left-3' : 'right-3'}`}
+                      aria-label={showPasswordConfirmation ? t('auth.hidePassword') : t('auth.showPassword')}
+                    >
+                      {showPasswordConfirmation ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
                   {errors.password_confirmation && (
                     <p className="text-rose-500 text-xs mt-1">{errors.password_confirmation.message}</p>
                   )}

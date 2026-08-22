@@ -109,6 +109,23 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
   const [copiedResponse, setCopiedResponse] = useState(false);
   const [updatingTenantId, setUpdatingTenantId] = useState<string | null>(null);
 
+  // Account Settings states
+  const [editDomain, setEditDomain] = useState('');
+  const [isSavingDomain, setIsSavingDomain] = useState(false);
+  const [showConfirmDomain, setShowConfirmDomain] = useState(false);
+  const [domainError, setDomainError] = useState('');
+  const [isSendingReset, setIsSendingReset] = useState(false);
+  const [showConfirmReset, setShowConfirmReset] = useState(false);
+
+  const { data: allDomains } = useQuery({
+    queryKey: ['admin-tenant-domains'],
+    queryFn: async () => {
+      const response = await api.get<{ success: boolean; data: string[] }>('/system-admin/tenants/all-domains');
+      return response.data;
+    },
+    enabled: !!authUser && authUser.role === 'system_admin',
+  });
+
   // Fetch Tenant Details
   const { data: tenantDetails, isLoading: tenantDetailsLoading, refetch: refetchTenantDetails } = useQuery({
     queryKey: ['admin-tenant-details', tenantId],
@@ -157,16 +174,21 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
 
   // Sync edit form states when details load
   useEffect(() => {
-    if (tenantDetails && tenantDetails.tenant.subscription?.plan) {
-      const plan = tenantDetails.tenant.subscription.plan;
-      setDetailPlanName(plan.name || '');
-      setDetailPlanPriceMonthly(plan.price_monthly || 0);
-      setDetailPlanPriceYearly(plan.price_yearly || 0);
-      setDetailPlanMaxBudget(plan.max_project_budget || 0);
-      setDetailPlanMaxUsers(plan.max_users || 0);
-      setDetailPlanCredits(plan.project_credits_per_year || 0);
-      setDetailPlanFeatures(plan.features || []);
-      setDetailNewFeatureText('');
+    if (tenantDetails) {
+      if (tenantDetails.tenant.domain) {
+        setEditDomain(tenantDetails.tenant.domain);
+      }
+      if (tenantDetails.tenant.subscription?.plan) {
+        const plan = tenantDetails.tenant.subscription.plan;
+        setDetailPlanName(plan.name || '');
+        setDetailPlanPriceMonthly(plan.price_monthly || 0);
+        setDetailPlanPriceYearly(plan.price_yearly || 0);
+        setDetailPlanMaxBudget(plan.max_project_budget || 0);
+        setDetailPlanMaxUsers(plan.max_users || 0);
+        setDetailPlanCredits(plan.project_credits_per_year || 0);
+        setDetailPlanFeatures(plan.features || []);
+        setDetailNewFeatureText('');
+      }
     }
   }, [tenantDetails]);
 
@@ -198,6 +220,79 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
       });
     } finally {
       setUpdatingTenantId(null);
+    }
+  };
+
+  const handleUpdateDomain = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editDomain) return;
+
+    setIsSavingDomain(true);
+    setDomainError('');
+
+    try {
+      const response = await api.put<{ success: boolean; message: string; data: TenantItem }>(
+        `/system-admin/tenants/${tenantId}/domain`,
+        { domain: editDomain }
+      );
+
+      if (response.success) {
+        toast.add({
+          title: isAr ? 'تم الحفظ' : 'Saved',
+          description: isAr ? 'تم تحديث الدومين بنجاح.' : 'Domain updated successfully.',
+          type: 'success',
+        });
+        refetchTenantDetails();
+        setShowConfirmDomain(false);
+      }
+    } catch (err: any) {
+      setDomainError(err.message || (isAr ? 'تعذر تحديث الدومين.' : 'Could not update domain.'));
+    } finally {
+      setIsSavingDomain(false);
+    }
+  };
+
+  const handleDomainChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value.toLowerCase();
+    
+    // Only allow letters, hyphens, and underscores
+    if (val && !/^[a-z\-_]+$/.test(val)) {
+      setDomainError(isAr ? 'يسمح فقط بالأحرف الإنجليزية والشرطات (- أو _)' : 'Only English letters, hyphens, and underscores allowed');
+    } else {
+      setDomainError('');
+    }
+
+    setEditDomain(val);
+
+    // Check availability in real time
+    if (val && allDomains && allDomains.includes(val) && val !== tenantDetails?.tenant.domain) {
+      setDomainError(isAr ? 'هذا الدومين مستخدم بالفعل لشركة أخرى' : 'This domain is already used by another company');
+    }
+  };
+
+  const handleSendResetPassword = async () => {
+    setIsSendingReset(true);
+    try {
+      const response = await api.post<{ success: boolean; message: string }>(
+        `/system-admin/tenants/${tenantId}/reset-password`
+      );
+
+      if (response.success) {
+        toast.add({
+          title: isAr ? 'تم الإرسال' : 'Sent',
+          description: isAr ? 'تم إرسال رابط استعادة كلمة المرور بنجاح.' : 'Password reset link sent successfully.',
+          type: 'success',
+        });
+        setShowConfirmReset(false);
+      }
+    } catch (err: any) {
+      toast.add({
+        title: isAr ? 'خطأ' : 'Error',
+        description: err.message || (isAr ? 'فشل إرسال الإيميل.' : 'Failed to send email.'),
+        type: 'error',
+      });
+    } finally {
+      setIsSendingReset(false);
     }
   };
 
@@ -472,6 +567,74 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
               </CardContent>
             </Card>
           </div>
+
+          {/* Company Account Settings */}
+          <Card className="border-border bg-card text-foreground">
+            <CardHeader className={isAr ? 'text-right' : 'text-left'}>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <SlidersHorizontal className={`w-5 h-5 text-indigo-400 ${isAr ? 'ml-1' : 'mr-1'}`} />
+                {isAr ? 'إعدادات حساب الشركة' : 'Company Account Settings'}
+              </CardTitle>
+              <CardDescription className="text-muted-foreground text-xs">
+                {isAr 
+                  ? 'إدارة الدومين الفرعي الخاص بالشركة أو إرسال رابط استعادة كلمة المرور للمدير الأساسي'
+                  : 'Manage the company subdomain or send a password reset link to the primary admin'}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              
+              {/* Domain Update */}
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-foreground">{isAr ? 'الدومين الفرعي للشركة (Subdomain)' : 'Company Subdomain'}</label>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <div className="flex-1 relative">
+                    <input
+                      type="text"
+                      value={editDomain}
+                      onChange={handleDomainChange}
+                      className={`w-full bg-background/80 border ${domainError ? 'border-rose-500' : 'border-border focus:border-indigo-500'} rounded-xl px-4 py-2.5 text-sm text-foreground outline-none transition-all font-mono`}
+                      placeholder={isAr ? 'أدخل الدومين (أحرف إنجليزية فقط)' : 'Enter domain (english letters only)'}
+                      dir="ltr"
+                    />
+                    {domainError && (
+                      <p className={`text-xs text-rose-500 mt-1.5 ${isAr ? 'text-right' : 'text-left'}`}>
+                        {domainError}
+                      </p>
+                    )}
+                  </div>
+                  <Button
+                    type="button"
+                    onClick={() => setShowConfirmDomain(true)}
+                    disabled={isSavingDomain || !!domainError || editDomain === tenantDetails.tenant.domain || !editDomain}
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl px-6 py-2.5 text-sm font-semibold cursor-pointer whitespace-nowrap"
+                  >
+                    {isSavingDomain ? <RefreshCw className="w-4 h-4 animate-spin" /> : (isAr ? 'تحديث الدومين' : 'Update Domain')}
+                  </Button>
+                </div>
+              </div>
+
+              <div className="h-px bg-border w-full" />
+
+              {/* Password Reset */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <h4 className="text-sm font-semibold text-foreground">{isAr ? 'استعادة كلمة المرور' : 'Password Reset'}</h4>
+                  <p className="text-xs text-muted-foreground">{isAr ? 'إرسال رابط آمن للمدير الأساسي للشركة لإعادة تعيين كلمة المرور الخاصة به.' : 'Send a secure link to the primary admin to reset their password.'}</p>
+                </div>
+                <Button
+                  type="button"
+                  onClick={() => setShowConfirmReset(true)}
+                  disabled={isSendingReset}
+                  variant="outline"
+                  className="border-indigo-500/30 text-indigo-400 hover:bg-indigo-500/10 hover:text-indigo-300 rounded-xl px-6 py-2.5 text-sm font-semibold cursor-pointer whitespace-nowrap gap-2"
+                >
+                  {isSendingReset ? <RefreshCw className="w-4 h-4 animate-spin" /> : <ShieldAlert className="w-4 h-4" />}
+                  {isAr ? 'إرسال الرابط للمدير' : 'Send Reset Link'}
+                </Button>
+              </div>
+
+            </CardContent>
+          </Card>
 
           {/* Customize Plan Editor */}
           <Card className="border-border bg-card text-foreground">
@@ -998,6 +1161,71 @@ export default function TenantDetailPage({ params }: { params: Promise<{ id: str
         </div>
       )}
 
+      {/* Domain Confirmation Modal */}
+      {showConfirmDomain && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-card border border-border shadow-2xl rounded-2xl p-6 max-w-md w-full animate-in zoom-in-95 duration-200">
+            <h3 className="text-lg font-bold text-foreground mb-2">
+              {isAr ? 'تأكيد تغيير الدومين' : 'Confirm Domain Change'}
+            </h3>
+            <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
+              {isAr 
+                ? 'هل أنت متأكد من رغبتك في تغيير الدومين الفرعي لهذه الشركة؟ قد يؤدي هذا إلى خروج المستخدمين الحاليين وطلب تسجيل الدخول عبر الرابط الجديد.'
+                : 'Are you sure you want to change the company subdomain? This may log out current users and require them to login via the new link.'}
+            </p>
+            <div className={`flex gap-3 ${isAr ? 'justify-end' : 'justify-end'}`}>
+              <Button
+                variant="outline"
+                onClick={() => setShowConfirmDomain(false)}
+                className="rounded-xl border-border hover:bg-muted text-foreground cursor-pointer"
+              >
+                {isAr ? 'إلغاء' : 'Cancel'}
+              </Button>
+              <Button
+                onClick={handleUpdateDomain}
+                disabled={isSavingDomain}
+                className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl gap-2 cursor-pointer"
+              >
+                {isSavingDomain ? <RefreshCw className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
+                {isAr ? 'تأكيد التغيير' : 'Confirm Change'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Password Reset Confirmation Modal */}
+      {showConfirmReset && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-card border border-border shadow-2xl rounded-2xl p-6 max-w-md w-full animate-in zoom-in-95 duration-200">
+            <h3 className="text-lg font-bold text-foreground mb-2">
+              {isAr ? 'تأكيد إرسال رابط الاستعادة' : 'Confirm Password Reset'}
+            </h3>
+            <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
+              {isAr 
+                ? 'هل أنت متأكد من رغبتك في إرسال رابط استعادة كلمة المرور للمدير الأساسي للشركة؟ سيصل الرابط إلى بريده الإلكتروني المسجل.'
+                : 'Are you sure you want to send a password reset link to the primary admin? The link will be sent to their registered email.'}
+            </p>
+            <div className={`flex gap-3 ${isAr ? 'justify-end' : 'justify-end'}`}>
+              <Button
+                variant="outline"
+                onClick={() => setShowConfirmReset(false)}
+                className="rounded-xl border-border hover:bg-muted text-foreground cursor-pointer"
+              >
+                {isAr ? 'إلغاء' : 'Cancel'}
+              </Button>
+              <Button
+                onClick={handleSendResetPassword}
+                disabled={isSendingReset}
+                className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl gap-2 cursor-pointer"
+              >
+                {isSendingReset ? <RefreshCw className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
+                {isAr ? 'تأكيد الإرسال' : 'Confirm Send'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

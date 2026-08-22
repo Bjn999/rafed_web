@@ -14,7 +14,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Loader2, Mail, Lock, LogIn, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Loader2, Mail, Lock, LogIn, ArrowRight, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { LanguageSelector } from '@/components/ui/LanguageSelector';
 
 function LoginForm() {
@@ -22,23 +22,35 @@ function LoginForm() {
   const { t, isAr } = useLanguage();
   const searchParams = useSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [landingUrl, setLandingUrl] = useState('/');
 
   React.useEffect(() => {
-    // If on a subdomain, this will trigger the global 403 redirect if tenant is invalid
-    api.get('/auth/tenant/verify').catch(() => {});
-
     // Calculate correct landing URL
     const host = window.location.host;
     const parts = host.split('.');
+    let isSubdomain = false;
+    
     if (host.includes('localhost') && parts.length > 1) {
        parts.shift();
        setLandingUrl(`${window.location.protocol}//${parts.join('.')}`);
+       isSubdomain = true;
     } else if (!host.includes('localhost') && parts.length > 2) {
        parts.shift();
        setLandingUrl(`${window.location.protocol}//${parts.join('.')}`);
+       isSubdomain = true;
+    }
+
+    if (isSubdomain) {
+      // If on a subdomain, verify it
+      api.get('/auth/tenant/verify')
+        .then(() => {})
+        .catch(() => {
+           // Interceptor redirects to 403 /not-found-company if invalid
+        });
     }
   }, []);
+
 
   // If redirect was triggered, check for callbackUrl
   const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
@@ -110,6 +122,8 @@ function LoginForm() {
     }
   };
 
+
+
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-background p-4 overflow-hidden" dir={isAr ? 'rtl' : 'ltr'}>
       {/* Top Header */}
@@ -168,13 +182,23 @@ function LoginForm() {
                   {isAr ? 'نسيت كلمة المرور؟' : 'Forgot password?'}
                 </Link>
               </div>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                className="bg-background/40 border-border focus:border-indigo-500 focus:ring-indigo-500/20 transition-all text-foreground font-sans"
-                {...register('password')}
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  className={`bg-background/40 border-border focus:border-indigo-500 focus:ring-indigo-500/20 transition-all text-foreground font-sans ${isAr ? 'pl-10' : 'pr-10'}`}
+                  {...register('password')}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className={`absolute top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors ${isAr ? 'left-3' : 'right-3'}`}
+                  aria-label={showPassword ? t('auth.hidePassword') : t('auth.showPassword')}
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
               {errors.password && (
                 <p className="text-rose-500 text-xs mt-1">{errors.password.message}</p>
               )}
