@@ -29,25 +29,13 @@ function LoginForm() {
     // Calculate correct landing URL
     const host = window.location.host;
     const parts = host.split('.');
-    let isSubdomain = false;
     
     if (host.includes('localhost') && parts.length > 1) {
        parts.shift();
        setLandingUrl(`${window.location.protocol}//${parts.join('.')}`);
-       isSubdomain = true;
     } else if (!host.includes('localhost') && parts.length > 2) {
        parts.shift();
        setLandingUrl(`${window.location.protocol}//${parts.join('.')}`);
-       isSubdomain = true;
-    }
-
-    if (isSubdomain) {
-      // If on a subdomain, verify it
-      api.get('/auth/tenant/verify')
-        .then(() => {})
-        .catch(() => {
-           // Interceptor redirects to 403 /not-found-company if invalid
-        });
     }
   }, []);
 

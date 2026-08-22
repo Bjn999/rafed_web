@@ -24,28 +24,7 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
 
-  React.useEffect(() => {
-    const host = window.location.host;
-    const parts = host.split('.');
-    let isSubdomain = false;
-    
-    if (host.includes('localhost') && parts.length > 1) {
-      isSubdomain = true;
-    } else if (!host.includes('localhost') && parts.length > 2) {
-      isSubdomain = true;
-    }
 
-    if (isSubdomain) {
-      api.get('/auth/tenant/verify')
-        .then(() => {
-          // Valid tenant, but registration is not allowed on subdomains
-          window.location.href = '/login';
-        })
-        .catch(() => {
-          // If invalid, api interceptor redirects to /not-found-company
-        });
-    }
-  }, []);
 
   const registerSchema = z.object({
     company_name: z.string().min(2, { message: t('auth.validation.companyNameRequired') }),
