@@ -27,21 +27,24 @@ async function request<T>(endpoint: string, options: RequestOptions = {}): Promi
   headers.set('Accept', 'application/json');
   headers.set('X-Language', language);
   
-  // Extract tenant from subdomain
-  if (typeof window !== 'undefined') {
-    const hostname = window.location.hostname;
-    // Example: com1.rafed.mydomain.com -> split -> ['com1', 'rafed', 'mydomain', 'com']
-    // Or locally: com1.localhost -> ['com1', 'localhost']
-    const parts = hostname.split('.');
-    
-    // Determine if we are on a subdomain (more than 2 parts for localhost, or more than 3 for production)
-    // A simpler way: if the first part is not 'www' and not the base domain itself, it's likely a tenant.
-    // For safety, let's just always take the first part if we have subdomains, 
-    // unless it matches the known base domain or localhost exactly.
-    if (hostname !== 'localhost' && !hostname.startsWith('rafed.')) {
-        headers.set('X-Tenant', parts[0]);
+    // Extract tenant from subdomain
+    if (typeof window !== 'undefined') {
+      const hostname = window.location.hostname;
+      const parts = hostname.split('.');
+      
+      const ignoredSubdomains = ['www', 'api', 'admin'];
+      
+      if (hostname !== 'localhost') {
+          // Localhost subdomains like company.localhost
+          if (hostname.endsWith('.localhost') && parts.length >= 2) {
+              headers.set('X-Tenant', parts[0]);
+          } 
+          // Production subdomains like company.rafed.com
+          else if (parts.length >= 3 && !ignoredSubdomains.includes(parts[0])) {
+              headers.set('X-Tenant', parts[0]);
+          }
+      }
     }
-  }
 
   if (!(options.body instanceof FormData)) {
     headers.set('Content-Type', 'application/json');
