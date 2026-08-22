@@ -19,6 +19,7 @@ import {
   AlertCircle,
   FolderTree,
 } from 'lucide-react';
+import ConfirmationModal from '@/components/ui/ConfirmationModal';
 import { WbsItemData } from './WbsItemModal';
 
 export interface TreeWbsItem extends WbsItemData {
@@ -52,6 +53,8 @@ export default function WbsTreeTable({
   const [expandedNodes, setExpandedNodes] = useState<Record<number, boolean>>({});
   const [movingId, setMovingId] = useState<number | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<number | null>(null);
 
   const toggleExpand = (id: number) => {
     setExpandedNodes((prev) => ({
@@ -72,18 +75,23 @@ export default function WbsTreeTable({
     }
   };
 
-  const handleDelete = async (id: number) => {
-    if (!window.confirm(isAr ? 'هل أنت تأكد من حذف هذا النشاط وكافة الأنشطة الفرعية التابعة له؟' : 'Are you sure you want to delete this activity and all its sub-activities?')) {
-      return;
-    }
-    setDeletingId(id);
+  const handleDelete = (id: number) => {
+    setItemToDelete(id);
+    setIsConfirmModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!itemToDelete) return;
+    setDeletingId(itemToDelete);
+    setIsConfirmModalOpen(false);
     try {
-      await api.delete(`/wbs/${id}`);
+      await api.delete(`/wbs/${itemToDelete}`);
       onRefresh();
     } catch (err) {
       console.error('Failed to delete item:', err);
     } finally {
       setDeletingId(null);
+      setItemToDelete(null);
     }
   };
 
@@ -152,7 +160,7 @@ export default function WbsTreeTable({
       <React.Fragment key={node.id}>
         <tr className="border-b border-border hover:bg-slate-850/40 transition-colors group">
           
-          {/* WBS Code & Name */}
+          {/* Activity Code & Name */}
           <td className="py-3 px-4 text-xs">
             <div
               className="flex items-center gap-2"
@@ -323,7 +331,7 @@ export default function WbsTreeTable({
       <table className="w-full text-right min-w-[750px]" dir={isAr ? 'rtl' : 'ltr'}>
         <thead>
           <tr className="border-b border-border bg-background/60 text-muted-foreground text-[11px] font-bold uppercase tracking-wider">
-            <th className="py-3 px-4 text-right">{isAr ? 'رمز WBS وبند العمل' : 'WBS Code & Activity'}</th>
+            <th className="py-3 px-4 text-right">{isAr ? 'رمز النشاط وبند العمل' : 'Activity Code & Name'}</th>
             <th className="py-3 px-3 text-center">{isAr ? 'الحالة' : 'Status'}</th>
             <th className="py-3 px-3 text-center">{isAr ? 'الأولوية' : 'Priority'}</th>
             <th className="py-3 px-3 text-center min-w-[120px]">{isAr ? 'نسبة الإنجاز' : 'Progress'}</th>
@@ -348,6 +356,19 @@ export default function WbsTreeTable({
           )}
         </tbody>
       </table>
+
+      <ConfirmationModal
+        isOpen={isConfirmModalOpen}
+        onClose={() => {
+          setIsConfirmModalOpen(false);
+          setItemToDelete(null);
+        }}
+        onConfirm={confirmDelete}
+        title={isAr ? 'تأكيد الحذف' : 'Confirm Deletion'}
+        message={isAr ? 'هل أنت متأكد من حذف هذا النشاط وكافة الأنشطة الفرعية التابعة له؟ لا يمكن التراجع عن هذا الإجراء.' : 'Are you sure you want to delete this activity and all its sub-activities? This action cannot be undone.'}
+        type="danger"
+        confirmText={isAr ? 'حذف النشاط' : 'Delete Activity'}
+      />
     </div>
   );
 }

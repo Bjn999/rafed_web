@@ -4,6 +4,18 @@ import type { NextRequest } from 'next/server';
 export function proxy(request: NextRequest) {
   const token = request.cookies.get('auth_token')?.value;
   const { pathname } = request.nextUrl;
+  const hostname = request.headers.get('host') || '';
+
+  // Get the subdomain (if any)
+  const parts = hostname.split('.');
+  const isLocalhost = hostname.includes('localhost');
+  const hasSubdomain = (isLocalhost && parts.length > 1) || (!isLocalhost && parts.length > 2);
+  const subdomain = hasSubdomain ? parts[0] : null;
+
+  // 1. If on a subdomain, prevent access to the landing page (root path /)
+  if (subdomain && pathname === '/') {
+    return NextResponse.redirect(new URL('/login', request.url));
+  }
 
   // Protect the dashboard routes
   const isProtectedPath = pathname.startsWith('/dashboard');
@@ -26,6 +38,7 @@ export function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
+    '/',
     '/dashboard/:path*',
     '/login',
     '/register',

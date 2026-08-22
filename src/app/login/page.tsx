@@ -22,6 +22,23 @@ function LoginForm() {
   const { t, isAr } = useLanguage();
   const searchParams = useSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [landingUrl, setLandingUrl] = useState('/');
+
+  React.useEffect(() => {
+    // If on a subdomain, this will trigger the global 403 redirect if tenant is invalid
+    api.get('/auth/tenant/verify').catch(() => {});
+
+    // Calculate correct landing URL
+    const host = window.location.host;
+    const parts = host.split('.');
+    if (host.includes('localhost') && parts.length > 1) {
+       parts.shift();
+       setLandingUrl(`${window.location.protocol}//${parts.join('.')}`);
+    } else if (!host.includes('localhost') && parts.length > 2) {
+       parts.shift();
+       setLandingUrl(`${window.location.protocol}//${parts.join('.')}`);
+    }
+  }, []);
 
   // If redirect was triggered, check for callbackUrl
   const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
@@ -97,12 +114,12 @@ function LoginForm() {
     <div className="relative min-h-screen flex items-center justify-center bg-background p-4 overflow-hidden" dir={isAr ? 'rtl' : 'ltr'}>
       {/* Top Header */}
       <div className="absolute top-0 left-0 right-0 p-6 flex justify-between items-center z-50">
-        <Link href="/">
+        <a href={landingUrl}>
           <Button variant="ghost" className="text-muted-foreground hover:text-foreground hover:bg-card rounded-xl px-4 h-10 gap-2 transition-colors cursor-pointer">
             {isAr ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
             {isAr ? 'العودة للرئيسية' : 'Back to Home'}
           </Button>
-        </Link>
+        </a>
         <LanguageSelector />
       </div>
 

@@ -5,6 +5,7 @@ import { useLanguage } from '@/context/LanguageContext';
 import { api } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
 import { X, Calendar, DollarSign, User, AlertCircle, Plus, Edit2, Layers } from 'lucide-react';
+import ConfirmationModal from '@/components/ui/ConfirmationModal';
 
 export interface WbsItemData {
   id?: number;
@@ -62,6 +63,8 @@ export default function WbsItemModal({
   const [activeTab, setActiveTab] = useState<'details' | 'dependencies'>('details');
   const [depLoading, setDepLoading] = useState(false);
   const [newDep, setNewDep] = useState({ predecessor_id: '', type: 'FS' });
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [depToDelete, setDepToDelete] = useState<number | null>(null);
 
   const [formData, setFormData] = useState<WbsItemData>({
     name: '',
@@ -160,17 +163,24 @@ export default function WbsItemModal({
     }
   };
 
-  const handleDeleteDependency = async (id: number) => {
-    if (!window.confirm(isAr ? 'هل أنت متأكد من حذف هذه الاعتمادية؟' : 'Are you sure you want to delete this dependency?')) return;
+  const handleDeleteDependency = (id: number) => {
+    setDepToDelete(id);
+    setIsConfirmModalOpen(true);
+  };
+
+  const confirmDeleteDependency = async () => {
+    if (!depToDelete) return;
     setDepLoading(true);
     setErrorMessage('');
+    setIsConfirmModalOpen(false);
     try {
-      await api.delete(`/wbs-dependencies/${id}`);
+      await api.delete(`/wbs-dependencies/${depToDelete}`);
       onSuccess(); // refresh
     } catch (err: any) {
       setErrorMessage(err?.response?.data?.message || (isAr ? 'حدث خطأ أثناء حذف الاعتمادية' : 'Error deleting dependency'));
     } finally {
       setDepLoading(false);
+      setDepToDelete(null);
     }
   };
 
@@ -217,10 +227,10 @@ export default function WbsItemModal({
             <div>
               <h3 className="text-base font-bold text-foreground">
                 {editingItem 
-                  ? (isAr ? 'تعديل بند WBS' : 'Edit WBS Item') 
+                  ? (isAr ? 'تعديل النشاط' : 'Edit Activity') 
                   : parentItem 
-                    ? (isAr ? `إضافة بند فرعي تحت: ${parentItem.code || ''} ${parentItem.name}` : `Add Sub-item under: ${parentItem.code || ''} ${parentItem.name}`)
-                    : (isAr ? 'إضافة بند WBS رئيسي' : 'Add Root WBS Item')}
+                    ? (isAr ? `إضافة نشاط فرعي تحت: ${parentItem.code || ''} ${parentItem.name}` : `Add Sub-activity under: ${parentItem.code || ''} ${parentItem.name}`)
+                    : (isAr ? 'إضافة نشاط رئيسي' : 'Add Root Activity')}
               </h3>
               <p className="text-xs text-muted-foreground">
                 {isAr ? 'تحديد مواصفات النشاط، التكاليف والمواعيد الزمنية' : 'Specify activity details, costs, and timeline'}
@@ -389,7 +399,7 @@ export default function WbsItemModal({
 
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-foreground">
-                {isAr ? 'العنصر الأب (Parent WBS)' : 'Parent WBS Item'}
+                {isAr ? 'النشاط الأب (Parent Activity)' : 'Parent Activity'}
               </label>
               <select
                 value={formData.parent_id || ''}
@@ -597,6 +607,19 @@ export default function WbsItemModal({
           )}
         </div>
       </div>
+      
+      <ConfirmationModal
+        isOpen={isConfirmModalOpen}
+        onClose={() => {
+          setIsConfirmModalOpen(false);
+          setDepToDelete(null);
+        }}
+        onConfirm={confirmDeleteDependency}
+        title={isAr ? 'تأكيد الحذف' : 'Confirm Deletion'}
+        message={isAr ? 'هل أنت متأكد من حذف هذه الاعتمادية؟ لا يمكن التراجع عن هذا الإجراء.' : 'Are you sure you want to delete this dependency? This action cannot be undone.'}
+        type="danger"
+        confirmText={isAr ? 'حذف الاعتمادية' : 'Delete Dependency'}
+      />
     </div>
   );
 }

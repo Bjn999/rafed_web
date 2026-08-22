@@ -24,6 +24,7 @@ import {
   Layers,
   ChevronUp,
 } from 'lucide-react';
+import ConfirmationModal from '@/components/ui/ConfirmationModal';
 import { TreeWbsItem } from './WbsTreeTable';
 
 interface WbsCardsTreeProps {
@@ -43,6 +44,8 @@ export default function WbsCardsTree({
   const [expandedNodes, setExpandedNodes] = useState<Record<number, boolean>>({});
   const [movingId, setMovingId] = useState<number | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<number | null>(null);
 
   const toggleExpand = (id: number) => {
     setExpandedNodes((prev) => ({
@@ -63,24 +66,23 @@ export default function WbsCardsTree({
     }
   };
 
-  const handleDelete = async (id: number) => {
-    if (
-      !window.confirm(
-        isAr
-          ? 'هل أنت تأكد من حذف هذا النشاط وكافة الأنشطة الفرعية التابعة له؟'
-          : 'Are you sure you want to delete this activity and all its sub-activities?'
-      )
-    ) {
-      return;
-    }
-    setDeletingId(id);
+  const handleDelete = (id: number) => {
+    setItemToDelete(id);
+    setIsConfirmModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!itemToDelete) return;
+    setDeletingId(itemToDelete);
+    setIsConfirmModalOpen(false);
     try {
-      await api.delete(`/wbs/${id}`);
+      await api.delete(`/wbs/${itemToDelete}`);
       onRefresh();
     } catch (err) {
       console.error('Failed to delete item:', err);
     } finally {
       setDeletingId(null);
+      setItemToDelete(null);
     }
   };
 
@@ -370,6 +372,19 @@ export default function WbsCardsTree({
           </p>
         </div>
       )}
+
+      <ConfirmationModal
+        isOpen={isConfirmModalOpen}
+        onClose={() => {
+          setIsConfirmModalOpen(false);
+          setItemToDelete(null);
+        }}
+        onConfirm={confirmDelete}
+        title={isAr ? 'تأكيد الحذف' : 'Confirm Deletion'}
+        message={isAr ? 'هل أنت متأكد من حذف هذا النشاط وكافة الأنشطة الفرعية التابعة له؟ لا يمكن التراجع عن هذا الإجراء.' : 'Are you sure you want to delete this activity and all its sub-activities? This action cannot be undone.'}
+        type="danger"
+        confirmText={isAr ? 'حذف النشاط' : 'Delete Activity'}
+      />
     </div>
   );
 }

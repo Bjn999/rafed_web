@@ -22,7 +22,10 @@ import {
   Briefcase,
   X,
   FileText,
-  AlertCircle
+  AlertCircle,
+  Clock,
+  XCircle,
+  Crown
 } from 'lucide-react';
 
 interface UsageStats {
@@ -85,12 +88,20 @@ export default function SettingsPage() {
   const [companyTimezone, setCompanyTimezone] = useState('');
   const [isSavingCompany, setIsSavingCompany] = useState(false);
 
+  // --- Upgrade Request Modal States ---
+  const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState('');
+  const [receiptFile, setReceiptFile] = useState<File | null>(null);
+  const [isSubmittingUpgrade, setIsSubmittingUpgrade] = useState(false);
+
   // Sync query parameter with state & localStorage
   useEffect(() => {
     const tab = searchParams.get('tab');
     if (tab === 'profile' || tab === 'security' || tab === 'company' || tab === 'subscription') {
       // Role protection check: if tab is company and user is not company_admin, default to profile
       if (tab === 'company' && authUser?.role !== 'company_admin') {
+        setActiveTab('profile');
+      } else if (tab === 'subscription' && authUser?.role !== 'company_admin') {
         setActiveTab('profile');
       } else {
         setActiveTab(tab as TabType);
@@ -100,7 +111,7 @@ export default function SettingsPage() {
       // If no tab in URL, check if there is a saved tab in localStorage
       const savedTab = localStorage.getItem('dashboard_settings_tab');
       if (savedTab && (savedTab === 'profile' || savedTab === 'security' || savedTab === 'company' || savedTab === 'subscription')) {
-        if (savedTab === 'company' && authUser?.role !== 'company_admin') {
+        if ((savedTab === 'company' || savedTab === 'subscription') && authUser?.role !== 'company_admin') {
           // skip
         } else {
           setActiveTab(savedTab as TabType);
@@ -131,7 +142,6 @@ export default function SettingsPage() {
     }
   }, [authUser, tenant]);
 
-  // Fetch subscription usage using React Query
   const { data: usage, isLoading: usageLoading } = useQuery<UsageStats | null>({
     queryKey: ['subscriptionUsageSettings'],
     queryFn: async () => {
@@ -145,6 +155,15 @@ export default function SettingsPage() {
     },
     enabled: !!authUser && authUser.role !== 'system_admin' && activeTab === 'subscription',
   });
+
+  const { data: latestRequestData, refetch: refetchLatestRequest } = useQuery<{ success: boolean; data: any }>({
+    queryKey: ['latestSubscriptionRequest'],
+    queryFn: async () => {
+      return await api.get('/subscription/requests/latest');
+    },
+    enabled: !!authUser && authUser.role !== 'system_admin' && activeTab === 'subscription',
+  });
+  const latestRequest = latestRequestData?.data;
 
   const handleTabChange = (tab: TabType) => {
     setActiveTab(tab);
@@ -262,6 +281,54 @@ export default function SettingsPage() {
     }
   };
 
+  const handleUpgradeSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedPlan) {
+      toast.add({
+        title: isAr ? 'تنبيه' : 'Alert',
+        description: isAr ? 'يرجى اختيار الباقة المراد الترقية إليها.' : 'Please select a plan to upgrade to.',
+        type: 'error',
+      });
+      return;
+    }
+    if (!receiptFile) {
+      toast.add({
+        title: isAr ? 'تنبيه' : 'Alert',
+        description: isAr ? 'يرجى رفع إيصال الإيداع أو التحويل.' : 'Please upload the deposit or transfer receipt.',
+        type: 'error',
+      });
+      return;
+    }
+
+    setIsSubmittingUpgrade(true);
+    try {
+      // Create FormData to upload file
+      const formData = new FormData();
+      formData.append('plan', selectedPlan);
+      formData.append('receipt', receiptFile);
+
+      await api.post('/subscription/requests', formData);
+
+      toast.add({
+        title: isAr ? 'تم إرسال الطلب' : 'Request Sent',
+        description: isAr ? 'تم إرسال طلب الترقية بنجاح، سيتم مراجعته قريباً.' : 'Upgrade request sent successfully and will be reviewed soon.',
+        type: 'success',
+      });
+      setIsUpgradeModalOpen(false);
+      setSelectedPlan('');
+      setReceiptFile(null);
+      refetchLatestRequest();
+    } catch (err: any) {
+      toast.add({
+        title: isAr ? 'خطأ في الإرسال' : 'Submit Failed',
+        description: isAr ? 'فشل إرسال طلب الترقية، يرجى المحاولة لاحقاً.' : 'Failed to send upgrade request, please try again later.',
+        type: 'error',
+      });
+    } finally {
+      setIsSubmittingUpgrade(false);
+    }
+  };
+
   const formatBudget = (budget: number) => {
     if (budget === 0) return isAr ? 'مفتوح (غير محدود)' : 'Unlimited';
     if (budget >= 1000000000) return isAr ? `${budget / 1000000000} مليار ريال` : `${budget / 1000000000} Billion SAR`;
@@ -323,17 +390,19 @@ export default function SettingsPage() {
           </button>
         )}
 
-        <button
-          onClick={() => handleTabChange('subscription')}
-          className={`flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-3 border-b-2 text-xs sm:text-sm font-semibold transition-all cursor-pointer shrink-0 ${
-            activeTab === 'subscription'
-              ? 'border-indigo-500 text-indigo-400'
-              : 'border-transparent text-muted-foreground hover:text-slate-200'
-          }`}
-        >
-          <CreditCard className={`w-4 h-4 ${isAr ? 'ml-1' : 'mr-1'}`} />
-          {isAr ? 'اشتراك الشركة' : 'Subscription'}
-        </button>
+        {isCompanyAdmin && (
+          <button
+            onClick={() => handleTabChange('subscription')}
+            className={`flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-3 border-b-2 text-xs sm:text-sm font-semibold transition-all cursor-pointer shrink-0 ${
+              activeTab === 'subscription'
+                ? 'border-indigo-500 text-indigo-400'
+                : 'border-transparent text-muted-foreground hover:text-slate-200'
+            }`}
+          >
+            <CreditCard className={`w-4 h-4 ${isAr ? 'ml-1' : 'mr-1'}`} />
+            {isAr ? 'اشتراك الشركة' : 'Subscription'}
+          </button>
+        )}
       </div>
 
       {/* --- PROFILE TAB (Read Only + Edit Modal) --- */}
@@ -656,8 +725,40 @@ export default function SettingsPage() {
       )}
 
       {/* --- SUBSCRIPTION TAB --- */}
-      {activeTab === 'subscription' && (
+      {activeTab === 'subscription' && isCompanyAdmin && (
         <div className="space-y-6" dir={isAr ? 'rtl' : 'ltr'}>
+              
+              {latestRequest && latestRequest.status === 'pending' && (
+                <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-2xl flex items-center gap-4 text-amber-500">
+                  <div className="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center shrink-0">
+                    <Clock className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold">{isAr ? 'طلب قيد المراجعة' : 'Request Pending'}</h4>
+                    <p className="text-sm opacity-90">{isAr ? `لقد قمت بتقديم طلب للاشتراك في باقة "${latestRequest.plan_name}" وهو قيد المراجعة حالياً.` : `You have submitted a request for "${latestRequest.plan_name}" plan which is currently under review.`}</p>
+                  </div>
+                </div>
+              )}
+              
+              {latestRequest && latestRequest.status === 'rejected' && (
+                <div className="p-4 bg-rose-500/10 border border-rose-500/20 rounded-2xl flex gap-4 text-rose-500">
+                  <div className="w-10 h-10 rounded-full bg-rose-500/20 flex items-center justify-center shrink-0">
+                    <XCircle className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold">{isAr ? 'طلب مرفوض' : 'Request Rejected'}</h4>
+                    <p className="text-sm opacity-90">{isAr ? `تم رفض طلبك للاشتراك في باقة "${latestRequest.plan_name}". يمكنك تقديم طلب جديد.` : `Your request for "${latestRequest.plan_name}" plan was rejected. You can submit a new request.`}</p>
+                    {latestRequest.rejection_reason && (
+                      <div className="mt-2 p-3 bg-background/50 rounded-xl border border-rose-500/20 text-sm">
+                        <span className="font-semibold block mb-1">{isAr ? 'سبب الرفض:' : 'Rejection Reason:'}</span>
+                        <p>{latestRequest.rejection_reason}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Current Plan Card */}
           {usageLoading ? (
             <div className="flex flex-col items-center py-10 text-muted-foreground gap-2">
               <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
@@ -695,11 +796,12 @@ export default function SettingsPage() {
                     </p>
                   </div>
                   <div className="shrink-0 w-full sm:w-auto mt-4 sm:mt-0">
-                    <Link href="/pricing" className="block w-full">
-                      <Button className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl px-8 font-bold transition-all shadow-lg shadow-indigo-600/20 cursor-pointer">
-                        {isAr ? 'تجديد الآن' : 'Renew Now'}
-                      </Button>
-                    </Link>
+                    <Button 
+                      onClick={() => setIsUpgradeModalOpen(true)}
+                      className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl px-8 font-bold transition-all shadow-lg shadow-indigo-600/20 cursor-pointer"
+                    >
+                      {isAr ? 'تجديد الآن' : 'Renew Now'}
+                    </Button>
                   </div>
                 </div>
               )}
@@ -717,12 +819,14 @@ export default function SettingsPage() {
                       {isAr ? 'متابعة حية لرصيد مشاريع شركتك ومقاعد الموظفين النشطين' : 'Realtime tracking of project credits and active user seats'}
                     </p>
                   </div>
-                  <Link href="/pricing">
-                    <Button variant="outline" className="border-indigo-500/20 hover:border-indigo-500 hover:bg-indigo-600/10 text-indigo-400 hover:text-white rounded-xl text-xs py-2 px-3.5 flex items-center gap-1.5 transition-all">
-                      {isAr ? 'ترقية الباقة الحالية' : 'Upgrade Plan'}
-                      <ArrowUpRight className="w-3.5 h-3.5" />
-                    </Button>
-                  </Link>
+                  <Button 
+                    onClick={() => setIsUpgradeModalOpen(true)}
+                    variant="outline" 
+                    className="border-indigo-500/20 hover:border-indigo-500 hover:bg-indigo-600/10 text-indigo-400 hover:text-white rounded-xl text-xs py-2 px-3.5 flex items-center gap-1.5 transition-all cursor-pointer"
+                  >
+                    {isAr ? 'ترقية الباقة الحالية' : 'Upgrade Plan'}
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </Button>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -823,6 +927,83 @@ export default function SettingsPage() {
               {isAr ? 'لا توجد معلومات اشتراك متاحة حالياً. يرجى مراجعة الدعم الفني.' : 'No subscription details are currently available. Please contact support.'}
             </div>
           )}
+        </div>
+      )}
+
+      {/* --- UPGRADE REQUEST MODAL --- */}
+      {isUpgradeModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/70 backdrop-blur-sm p-4 animate-in fade-in duration-250">
+          <div 
+            className="bg-card border border-border rounded-2xl w-full max-w-lg p-6 shadow-2xl space-y-4 animate-in zoom-in-95 duration-200"
+            dir={isAr ? 'rtl' : 'ltr'}
+          >
+            <div className="flex justify-between items-center border-b border-border pb-3">
+              <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
+                <ArrowUpRight className="w-5 h-5 text-indigo-500" />
+                {isAr ? 'طلب ترقية / تجديد باقة الشركة' : 'Request Plan Upgrade / Renewal'}
+              </h3>
+              <button
+                onClick={() => setIsUpgradeModalOpen(false)}
+                className="text-muted-foreground hover:text-slate-200 transition-all p-1 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleUpgradeSubmit} className={`space-y-5 pt-2 ${isAr ? 'text-right' : 'text-left'}`}>
+              <div className="space-y-1.5">
+                <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'الباقة المراد الترقية أو التجديد إليها' : 'Plan to Upgrade/Renew To'}</label>
+                <select
+                  required
+                  value={selectedPlan}
+                  onChange={(e) => setSelectedPlan(e.target.value)}
+                  className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none text-slate-200 cursor-pointer"
+                >
+                  <option value="" disabled>{isAr ? '-- اختر الباقة --' : '-- Select Plan --'}</option>
+                  <option value="basic">{isAr ? 'الأساسية (Basic)' : 'Basic'}</option>
+                  <option value="professional">{isAr ? 'الاحترافية (Professional)' : 'Professional'}</option>
+                  <option value="business">{isAr ? 'الأعمال (Business)' : 'Business'}</option>
+                  <option value="enterprise">{isAr ? 'المؤسسات (Enterprise)' : 'Enterprise'}</option>
+                </select>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs text-muted-foreground font-semibold">{isAr ? 'إيصال الإيداع أو التحويل البنكي' : 'Deposit or Bank Transfer Receipt'}</label>
+                <input
+                  type="file"
+                  required
+                  accept="image/*,.pdf"
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files.length > 0) {
+                      setReceiptFile(e.target.files[0]);
+                    }
+                  }}
+                  className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer"
+                />
+                <p className="text-[10px] text-muted-foreground mt-1">
+                  {isAr ? 'الرجاء رفع صورة الإيصال أو ملف PDF لتأكيد الحوالة البنكية.' : 'Please upload an image or PDF of your bank transfer receipt.'}
+                </p>
+              </div>
+
+              <div className="flex justify-end gap-3 pt-3 border-t border-border mt-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setIsUpgradeModalOpen(false)}
+                  className="border-border hover:bg-muted hover:text-foreground text-muted-foreground rounded-xl px-5 cursor-pointer"
+                >
+                  {isAr ? 'إلغاء' : 'Cancel'}
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={isSubmittingUpgrade}
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl px-6 font-semibold shadow-lg shadow-indigo-600/20 cursor-pointer"
+                >
+                  {isSubmittingUpgrade ? (isAr ? 'جاري الإرسال...' : 'Sending...') : (isAr ? 'تأكيد وإرسال الطلب' : 'Confirm & Send Request')}
+                </Button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
 

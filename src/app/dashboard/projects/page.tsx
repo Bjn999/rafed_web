@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api, ApiError } from '@/lib/api';
 import { toast } from '@/components/ui/toast';
+import ConfirmationModal from '@/components/ui/ConfirmationModal';
 import Link from 'next/link';
 import {
   FolderKanban,
@@ -25,7 +26,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Briefcase,
-  HardHat
+  HardHat,
+  AlertCircle
 } from 'lucide-react';
 
 interface ProjectItem {
@@ -212,6 +214,10 @@ export default function ProjectsPage() {
   // Modals state
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isCreateConfirmOpen, setIsCreateConfirmOpen] = useState(false);
+  const [isEditConfirmOpen, setIsEditConfirmOpen] = useState(false);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [projectToDelete, setProjectToDelete] = useState<{id: number, name: string} | null>(null);
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
 
   // Form states
@@ -411,7 +417,7 @@ export default function ProjectsPage() {
       });
       return;
     }
-    createMutation.mutate(formData);
+    setIsCreateConfirmOpen(true);
   };
 
   const handleEditSubmit = (e: React.FormEvent) => {
@@ -425,7 +431,7 @@ export default function ProjectsPage() {
       });
       return;
     }
-    updateMutation.mutate({ id: selectedProject.id, data: formData });
+    setIsEditConfirmOpen(true);
   };
 
   const openEditModal = (project: ProjectItem) => {
@@ -449,8 +455,15 @@ export default function ProjectsPage() {
   };
 
   const handleDelete = (id: number, name: string) => {
-    if (confirm(isAr ? `هل أنت متأكد من رغبتك في حذف مشروع "${name}" بشكل نهائي؟` : `Are you sure you want to permanently delete project "${name}"?`)) {
-      deleteMutation.mutate(id);
+    setProjectToDelete({ id, name });
+    setIsDeleteConfirmOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (projectToDelete) {
+      deleteMutation.mutate(projectToDelete.id);
+      setIsDeleteConfirmOpen(false);
+      setProjectToDelete(null);
     }
   };
 
@@ -982,6 +995,52 @@ export default function ProjectsPage() {
           </div>
         </div>
       )}
+
+      {/* --- CONFIRM MODALS --- */}
+      <ConfirmationModal
+        isOpen={isCreateConfirmOpen}
+        onClose={() => setIsCreateConfirmOpen(false)}
+        onConfirm={() => {
+          createMutation.mutate(formData);
+          setIsCreateConfirmOpen(false);
+        }}
+        title={isAr ? 'تأكيد إنشاء المشروع' : 'Confirm Project Creation'}
+        message={isAr 
+          ? `هل أنت متأكد من رغبتك في إنشاء مشروع "${formData.name}"؟` 
+          : `Are you sure you want to create the project "${formData.name}"?`}
+        type="success"
+        confirmText={isAr ? 'إنشاء' : 'Create'}
+      />
+
+      <ConfirmationModal
+        isOpen={isEditConfirmOpen}
+        onClose={() => setIsEditConfirmOpen(false)}
+        onConfirm={() => {
+          if (selectedProject) updateMutation.mutate({ id: selectedProject.id, data: formData });
+          setIsEditConfirmOpen(false);
+        }}
+        title={isAr ? 'تأكيد تعديل المشروع' : 'Confirm Project Edit'}
+        message={isAr 
+          ? `هل أنت متأكد من حفظ التعديلات لمشروع "${formData.name}"؟` 
+          : `Are you sure you want to save changes for the project "${formData.name}"?`}
+        type="info"
+        confirmText={isAr ? 'حفظ' : 'Save'}
+      />
+
+      <ConfirmationModal
+        isOpen={isDeleteConfirmOpen}
+        onClose={() => {
+          setIsDeleteConfirmOpen(false);
+          setProjectToDelete(null);
+        }}
+        onConfirm={confirmDelete}
+        title={isAr ? 'تأكيد الحذف' : 'Confirm Deletion'}
+        message={isAr 
+          ? `هل أنت متأكد من رغبتك في حذف مشروع "${projectToDelete?.name}" بشكل نهائي؟ لا يمكن التراجع عن هذا الإجراء.` 
+          : `Are you sure you want to permanently delete project "${projectToDelete?.name}"? This action cannot be undone.`}
+        type="danger"
+        confirmText={isAr ? 'نعم، احذف' : 'Yes, Delete'}
+      />
 
     </div>
   );
